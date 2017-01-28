@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="CentOS 6.x ocserv安装"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>CentOS 6.x ocserv安装 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            CentOS 6.x ocserv安装
+            
+          </h1>
+          <p class="posted-on">
+          2017-01-18
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/VPN/" rel="tag">
+                  VPN
+                </a>
+              
+                <a href="/tags/ocserv/" rel="tag">
+                  ocserv
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="1-ocserv"><a href="#1-ocserv" class="headerlink" title="1. ocserv"></a>1. ocserv</h3><h4 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1 介绍"></a>1.1 介绍</h4><p>OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Linux平台。</p>
+<h4 id="1-2-yum安装ocserv"><a href="#1-2-yum安装ocserv" class="headerlink" title="1.2 yum安装ocserv"></a>1.2 yum安装ocserv</h4><p>现在可以使用yum安装ocserv</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install -y epel-release</div><div class="line">yum install -y ocserv</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-证书安装"><a href="#2-证书安装" class="headerlink" title="2. 证书安装"></a>2. 证书安装</h3><h4 id="2-1-配置文件夹创建"><a href="#2-1-配置文件夹创建" class="headerlink" title="2.1 配置文件夹创建"></a>2.1 配置文件夹创建</h4><p>ocserv服务的启动需要相关证书，为了方便管理，首先在配置文件夹中创建一些文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /etc/ocserv/ssl/private          <span class="comment">#保存服务器私钥</span></div><div class="line">mkdir -p /etc/ocserv/ssl/ca                 <span class="comment">#保存CA</span></div><div class="line">mkdir -p /etc/ocserv/ssl/server           <span class="comment">#保存服务器证书</span></div><div class="line">mkdir -p /etc/ocserv/ssl/user              <span class="comment">#保存用户证书</span></div><div class="line">mkdir -p /etc/ocserv/ssl/crl                 <span class="comment">#保存用户吊销证书链</span></div></pre></td></tr></table></figure>
+<h4 id="2-2-使用自签证书"><a href="#2-2-使用自签证书" class="headerlink" title="2.2 使用自签证书"></a>2.2 使用自签证书</h4><h5 id="2-2-1-CA证书生成"><a href="#2-2-1-CA证书生成" class="headerlink" title="2.2.1 CA证书生成"></a>2.2.1 CA证书生成</h5><p>生成CA私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
+<p>生成CA模板，cn和o选项填入任意域名，本文以test.com代替。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/ca</div><div class="line">cat &lt;&lt; EOF &gt; ca.tmpl</div><div class="line">cn = <span class="string">"test.com"</span></div><div class="line">organization = <span class="string">"test.com"</span></div><div class="line">serial = 1</div><div class="line">expiration_days = 3650</div><div class="line">ca</div><div class="line">signing_key</div><div class="line">cert_signing_key</div><div class="line">crl_signing_key</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>CA证书生成</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">certtool --generate-self-signed --load-privkey ../private/ca-key.pem --template \</div><div class="line">ca.tmpl --outfile ca-cert.pem</div></pre></td></tr></table></figure>
+<h5 id="2-2-2-Server证书生成"><a href="#2-2-2-Server证书生成" class="headerlink" title="2.2.2 Server证书生成"></a>2.2.2 Server证书生成</h5><p>生成Server私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile server-key.pem</div></pre></td></tr></table></figure>
+<p>生成Server证书模板，cn和o选项填入ocserv服务器的域名，本文以test.com代替。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/server</div><div class="line">cat &lt;&lt; EOF &gt; server.tmpl</div><div class="line">cn = <span class="string">"test.com"</span></div><div class="line">organization = <span class="string">"test.com"</span></div><div class="line">expiration_days = 3650</div><div class="line">signing_key</div><div class="line">encryption_key </div><div class="line">tls_www_server</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>生成Server证书：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/server-key.pem  \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template server.tmpl --outfile server-cert.pem</div></pre></td></tr></table></figure>
+<h4 id="2-3-使用授权证书"><a href="#2-3-使用授权证书" class="headerlink" title="2.3 使用授权证书"></a>2.3 使用授权证书</h4><h5 id="2-3-1-申请证书"><a href="#2-3-1-申请证书" class="headerlink" title="2.3.1 申请证书"></a>2.3.1 申请证书</h5><p>授权证书可以从<a href="https://buy.wosign.com/" target="_blank" rel="external">沃通</a>或者<a href="https://startssl.com" target="_blank" rel="external">startssl</a>、<a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>等申请免费的ssl证书。申请证书的大概流程为：</p>
+<ul>
+<li>CSR文件为请求证书的文件，会产生一对公私钥，公钥（pub-key）需要上传给证书颁发结构，私钥（private-key）则要自己保留不能泄露。</li>
+<li>证书颁发结构需要要验证申请人的域名拥有权，证明域名拥有权之后，使用其私钥（signature private-key）申请人上传的pub-lkey进行签名，并把域名等证书信息追加到其中，产生一个证书，例如<code>2_dovzinp3.icean.me.crt</code></li>
+<li>终端用户并不信任这个证书，鉴于这个证书不是权威机构颁发，所以需要证书链，来证明颁发该证书的结构是权威机构认证的。</li>
+<li>证书链为颁发<code>2_dovzinp3.icean.me.crt</code>证书的结构，其上级机构对其公钥进行签名，逐级进行签名，直到顶级CA。</li>
+</ul>
+<h5 id="2-3-2-安装证书"><a href="#2-3-2-安装证书" class="headerlink" title="2.3.2 安装证书"></a>2.3.2 安装证书</h5><p>下载证书的压缩文件包中，解压OtherServer，以startssl为例子，解压出如下图所示。</p>
+<center><img src="http://i.imgur.com/aUSEeOG.png" alt=""></center>
+
+<center style="color:purple"><strong>图2-1 授权证书</strong></center>
+
+<p>服务器私钥为生成CSR文件所用的私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv xxx.key server-key.pem</div><div class="line">mv server-key.pem /etc/ocserv/ssl/private</div></pre></td></tr></table></figure>
+<p>创建服务器证书，根据证书链的顺序，首先追加服务器证书，然后追加中间证书，最后追加CA证书。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat 2_dovzinp3.icean.me.crt &gt;&gt; server-cert.pem</div><div class="line">cat 1_Intermediate.crt &gt;&gt; server-cert.pem</div><div class="line">cat root.crt &gt;&gt; server-cert.pem</div><div class="line">mv server-cert.pem /etc/ocserv/ssl/server</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-主要配置"><a href="#3-主要配置" class="headerlink" title="3. 主要配置"></a>3. 主要配置</h3><h4 id="3-1-配置文件备份-amp-修改"><a href="#3-1-配置文件备份-amp-修改" class="headerlink" title="3.1 配置文件备份&amp;修改"></a>3.1 配置文件备份&amp;修改</h4><p>备份原配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv</div><div class="line">mv ocserv.conf ocserv.conf.bak</div></pre></td></tr></table></figure>
+<p>创建新的配置文件<code>ocserv.conf</code>，内容如下，缺省验证方式为账户密码验证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">auth = <span class="string">"plain[/etc/ocserv/passwd]"</span>                                            <span class="comment">#本地账户密码验证      </span></div><div class="line"><span class="comment">#auth = "certificate"                                                                    #证书验证</span></div><div class="line"><span class="comment">#auth = "radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"  </span></div><div class="line">                                                                                                     <span class="comment">#radius验证</span></div><div class="line"><span class="comment">#acct = "radius[config=/etc/radcli/radiusclient.conf]"                #radius审计</span></div><div class="line"></div><div class="line">stats-report-time = 360                                                               <span class="comment">#发送审计报告时间间隔</span></div><div class="line">max-clients = 16</div><div class="line">max-same-clients = 1</div><div class="line">tcp-port = 443                                                                            <span class="comment">#连接端口号，可以修改为其他端口</span></div><div class="line">udp-port = 443                                                                           <span class="comment">#连接端口号，可以修改为其他端口</span></div><div class="line">keepalive = 32400</div><div class="line">dpd = 90</div><div class="line">mobile-dpd = 1800</div><div class="line">try-mtu-discovery = <span class="literal">true</span></div><div class="line">cisco-client-compat = <span class="literal">true</span></div><div class="line"><span class="comment">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</span></div><div class="line">server-cert = /etc/ocserv/ssl/server/server-cert.pem                  <span class="comment">#服务器证书存储路径</span></div><div class="line">server-key = /etc/ocserv/ssl/private/server-key.pem                  <span class="comment">#服务器私钥存储路径</span></div><div class="line"><span class="comment">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</span></div><div class="line">auth-timeout = 40</div><div class="line">pid-file = /var/run/ocserv.pid</div><div class="line">socket-file = /var/run/ocserv-socket</div><div class="line">run-as-user = nobody</div><div class="line">run-as-group = daemon</div><div class="line">device = vpns</div><div class="line">ipv4-network = 192.168.80.0                                                       <span class="comment">#虚拟IP地址段，分配给VPN客户端</span></div><div class="line">ipv4-netmask = 255.255.255.0                                                    <span class="comment">#虚拟IP掩码</span></div><div class="line">dns = 8.8.8.8                                                                                <span class="comment">#DNS地址</span></div><div class="line">dns = 8.8.4.4</div><div class="line"></div><div class="line"><span class="comment">#no-route = 1.0.0.0/255.192.0.0                                                   #不路由某些地址</span></div><div class="line"><span class="comment">#route = 1.64.0.0/255.224.0.0                                                      #只路由某些地址，no-route和route不可同时用</span></div></pre></td></tr></table></figure>
+<h4 id="3-2-route-amp-no-route"><a href="#3-2-route-amp-no-route" class="headerlink" title="3.2 route &amp; no-route"></a>3.2 route &amp; no-route</h4><p>如果需要指定客户端只能路由到某些地址，则需要在配置文件<code>ocserv.conf</code>中添加如下样例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">route = 192.168.1.0/255.255.255.0</div></pre></td></tr></table></figure>
+<p>如果需要指定客户端不需要路由到某些地址，则需要在配置文件<code>ocserv.conf</code>中添加如下样例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">no-route = 192.168.1.0/255.255.255.0</div></pre></td></tr></table></figure>
+<p>两者不可同时使用</p>
+<h4 id="3-3-账户密码验证"><a href="#3-3-账户密码验证" class="headerlink" title="3.3 账户密码验证"></a>3.3 账户密码验证</h4><p>在配置文件<code>ocserv.conf</code>中修改，如下所示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auth = <span class="string">"plain[/etc/ocserv/passwd]"</span>  </div><div class="line"><span class="comment">#auth = "certificate" </span></div><div class="line"><span class="comment">#auth = "radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"  </span></div><div class="line"><span class="comment">#acct = "radius[config=/etc/radcli/radiusclient.conf]"   </span></div><div class="line">.......</div></pre></td></tr></table></figure>
+<p>创建登录用户以及密码，每次创建用户，都需要参数c</p>
+<pre><code>ocpasswd -c /etc/ocserv/passwd username
+</code></pre><h4 id="3-4-radius验证"><a href="#3-4-radius验证" class="headerlink" title="3.4 radius验证"></a>3.4 radius验证</h4><p>在配置文件中<code>ocserv.conf</code>修改如下, 其中radius客户端配置路径为<code>/etc/radcli</code>，在安装ocserv时候，radcli作为依赖被安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#auth = "plain[/etc/ocserv/passwd]"  </span></div><div class="line"><span class="comment">#auth = "certificate" </span></div><div class="line">auth = <span class="string">"radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"</span>  </div><div class="line">acct = <span class="string">"radius[config=/etc/radcli/radiusclient.conf]"</span>   </div><div class="line">.......</div></pre></td></tr></table></figure>
+<p>添加radius服务器，修改<code>/etc/radcli/servers</code>，例如添加本机作为radius服务器，如下所示。也可以按照格式添加其他的radius服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">localhost/localhost  testing123   <span class="comment">#验证服务器/审计服务器  服务器暗码</span></div></pre></td></tr></table></figure>
+<p>修改配置文件<code>/etc/radcli/radiusclient.conf</code>，选择要使用的验证服务器以及审计服务器，如下为使用localhost作为验证和审计服务器，其他选项不需要修改。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">authserver  localhost</div><div class="line">acctserver  localhost</div></pre></td></tr></table></figure>
+<h4 id="3-5-证书验证"><a href="#3-5-证书验证" class="headerlink" title="3.5 证书验证"></a>3.5 证书验证</h4><h5 id="3-5-1-用户证书生成"><a href="#3-5-1-用户证书生成" class="headerlink" title="3.5.1 用户证书生成"></a>3.5.1 用户证书生成</h5><p>使用账户密码以及radius验证，接入的客户端需要每次输入账户名和密码，而证书验证则不需要每次输入账户名和密码。第一次在客户端导入证书即可。</p>
+<p>使用certtool生成用户私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile user-key.pem</div></pre></td></tr></table></figure>
+<p>创建用户模板</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; user.tmpl</div><div class="line">cn = <span class="string">"example-cn"</span></div><div class="line">unit = <span class="string">"example-unit"</span></div><div class="line">expiration_days = 365</div><div class="line">signing_key</div><div class="line">tls_www_client</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>生成用户证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#生成用户证书</span></div><div class="line"><span class="built_in">cd</span>  /etc/ocserv/ssl/user</div><div class="line">certtool --generate-certificate --load-privkey ../private/user-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template user.tmpl --outfile user-cert.pem</div><div class="line"></div><div class="line"><span class="comment">#将用户证书和密钥打包为p12格式，在此过程中，需要输入名称和密码，在安装证书时，需要输入该密码进行验证。</span></div><div class="line">certtool --to-p12 --load-privkey ../private/user-key.pem --pkcs-cipher \ </div><div class="line">3des-pkcs12 --load-certificate user-cert.pem --outfile user-cert.p12 --outder</div></pre></td></tr></table></figure>
+<p>自动生成证书脚本，运行下面脚本之前，请确认当前目录下有<code>user.tmpl</code>，<code>ca-key.pem</code>，<code>ca-cert.pem</code>三个文件，或者自己命令中的路径参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="comment">#定义变量</span></div><div class="line">id=<span class="built_in">test</span></div><div class="line">day=365</div><div class="line"></div><div class="line"><span class="built_in">cd</span>  /etc/ocserv/ssl/user</div><div class="line">cp user.tmpl <span class="variable">$id</span>.tmpl</div><div class="line">sed -i <span class="string">"s/example-cn/<span class="variable">$id</span>/g"</span> <span class="variable">$id</span>.tmpl</div><div class="line">sed -i <span class="string">"s/example-unit/<span class="variable">$id</span>/g"</span> <span class="variable">$id</span>.tmpl</div><div class="line">sed -i <span class="string">"s/365/<span class="variable">$day</span>/g"</span> <span class="variable">$id</span>.tmpl</div><div class="line">certtool --generate-privkey --outfile <span class="variable">$id</span>-key.pem</div><div class="line">certtool --generate-certificate --load-privkey <span class="variable">$id</span>-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem \</div><div class="line">--template <span class="variable">$id</span>.tmpl --outfile <span class="variable">$id</span>-cert.pem</div><div class="line">certtool --to-p12 --load-privkey <span class="variable">$id</span>-key.pem --pkcs-cipher 3des-pkcs12 \</div><div class="line">--load-certificate <span class="variable">$id</span>-cert.pem --outfile <span class="variable">$id</span>-cert.p12 --outder</div><div class="line"></div><div class="line"><span class="comment">#最后所有相关的文件放入名字为$id的文件夹中</span></div><div class="line">mkdir <span class="variable">$id</span></div><div class="line">mv <span class="variable">$id</span>* <span class="variable">$id</span></div></pre></td></tr></table></figure>
+<h5 id="3-5-2-用户证书吊销"><a href="#3-5-2-用户证书吊销" class="headerlink" title="3.5.2 用户证书吊销"></a>3.5.2 用户证书吊销</h5><p>创建空吊销列表文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/crl</div><div class="line">touch revoked.pem</div></pre></td></tr></table></figure>
+<p>创建吊销证书模板</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; crl.tmpl</div><div class="line">crl_next_update = 9999</div><div class="line">crl_number = 1</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>创建空的吊销列表，当<code>revoked.pem</code>为空时，执行如下命令生成吊销证书链文件<code>crl.pem</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
+<p>吊销一个用户，假设要吊销用户证书为user1，首先将其用户证书追加到<code>revoked.pem</code>，然后生成新的吊销证书链文件<code>crl.pem</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/crl</div><div class="line">cat ../user/user1/user1-cert.pem &gt;&gt; revoked.pem</div><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-certificate revoked.pem \</div><div class="line">--template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
+<p>若想重新启用一个被吊销的用户，则需要删除<code>revoked.pem</code>其中对应用户证书的密钥，然后重新生成吊销证书链文件<code>crl.pem</code>，若revoke.pem被清空，则生成的时候不添加<code>--load-certificate</code>参数</p>
+<p>完整CA添加/吊销/重新启用脚本请点击<a href="http://pan.baidu.com/s/1o7Z55Om" target="_blank" rel="external">这里</a></p>
+<hr>
+<h3 id="4-ocserv服务启动"><a href="#4-ocserv服务启动" class="headerlink" title="4. ocserv服务启动"></a>4. ocserv服务启动</h3><h4 id="4-1-开启系统转发"><a href="#4-1-开启系统转发" class="headerlink" title="4.1 开启系统转发"></a>4.1 开启系统转发</h4><p>编译/etc/sysctl.conf，开启IPv4转发，启用此项</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">net.ipv4.ip_forward=1</div></pre></td></tr></table></figure>
+<p>并刷新配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -p /etc/sysctl.conf</div></pre></td></tr></table></figure>
+<h4 id="4-2-iptables配置"><a href="#4-2-iptables配置" class="headerlink" title="4.2 iptables配置"></a>4.2 iptables配置</h4><p>添加条目到iptables，端口号为配置文件定义的，下面以443为例，同时添加转发表条目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1  -j ACCEPT</div></pre></td></tr></table></figure>
+<p>根据需要，设定要访问的网络，例如如果要VPN终端用户要访问服务器eth0网段的网卡，则添加如下条目，访问eth1的添加规则类似</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING <span class="_">-s</span>  192.168.80.0/24 -o eth0 -j MASQUERADE</div></pre></td></tr></table></figure>
+<p>保存并重启iptables</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service iptables save</div><div class="line">service iptables restart</div></pre></td></tr></table></figure>
+<h4 id="4-3-ocserv服务启动"><a href="#4-3-ocserv服务启动" class="headerlink" title="4.3 ocserv服务启动"></a>4.3 ocserv服务启动</h4><p>启动ocserv服务，然后终端用户可以通过思科Anyconnect客户端进行连接。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service ocserv start</div></pre></td></tr></table></figure>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2017/01/18/CentOS 6.x Freeradius 3.0.12编译安装/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2017/01/16/AWK学习/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="Linux Shell 标准输入、输出和错误重定向"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>Linux Shell 标准输入、输出和错误重定向 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            Linux Shell 标准输入、输出和错误重定向
+            
+          </h1>
+          <p class="posted-on">
+          2017-01-16
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/shell/" rel="tag">
+                  shell
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="1-文件描述符"><a href="#1-文件描述符" class="headerlink" title="1. 文件描述符"></a>1. 文件描述符</h3><p>文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。</p>
+<table>
+<thead>
+<tr>
+<th>文件描述符</th>
+<th>文件</th>
+<th>缺省</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0(文件)</td>
+<td>标准输入</td>
+<td>键盘</td>
+</tr>
+<tr>
+<td>1(文件)</td>
+<td>标准输出</td>
+<td>屏幕</td>
+</tr>
+<tr>
+<td>2(文件)</td>
+<td>标准错误</td>
+<td>屏幕</td>
+</tr>
+</tbody>
+</table>
+<p>系统有12个文件描述符，可以任意使用的文件描述符是3到9</p>
+<hr>
+<h3 id="2-重定向命令"><a href="#2-重定向命令" class="headerlink" title="2. 重定向命令"></a>2. 重定向命令</h3><p>####2.1 输出重定向 </p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command &gt; filename</td>
+<td>把<strong>标准输出</strong>重定向到一个新的文件中</td>
+</tr>
+<tr>
+<td>Command &gt;&gt; filename</td>
+<td>把<strong>标准输出</strong>重定向到一个文件中<strong>(追加)</strong></td>
+</tr>
+<tr>
+<td>Command &gt; filename 2&gt;&amp;1</td>
+<td>把<strong>标准输出</strong>和<strong>标准错误</strong>重定向到一个新的文件中</td>
+</tr>
+<tr>
+<td>Command &amp;&gt; filename</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>Command &gt;&gt; filename 2&gt;&amp;1</td>
+<td>把<strong>标准输出</strong>和<strong>标准错误</strong>重定向到一个文件中<strong>(追加)</strong></td>
+</tr>
+<tr>
+<td>Command &amp;&gt;&gt; filename</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>Command 2 &gt; filename</td>
+<td>把<strong>标准错误</strong>重定向到一个新的文件中</td>
+</tr>
+<tr>
+<td>Command 2 &gt;&gt; filename</td>
+<td>把<strong>标准错误</strong>重定向到一个文件中<strong>(追加)</strong></td>
+</tr>
+<tr>
+<td>Command 1 &gt; filename 2 &gt; filename</td>
+<td>把<strong>标准输出</strong>和<strong>标准错误</strong>分别重定向到两个不同新的文件中</td>
+</tr>
+<tr>
+<td>Command 1 &gt;&gt; filename1  2 &gt;&gt; filename2</td>
+<td>把<strong>标准输出</strong>和<strong>标准错误</strong>分别重定向到两个不同的文件中<strong>(追加)</strong></td>
+</tr>
+<tr>
+<td>Command  tee filename</td>
+<td>让<strong>标准输出</strong>在屏幕显示，同时重定向一个新的文件</td>
+</tr>
+<tr>
+<td>Command I tee -i filename</td>
+<td>同上，但是不接受中断信号，只能<strong>Ctrl+D</strong>结束，不能用<strong>Ctrl+C</strong></td>
+</tr>
+<tr>
+<td>Command I tee -a filename</td>
+<td>让<strong>标准输出</strong>在屏幕显示，同时重定向一个文件<strong>(追加)</strong></td>
+</tr>
+<tr>
+<td>Command 2&gt;&amp;1 I tee filename</td>
+<td>让<strong>标准输出</strong>和<strong>标准错误</strong>在屏幕显示，重定向到一个新的文件中</td>
+</tr>
+<tr>
+<td>Command 2&gt;&amp;1 I tee -a filename</td>
+<td>让<strong>标准输出</strong>和<strong>标准错误</strong>在屏幕显示，重定向到一个文件中<strong>(追加)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>由于网页支持问题，上述表格内容中的I代表|</li>
+<li><strong>2&gt;&amp;1</strong>为<strong>标准错误</strong>重定向到<strong>标准输出</strong></li>
+<li>重定向运算符 ‘<strong>&gt;</strong>‘  ‘<strong>&gt;&gt;</strong>‘的默认参数为标准输出，为1。所以:<ul>
+<li>‘<strong>&gt;</strong>‘ 等价于’<strong>1&gt;</strong>‘</li>
+<li>‘<strong>&gt;&gt;</strong>‘等价于’<strong>1&gt;&gt;</strong>‘</li>
+</ul>
+</li>
+</ul>
+<p>####2.2 输入重定向 </p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command &lt; filename1 &gt;filename2</td>
+<td>Command命令以 filename1 文件作为<strong>标准输入</strong>，以filename2文件作为<strong>标准输出</strong></td>
+</tr>
+<tr>
+<td>Command &lt; filename</td>
+<td>Command命令以 filename 文件作为<strong>标准输入</strong></td>
+</tr>
+<tr>
+<td>Command &lt;&lt; delimiter</td>
+<td>从<strong>标准输入</strong>中读入，直到遇到 delimiter 分界符</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-3-绑定重定向"><a href="#2-3-绑定重定向" class="headerlink" title="2.3 绑定重定向"></a>2.3 绑定重定向</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command &gt;&amp;m</td>
+<td>把<strong>标准输出</strong>重定向到文件描述符m中</td>
+</tr>
+<tr>
+<td>Command &lt;&amp;m</td>
+<td>读取文件描述符m的<strong>标准输入</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="3-重定向例子"><a href="#3-重定向例子" class="headerlink" title="3.重定向例子"></a>3.重定向例子</h3><h4 id="3-1-错误信息重定向空设备"><a href="#3-1-错误信息重定向空设备" class="headerlink" title="3.1 错误信息重定向空设备"></a>3.1 错误信息重定向空设备</h4><p>若Command出错，将错误信息重定向到空设备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Command 2 &gt; /dev/null</div></pre></td></tr></table></figure>
+<h4 id="3-2-文本块重定向作为标注输入"><a href="#3-2-文本块重定向作为标注输入" class="headerlink" title="3.2 文本块重定向作为标注输入"></a>3.2 文本块重定向作为标注输入</h4><p>将文本块重定向到test.txt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt;EOF &gt;&gt;test.txt</div><div class="line">hello</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<h4 id="3-3-用户自定义文件描述符"><a href="#3-3-用户自定义文件描述符" class="headerlink" title="3.3 用户自定义文件描述符"></a>3.3 用户自定义文件描述符</h4><p>0、1、2为shell保留文件描述符，可以自定义文件描述符，对其进行读写，用户自定义文件描述符用<code>exec</code>命令进行创建，创建的文件描述符有三种形式</p>
+<h5 id="3-3-1-只读方式"><a href="#3-3-1-只读方式" class="headerlink" title="3.3.1 只读方式"></a>3.3.1 只读方式</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> descriptor&lt;filename</div></pre></td></tr></table></figure>
+<p>只读方式的文件描述符只能读取一次，要再次读取，需要对文件描述符重新打开赋值，以文件描述符3为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> 3&lt;test.txt</div><div class="line">cat &lt;&amp;3</div></pre></td></tr></table></figure>
+<p>如果在读取一次之后，再次执行<code>cat &lt;&amp;3</code>，不输入任何内容</p>
+<h5 id="3-3-2-截断模式写方式"><a href="#3-3-2-截断模式写方式" class="headerlink" title="3.3.2 截断模式写方式"></a>3.3.2 截断模式写方式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exec descriptor&gt;filename</div></pre></td></tr></table></figure>
+<p>截断模式相当于重新创建文件，文件之前的内容会被清空，以文件描述符4为例，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> 4&gt;test.txt</div><div class="line"><span class="built_in">echo</span> <span class="string">"1"</span> &gt;&amp;4</div><div class="line"><span class="built_in">echo</span> <span class="string">"2"</span> &gt;&amp;4</div><div class="line"><span class="built_in">exec</span> 4&gt;test.txt</div><div class="line"><span class="built_in">echo</span> <span class="string">"3"</span> &gt;&amp;4</div></pre></td></tr></table></figure>
+<p>最终test.txt的内容为3</p>
+<h5 id="3-3-3-追加模式写方式"><a href="#3-3-3-追加模式写方式" class="headerlink" title="3.3.3 追加模式写方式"></a>3.3.3 追加模式写方式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exec descriptor&gt;&gt;filename</div></pre></td></tr></table></figure>
+<p>写方式的文件描述符只要一次打开便可多次写入，并且后续的写入操作会一直追加到文件的结尾，以文件描述符5为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> 5&gt;&gt;test.txt</div><div class="line"><span class="built_in">echo</span> <span class="string">"1"</span> &gt;&amp;5</div><div class="line"><span class="built_in">echo</span> <span class="string">"2"</span> &gt;&amp;5</div><div class="line"><span class="built_in">exec</span> 5&gt;&gt;test.txt</div><div class="line"><span class="built_in">echo</span> <span class="string">"3"</span> &gt;&amp;5</div></pre></td></tr></table></figure>
+<p>最后test.txt的结果为 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td></tr></table></figure>
+<h4 id="3-4-重定向读取文件"><a href="#3-4-重定向读取文件" class="headerlink" title="3.4  重定向读取文件"></a>3.4  重定向读取文件</h4><p>逐行读取一个文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> <span class="built_in">read</span> LINE</div><div class="line"><span class="keyword">do</span></div><div class="line"><span class="built_in">echo</span> <span class="variable">$LINE</span></div><div class="line"><span class="keyword">done</span> &lt; <span class="variable">$FILENAME</span></div></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考"></a>4. 参考</h3><ul>
+<li><a href="http://blog.csdn.net/cjfeii/article/details/10084343" target="_blank" rel="external">http://blog.csdn.net/cjfeii/article/details/10084343</a></li>
+<li><a href="http://blog.chinaunix.net/uid-20671208-id-3588619.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-20671208-id-3588619.html</a></li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2017/01/16/AWK学习/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/08/31/CentOS 6.x7.x Strongswan 5.5.0编译安装+Freeradius验证_v2/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -130,12 +130,12 @@
           <div class="tags-links">
             
               
-                <a href="/tags/linux/" rel="tag">
-                  linux
-                </a>
-              
                 <a href="/tags/VPN/" rel="tag">
                   VPN
+                </a>
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
                 </a>
               
                 <a href="/tags/ocserv/" rel="tag">
@@ -147,9 +147,9 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-ocserv安装"><a href="#Ⅰ-ocserv安装" class="headerlink" title="Ⅰ.ocserv安装"></a>Ⅰ.ocserv安装</h3><h4 id="▪-yum安装相关软件"><a href="#▪-yum安装相关软件" class="headerlink" title="▪ yum安装相关软件"></a>▪ yum安装相关软件</h4><p>在CentOS7中，可以直接使用yum安装ocserv</p>
+          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><p>在CentOS7中，可以直接使用yum安装ocserv</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install epel-release -y</div><div class="line">yum install -y ocserv</div></pre></td></tr></table></figure>
-<h4 id="▪-自签名证书生成"><a href="#▪-自签名证书生成" class="headerlink" title="▪ 自签名证书生成"></a>▪ 自签名证书生成</h4><h5 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h5><p>ocserv服务的启动需要证书，这里介绍的是如何使用自签证书。首先创建相关文件夹</p>
+<h4 id="自签名证书生成"><a href="#自签名证书生成" class="headerlink" title="自签名证书生成"></a>自签名证书生成</h4><h5 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h5><p>ocserv服务的启动需要证书，这里介绍的是如何使用自签证书。首先创建相关文件夹</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /etc/ocserv/ssl/private          #保存服务器私钥</div><div class="line">mkdir -p /etc/ocserv/ssl/ca                 #保存CA</div><div class="line">mkdir -p /etc/ocserv/ssl/server           #保存服务器证书</div><div class="line">mkdir -p /etc/ocserv/ssl/user              #保存用户证书</div><div class="line">mkdir -p /etc/ocserv/ssl/crl                 #保存用户吊销证书链</div></pre></td></tr></table></figure>
 <h5 id="创建自签CA"><a href="#创建自签CA" class="headerlink" title="创建自签CA"></a>创建自签CA</h5><p>创建自签名CA私钥</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
@@ -164,7 +164,7 @@
 <p>生成服务器证书</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/server-key.pem  \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template server.tmpl --outfile server-cert.pem</div></pre></td></tr></table></figure>
 <p>自签名服务器证书在此配置完成。</p>
-<h4 id="▪-使用授权证书"><a href="#▪-使用授权证书" class="headerlink" title="▪ 使用授权证书"></a>▪ 使用授权证书</h4><h5 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h5><p>授权证书可以从<a href="https://buy.wosign.com/" target="_blank" rel="external">沃通</a>或者<a href="https://startssl.com" target="_blank" rel="external">startssl</a>、<a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>等申请免费的ssl证书。申请证书的大概流程为：</p>
+<h4 id="使用授权证书"><a href="#使用授权证书" class="headerlink" title="使用授权证书"></a>使用授权证书</h4><h5 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h5><p>授权证书可以从<a href="https://buy.wosign.com/" target="_blank" rel="external">沃通</a>或者<a href="https://startssl.com" target="_blank" rel="external">startssl</a>、<a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>等申请免费的ssl证书。申请证书的大概流程为：</p>
 <ul>
 <li>CSR文件为请求证书的文件，会产生一对公私钥，公钥（pub-key）需要上传给证书颁发结构，私钥（private-key）则要自己保留不能泄露。</li>
 <li>证书颁发结构需要要验证申请人的域名拥有权，证明域名拥有权之后，使用其私钥（signature private-key）申请人上传的pub-lkey进行签名，并把域名等证书信息追加到其中，产生一个证书，例如2_dovzinp3.icean.xxx.crt</li>
@@ -181,7 +181,7 @@
 <p>创建服务器证书，根据证书链的顺序，首先追加服务器证书，然后追加中间证书，最后追加CA证书。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat 2_dovzinp3.icean.me.crt &gt;&gt; server-cert.pem</div><div class="line">cat 1_Intermediate.crt &gt;&gt; server-cert.pem</div><div class="line">cat root.crt &gt;&gt; server-cert.pem</div><div class="line">mv server-cert.pem /etc/ocserv/ssl/server</div></pre></td></tr></table></figure>
 <p>ocserv配置</p>
-<h4 id="▪-配置文件修改"><a href="#▪-配置文件修改" class="headerlink" title="▪ 配置文件修改"></a>▪ 配置文件修改</h4><p>备份原配置文件</p>
+<h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>备份原配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv</div><div class="line">mv ocserv.conf ocserv.conf.bak</div></pre></td></tr></table></figure>
 <p>创建新的配置文件，no-route列表过长，只是部分给出。下图缺省使用radius验证，这里首先介绍本地账户密码验证和证书验证。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;/etc/ocserv/ocserv.conf</div><div class="line"></div><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div><div class="line"></div><div class="line">max-clients = 16</div><div class="line">max-same-clients = 1</div><div class="line">tcp-port = 443</div><div class="line">udp-port = 443</div><div class="line">keepalive = 32400</div><div class="line">dpd = 90</div><div class="line">mobile-dpd = 1800</div><div class="line">try-mtu-discovery = true</div><div class="line">cisco-client-compat = true</div><div class="line">server-cert = /etc/ocserv/ssl/server/server-cert.pem                  #服务器证书存储路径</div><div class="line">server-key = /etc/ocserv/ssl/private/server-key.pem                  #服务器私钥存储路径</div><div class="line">auth-timeout = 40</div><div class="line">pid-file = /var/run/ocserv.pid</div><div class="line">socket-file = /var/run/ocserv-socket</div><div class="line">run-as-user = nobody</div><div class="line">run-as-group = daemon</div><div class="line">device = vpns</div><div class="line">ipv4-network = 192.168.80.0</div><div class="line">ipv4-netmask = 255.255.255.0</div><div class="line">dns = 8.8.8.8</div><div class="line">dns = 8.8.4.4</div><div class="line"></div><div class="line">no-route = 1.0.0.0/255.192.0.0</div><div class="line">no-route = 1.64.0.0/255.224.0.0</div><div class="line">EOF</div></pre></td></tr></table></figure>
@@ -212,12 +212,12 @@
 <p>若想重新启用一个被吊销的用户，则需要删除revoked.pem其中对应的密钥，然后重新生成吊销证书crl.pem,若revoke.pem被清空，则生成的时候不添加<code>--load-certificate</code>参数。吊销或者重新启用被吊销的证书时需要重启ocserv服务。</p>
 <p>完整CA添加/吊销/重新启用脚本请点击<a href="http://pan.baidu.com/s/1o7Z55Om" target="_blank" rel="external">这里</a></p>
 <hr>
-<h3 id="Ⅱ-其他设置"><a href="#Ⅱ-其他设置" class="headerlink" title="Ⅱ.其他设置"></a>Ⅱ.其他设置</h3><h4 id="▪-iptables设置"><a href="#▪-iptables设置" class="headerlink" title="▪ iptables设置"></a>▪ iptables设置</h4><p>添加如下条目到iptables，并保存。</p>
+<h3 id="2-其他设置"><a href="#2-其他设置" class="headerlink" title="2.其他设置"></a>2.其他设置</h3><h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>添加如下条目到iptables，并保存。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 3 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p udp -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p tcp -j ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING -s  192.168.80.0/24 -o eth0 -j MASQUERADE   #转发ocserv虚拟子网</div><div class="line">iptables-save &gt;&gt; /etc/sysconfig/iptables</div></pre></td></tr></table></figure>
-<h4 id="▪-系统转发设置"><a href="#▪-系统转发设置" class="headerlink" title="▪ 系统转发设置"></a>▪ 系统转发设置</h4><p>开启IPv4和IPv6转发</p>
+<h4 id="系统转发设置"><a href="#系统转发设置" class="headerlink" title="系统转发设置"></a>系统转发设置</h4><p>开启IPv4和IPv6转发</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &apos;net.ipv4.ip_forward = 1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">echo &apos;net.ipv6.conf.all.forwarding=1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">sysctl -p /etc/sysctl.conf</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅲ-freeradius-设置"><a href="#Ⅲ-freeradius-设置" class="headerlink" title="Ⅲ.freeradius 设置"></a>Ⅲ.freeradius 设置</h3><h4 id="▪-ocserv配置文件"><a href="#▪-ocserv配置文件" class="headerlink" title="▪ ocserv配置文件"></a>▪ ocserv配置文件</h4><p>此时ocserv.conf前面部分应该为如下所示</p>
+<h3 id="3-freeradius-设置"><a href="#3-freeradius-设置" class="headerlink" title="3.freeradius 设置"></a>3.freeradius 设置</h3><h4 id="ocserv配置文件"><a href="#ocserv配置文件" class="headerlink" title="ocserv配置文件"></a>ocserv配置文件</h4><p>此时ocserv.conf前面部分应该为如下所示</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;                         acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;       #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
 <ul>
 <li>groupconfig在配置文件的auth选项中去掉，否则freeradius的验证组radgroupreply属性只能添加<strong>‘Auth-Type’,’:=’,’Local’</strong>, <strong>acct字段为向freeradius服务器发送审计日志</strong>，否则ocserv只有在建立VPN连接之初与freeradius服务器进行验证用户的有效性，<strong>stats-report-time</strong>字段定义了向freeradius服务器发送审计日志的时间间隔。</li>
@@ -225,9 +225,9 @@
 <li>不使用udp端口，可以提高下载速度，但是上传速度下降</li>
 <li>经过验证，ocserv不能使用本地freeradius服务器进行验证,密码不匹配。</li>
 </ul>
-<h4 id="▪-freeradius客户端安装"><a href="#▪-freeradius客户端安装" class="headerlink" title="▪ freeradius客户端安装"></a>▪ freeradius客户端安装</h4><p>安装freeradius客户端以及工具</p>
+<h4 id="freeradius客户端安装"><a href="#freeradius客户端安装" class="headerlink" title="freeradius客户端安装"></a>freeradius客户端安装</h4><p>安装freeradius客户端以及工具</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install freeradius-client freeradius-utils -y</div></pre></td></tr></table></figure>
-<h4 id="▪-freeradius客户端配置"><a href="#▪-freeradius客户端配置" class="headerlink" title="▪ freeradius客户端配置"></a>▪ freeradius客户端配置</h4><p>变量设置，serverHostname为freeradius服务器hostname，serverIP为其IP地址，secret为共享的密钥。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">serverHostname=$1</div><div class="line">serverIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure></p>
+<h4 id="freeradius客户端配置"><a href="#freeradius客户端配置" class="headerlink" title="freeradius客户端配置"></a>freeradius客户端配置</h4><p>变量设置，serverHostname为freeradius服务器hostname，serverIP为其IP地址，secret为共享的密钥。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">serverHostname=$1</div><div class="line">serverIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure></p>
 <p>向hosts文件中添加freeradius服务器地址解析</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$serverIP $serverHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
 <p>向freeradius server配置文件中追加freeradius服务器hostname</p>
@@ -239,7 +239,7 @@
 <p>其他修改，具体原因不了解</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/radius_deadtime/#radius_deadtime/g&apos; radiusclient.conf</div><div class="line">sed -i &apos;s/bindaddr */#bindaddr */g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
 <p>下载字典，并修改字典文件，注释掉所有dictionary中带IPv6的条目，否则会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /etc/radiusclient</div><div class="line">wget http://qingdao.icean.cc:11234/dictionary.microsoft</div><div class="line">cp /usr/share/radiusclient/dictionary.merit ./</div><div class="line">cp dictionary dictionary.bak </div><div class="line"></div><div class="line">cat &lt;&lt; EOF &gt;&gt; /etc/radiusclient/dictionary</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.microsoft</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.merit </div><div class="line">EOF</div></pre></td></tr></table></figure></p>
-<h4 id="▪-freeradius服务器配置"><a href="#▪-freeradius服务器配置" class="headerlink" title="▪ freeradius服务器配置"></a>▪ freeradius服务器配置</h4><p>变量设置，clientHostname为配置ocserv服务的hostname，clientIP为其IP地址，secret为共享密钥</p>
+<h4 id="freeradius服务器配置"><a href="#freeradius服务器配置" class="headerlink" title="freeradius服务器配置"></a>freeradius服务器配置</h4><p>变量设置，clientHostname为配置ocserv服务的hostname，clientIP为其IP地址，secret为共享密钥</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">clientHostname= $1</div><div class="line">clientIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure>
 <p>添加客户端地址解析到hosts文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$clientIP $clientHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
@@ -267,10 +267,10 @@
 <p>在/etc/raddb/sites-enabled/default中启用monthlytrafficcounter模块，在authenticate字段中，添加monthlytrafficcounter，然后重启radius服务</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">authenticate&#123;</div><div class="line">  	monthlytrafficcounter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅳ-启动服务"><a href="#Ⅳ-启动服务" class="headerlink" title="Ⅳ. 启动服务"></a>Ⅳ. 启动服务</h3><p>启动ocserv服务，在终端进行测试，使用在freeradius服务器端配置的账号和密码进行登陆。</p>
+<h3 id="4-启动服务"><a href="#4-启动服务" class="headerlink" title="4. 启动服务"></a>4. 启动服务</h3><p>启动ocserv服务，在终端进行测试，使用在freeradius服务器端配置的账号和密码进行登陆。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service ocserv start</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅴ-问题拓展"><a href="#Ⅴ-问题拓展" class="headerlink" title="Ⅴ. 问题拓展"></a>Ⅴ. 问题拓展</h3><ul>
+<h3 id="5-问题拓展"><a href="#5-问题拓展" class="headerlink" title="5. 问题拓展"></a>5. 问题拓展</h3><ul>
 <li><p>ocserv验证对应的radgroupreply无法添加更多属性。</p>
 </li>
 <li><p>ocserv验证对应的radgroupcheck中Simultaneous-Use，限制同时在线人数属性不生效，验证pptp时候也如此。</p>
@@ -305,7 +305,7 @@
       
       
         <div class="nav-next">
-          <a href="/2016/09/29/CentOS Minimal X11转发/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2016/09/29/CentOS 7 ocserv IPv6支持实验分析/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

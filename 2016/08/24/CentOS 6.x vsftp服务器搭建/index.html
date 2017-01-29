@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h2 id="CentOS-6-x搭建图床"><a href="#CentOS-6-x搭建图床" class="headerlink" title="CentOS 6.x搭建图床"></a>CentOS 6.x搭建图床</h2><h3 id="Ⅰ-创建用户以及用户组"><a href="#Ⅰ-创建用户以及用户组" class="headerlink" title="Ⅰ. 创建用户以及用户组"></a>Ⅰ. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
+          <h2 id="CentOS-6-x搭建图床"><a href="#CentOS-6-x搭建图床" class="headerlink" title="CentOS 6.x搭建图床"></a>CentOS 6.x搭建图床</h2><h3 id="1-创建用户以及用户组"><a href="#1-创建用户以及用户组" class="headerlink" title="1. 创建用户以及用户组"></a>1. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
 <pre><code>useradd -s /sbin/nologin vxftp
 passwd vxftp
 </code></pre><p>建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令</p>
@@ -155,7 +155,7 @@ passwd vxftp
 </code></pre><p>更改文件夹属性</p>
 <pre><code>chown -R vxftp.vsftp /home/vxftp/imgbed
 </code></pre><hr>
-<h3 id="Ⅱ-安装配置vsftp"><a href="#Ⅱ-安装配置vsftp" class="headerlink" title="Ⅱ.安装配置vsftp"></a>Ⅱ.安装配置vsftp</h3><p>安装vsftpd<br>    yum install -y vsftpd</p>
+<h3 id="2-安装配置vsftp"><a href="#2-安装配置vsftp" class="headerlink" title="2.安装配置vsftp"></a>2.安装配置vsftp</h3><p>安装vsftpd<br>    yum install -y vsftpd</p>
 <p>修改vsftpd配置文件</p>
 <pre><code>vi /etc/vsftpd/vsftpd.conf
 </code></pre><p>检查一下是否正确</p>
@@ -180,7 +180,7 @@ chkconfig --level 35 vsftpd on
 <pre><code>ftp://ftp-server:11235
 </code></pre><p>然后会弹出登录框，登录成功后，可以创建一个文件夹，并把该文件夹收藏到收藏夹，方便上传图片</p>
 <hr>
-<h3 id="Ⅲ-修改FTP端口号"><a href="#Ⅲ-修改FTP端口号" class="headerlink" title="Ⅲ.修改FTP端口号"></a>Ⅲ.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
+<h3 id="3-修改FTP端口号"><a href="#3-修改FTP端口号" class="headerlink" title="3.修改FTP端口号"></a>3.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
 <p>编辑/etc/vsftpd/vsftpd.conf文件，将预设端口号加入文件末尾，其中11235为修改后的端口号</p>
 <pre><code>cat &quot;listen_port=11235&quot; &gt;&gt; /etc/vsftpd/vsftpd.conf
 </code></pre><p>编辑/etc/services， 将其中的 ftp 21/tcp 改为 ftp 11235/tcp，ftp 21/udp 改为 ftp 11235/udp</p>
@@ -196,7 +196,7 @@ service iptabkes restart
 </code></pre><p>重新启动vsftpd服务</p>
 <pre><code>service vsftpd restart
 </code></pre><hr>
-<h3 id="Ⅳ-安装HTTP服务器"><a href="#Ⅳ-安装HTTP服务器" class="headerlink" title="Ⅳ.安装HTTP服务器"></a>Ⅳ.安装HTTP服务器</h3><p>安装httpd服务</p>
+<h3 id="4-安装HTTP服务器"><a href="#4-安装HTTP服务器" class="headerlink" title="4.安装HTTP服务器"></a>4.安装HTTP服务器</h3><p>安装httpd服务</p>
 <pre><code>yum install -y httpd
 </code></pre><p>启动httpd服务并加入到开机启动中</p>
 <pre><code>service httpd start
@@ -211,7 +211,7 @@ service httpd restart
 <pre><code>chmod +x /home/vxftp
 </code></pre><p>这样在网页下就可以访问imgbed图床文件夹了</p>
 <hr>
-<h3 id="Ⅴ-修改HTTP端口"><a href="#Ⅴ-修改HTTP端口" class="headerlink" title="Ⅴ. 修改HTTP端口"></a>Ⅴ. 修改HTTP端口</h3><p>若不想用80端口，可以将端口修改为其他放，首先找到配置文件/etc/httpd/conf/httpd.conf</p>
+<h3 id="5-修改HTTP端口"><a href="#5-修改HTTP端口" class="headerlink" title="5. 修改HTTP端口"></a>5. 修改HTTP端口</h3><p>若不想用80端口，可以将端口修改为其他放，首先找到配置文件/etc/httpd/conf/httpd.conf</p>
 <pre><code>将Listen 80改为 Listen 11234
 </code></pre><p>11234为修改后的端口号，继续修改httpd.conf，找到#ServerName www.example.com:80，在下面添加一行</p>
 <pre><code>ServerName localhost:11234
@@ -222,7 +222,7 @@ service iptabkes restart
 </code></pre><p>重新启动服务</p>
 <pre><code>service httpd restart
 </code></pre><hr>
-<h3 id="Ⅵ-Selinux问题"><a href="#Ⅵ-Selinux问题" class="headerlink" title="Ⅵ. Selinux问题"></a>Ⅵ. Selinux问题</h3><p>关闭selinux，否则网页上没有权限访问软链接的内容，或者查看selinux关于ftp相关的设置，命令如下</p>
+<h3 id="6-Selinux问题"><a href="#6-Selinux问题" class="headerlink" title="6. Selinux问题"></a>6. Selinux问题</h3><p>关闭selinux，否则网页上没有权限访问软链接的内容，或者查看selinux关于ftp相关的设置，命令如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getsebool -a| grep ftp</div></pre></td></tr></table></figure>
 <p>若不关闭设置如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setsebool ftpd_disable_trans 1</div><div class="line">setsebool -P ftp_home_dir 1</div><div class="line">setsebool -P httpd_read_user_content 1</div></pre></td></tr></table></figure>

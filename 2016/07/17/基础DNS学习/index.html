@@ -143,14 +143,14 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-常用命令"><a href="#Ⅰ-常用命令" class="headerlink" title="Ⅰ. 常用命令"></a>Ⅰ. 常用命令</h3><h4 id="▪-nslookup"><a href="#▪-nslookup" class="headerlink" title="▪ nslookup"></a>▪ nslookup</h4><p>查询域名命令，Windows自带该工具，Linux一般自带，有一些distribution没有，可以通过如下命令安装该工具。可以列出查询出来的IP，可以执行正解和反解查询。</p>
+          <h3 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h3><h4 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h4><p>查询域名命令，Windows自带该工具，Linux一般自带，有一些distribution没有，可以通过如下命令安装该工具。可以列出查询出来的IP，可以执行正解和反解查询。</p>
 <p>Ubuntu:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install dnsutils</div></pre></td></tr></table></figure>
 <p>Debian:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install dnsutils</div></pre></td></tr></table></figure>
 <p>Fedora / Centos:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install bind-utils</div></pre></td></tr></table></figure>
-<h4 id="▪-dig"><a href="#▪-dig" class="headerlink" title="▪ dig"></a>▪ dig</h4><p>使用方法，可以执行正解和反解。</p>
+<h4 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h4><p>使用方法，可以执行正解和反解。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig [options] FQDN [@server]</div></pre></td></tr></table></figure>
 <p>输出说明</p>
 <ul>
@@ -158,10 +158,10 @@
 <li>ANSWER（回答）: 应答结果</li>
 <li>AUTHORITY（验证）: 哪个DNS给出的回答。</li>
 </ul>
-<h4 id="▪-whois"><a href="#▪-whois" class="headerlink" title="▪ whois"></a>▪ whois</h4><p>查询领域设定，管理者是谁。</p>
-<h4 id="▪-host"><a href="#▪-host" class="headerlink" title="▪ host"></a>▪ host</h4><p>把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名</p>
+<h4 id="whois"><a href="#whois" class="headerlink" title="whois"></a>whois</h4><p>查询领域设定，管理者是谁。</p>
+<h4 id="host"><a href="#host" class="headerlink" title="host"></a>host</h4><p>把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名</p>
 <hr>
-<h3 id="Ⅱ-DNS记录类型"><a href="#Ⅱ-DNS记录类型" class="headerlink" title="Ⅱ. DNS记录类型"></a>Ⅱ. DNS记录类型</h3><h4 id="▪-正解"><a href="#▪-正解" class="headerlink" title="▪ 正解"></a>▪ 正解</h4><p>正解符合规范即可设定，取得域名授权就可以设定。</p>
+<h3 id="2-DNS记录类型"><a href="#2-DNS记录类型" class="headerlink" title="2. DNS记录类型"></a>2. DNS记录类型</h3><h4 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h4><p>正解符合规范即可设定，取得域名授权就可以设定。</p>
 <table>
 <thead>
 <tr>
@@ -230,7 +230,7 @@
 <li><strong>失效时间 (Expire)</strong>：如果一直失败尝试时间，持续联机到达这个设定值时限， 那么 slave 将不再继续尝试联机，并且尝试删除这份下载的 zone file 信息。</li>
 <li><strong>快取时间 (Minumum TTL)</strong>：如果这个数据库 zone file 中，每笔 RR 记录都没有写到 TTL 快取时间的话，那么就以这个 SOA 的设定值为主。</li>
 </ol>
-<h4 id="▪-反解"><a href="#▪-反解" class="headerlink" title="▪ 反解"></a>▪ 反解</h4><p>除非取得的是整个 class C 以上等级的 IP 网段，ISP 才有可能给 IP 反解授权。否则，若有反解的需求，就得要向直属上层 ISP 申请。</p>
+<h4 id="反解"><a href="#反解" class="headerlink" title="反解"></a>反解</h4><p>除非取得的是整个 class C 以上等级的 IP 网段，ISP 才有可能给 IP 反解授权。否则，若有反解的需求，就得要向直属上层 ISP 申请。</p>
 <table>
 <thead>
 <tr>
@@ -252,13 +252,13 @@
 </tbody>
 </table>
 <hr>
-<h3 id="Ⅲ-DNS服务搭建"><a href="#Ⅲ-DNS服务搭建" class="headerlink" title="Ⅲ. DNS服务搭建"></a>Ⅲ. DNS服务搭建</h3><p>安装bind套件，CentOS命令如下</p>
+<h3 id="3-DNS服务搭建"><a href="#3-DNS服务搭建" class="headerlink" title="3. DNS服务搭建"></a>3. DNS服务搭建</h3><p>安装bind套件，CentOS命令如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y bind*</div></pre></td></tr></table></figure>
-<h4 id="▪-转发DNS"><a href="#▪-转发DNS" class="headerlink" title="▪ 转发DNS"></a>▪ 转发DNS</h4><p>只需要.这个zonefile的简单DNS服务器，只有快速搜索功能，没有本地主机IP正反解配置文件。需要指定一个上层DNS服务器。只需要编辑/etc/named.conf</p>
+<h4 id="转发DNS"><a href="#转发DNS" class="headerlink" title="转发DNS"></a>转发DNS</h4><p>只需要.这个zonefile的简单DNS服务器，只有快速搜索功能，没有本地主机IP正反解配置文件。需要指定一个上层DNS服务器。只需要编辑/etc/named.conf</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vim /etc/named.conf</div><div class="line">  // 在预设的情况下，这个档案会去读取 /etc/named.rfc1912.zones 这个领域定义档</div><div class="line">  // 所以请记得要修改成底下的样式</div><div class="line">  options &#123;</div><div class="line">          listen-on port 53 &#123; any; &#125;;                                             //可不设定，代表全部接受</div><div class="line">          directory &quot;/var/named&quot;;                                              //数据库默认放置的目录所在</div><div class="line">          dump-file &quot;/var/named/data/cache_dump.db&quot;;         //一些统计信息</div><div class="line">          statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">          memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">          allow-query &#123; any; &#125;;                                                    //可不设定，代表全部接受</div><div class="line">          recursion yes;                                                              //将自己视为客户端的一种查询模式</div><div class="line">          forward only;                                                               //可暂时不设定</div><div class="line">          forwarders &#123;                                                                //是重点！</div><div class="line">          168.95.1.1;                                                                  //先用中华电信的 DNS 当上层</div><div class="line">          139.175.10.20;                                                            //再用 seednet 当上层</div><div class="line">          &#125;;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
 <p>启动服务，注意开启iptables的tcp和udp的53端口。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named start</div></pre></td></tr></table></figure>
-<h4 id="▪-权威DNS-amp-递归DNS"><a href="#▪-权威DNS-amp-递归DNS" class="headerlink" title="▪ 权威DNS &amp; 递归DNS"></a>▪ 权威DNS &amp; 递归DNS</h4><ul>
+<h4 id="权威DNS-amp-递归DNS"><a href="#权威DNS-amp-递归DNS" class="headerlink" title="权威DNS &amp; 递归DNS"></a>权威DNS &amp; 递归DNS</h4><ul>
 <li><p>规划IP地址和域名对应关系</p>
 </li>
 <li><p>主配置文件 /etc/named.conf</p>
@@ -309,15 +309,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named restart</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="▪-授权子域"><a href="#▪-授权子域" class="headerlink" title="▪ 授权子域"></a>▪ 授权子域</h4><ul>
+<h4 id="授权子域"><a href="#授权子域" class="headerlink" title="授权子域"></a>授权子域</h4><ul>
 <li>需要在上层DNS服务器的zonefile内指定增加NS并指向下层DNS的主机名和IP（A）即可，zonefile的序号也需要增加。</li>
 <li>下层DNS服务器必须上层DNS所提供的可用子域名，并被上层DNS管理员所获知。</li>
 </ul>
 <p>假设上层DNS管理edu.cn这个域名。其对应的zonefile为<code>/var/named/named.edu.cn</code>，内容如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA dns.edu.cn. admin.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS dns.edu.cn.</div><div class="line">dns.edu.cn. IN A 210.76.211.1</div><div class="line">@ IN MX 10 dns.edu.cn.</div><div class="line"></div><div class="line">ucas.edu.cn IN NS gsns.ucas.edu.cn      #子DNS服务器名称</div><div class="line">gsns.ucas.edu.cn IN A 30.30.30.30         #子DNS服务器IP地址</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅳ-相关操作"><a href="#Ⅳ-相关操作" class="headerlink" title="Ⅳ. 相关操作"></a>Ⅳ. 相关操作</h3><h4 id="▪-日志功能"><a href="#▪-日志功能" class="headerlink" title="▪ 日志功能"></a>▪ 日志功能</h4><p>检查 /var/log/messages 的内容讯息 (极重要！)，</p>
-<h4 id="▪-数据库更新"><a href="#▪-数据库更新" class="headerlink" title="▪ 数据库更新"></a>▪ 数据库更新</h4><ul>
+<h3 id="4-相关操作"><a href="#4-相关操作" class="headerlink" title="4. 相关操作"></a>4. 相关操作</h3><h4 id="日志功能"><a href="#日志功能" class="headerlink" title="日志功能"></a>日志功能</h4><p>检查 /var/log/messages 的内容讯息 (极重要！)，</p>
+<h4 id="数据库更新"><a href="#数据库更新" class="headerlink" title="数据库更新"></a>数据库更新</h4><ul>
 <li>先针对要更改的那个 zone 的数据库档案去做更新，就是加入 RR 的标志即是！</li>
 </ul>
 <ul>
@@ -326,11 +326,11 @@
 <ul>
 <li>重新启动 named ，或者是让 named 重新读取配置文件即可。</li>
 </ul>
-<h4 id="▪-其他"><a href="#▪-其他" class="headerlink" title="▪ 其他"></a>▪ 其他</h4><p>有待补充</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>有待补充</p>
 <hr>
-<h3 id="Ⅴ-实验测试"><a href="#Ⅴ-实验测试" class="headerlink" title="Ⅴ. 实验测试"></a>Ⅴ. 实验测试</h3><h4 id="▪-实验拓扑"><a href="#▪-实验拓扑" class="headerlink" title="▪ 实验拓扑"></a>▪ 实验拓扑</h4><center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-1.jpg" alt="5-1"></center><center style="color:purple"><strong>图5-1 实验拓扑</strong></center>
+<h3 id="5-实验测试"><a href="#5-实验测试" class="headerlink" title="5. 实验测试"></a>5. 实验测试</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-1.jpg" alt="5-1"></center><center style="color:purple"><strong>图5-1 实验拓扑</strong></center>
 
-<h4 id="▪-设备信息"><a href="#▪-设备信息" class="headerlink" title="▪ 设备信息"></a>▪ 设备信息</h4><table>
+<h4 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h4><table>
 <thead>
 <tr>
 <th>设备名</th>
@@ -372,7 +372,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="▪-DNS测试"><a href="#▪-DNS测试" class="headerlink" title="▪ DNS测试"></a>▪ DNS测试</h4><p>Winxp2的DNS地址为gsns.ucas.edu.cn时，可以进行nslookup测试，如图5-2所示</p>
+<h4 id="DNS测试"><a href="#DNS测试" class="headerlink" title="DNS测试"></a>DNS测试</h4><p>Winxp2的DNS地址为gsns.ucas.edu.cn时，可以进行nslookup测试，如图5-2所示</p>
 <center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-2.jpg" alt="5-2"></center><center style="color:purple"><strong>图5-2 nslookup</strong></center>
 
 
@@ -400,7 +400,7 @@
     <div class="nav-links">
       
         <div class="nav-previous">
-          <a href="/2016/07/18/OSPF 模拟入侵测试2-劫持指定主机IP/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+          <a href="/2016/07/18/OSPF 模拟入侵测试3-劫持网页服务器IP/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
         </div>
       
       

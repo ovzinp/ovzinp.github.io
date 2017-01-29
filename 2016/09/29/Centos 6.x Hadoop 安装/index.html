@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-简介"><a href="#Ⅰ-简介" class="headerlink" title="Ⅰ.简介"></a>Ⅰ.简介</h3><p>Hadoop可分为<strong>分布式安装</strong>以及<strong>伪分布式安装</strong>，以分布式安装的方式安装Hadoop，可以更好地体验Hadoop的分布式工作的原理。然而，安装设备可能是一个问题，找不到那么多的Linux主机来安装Hadoop，以及要维护这些Linux主机之间的通信，这都是一系列问题。以下为我设计的Hadoop安装方案。</p>
+          <h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>Hadoop可分为<strong>分布式安装</strong>以及<strong>伪分布式安装</strong>，以分布式安装的方式安装Hadoop，可以更好地体验Hadoop的分布式工作的原理。然而，安装设备可能是一个问题，找不到那么多的Linux主机来安装Hadoop，以及要维护这些Linux主机之间的通信，这都是一系列问题。以下为我设计的Hadoop安装方案。</p>
 <ul>
 <li>所需软件<ul>
 <li>VirtualBox</li>
@@ -153,7 +153,7 @@
 </li>
 </ul>
 <hr>
-<h3 id="Ⅱ-逻辑拓扑"><a href="#Ⅱ-逻辑拓扑" class="headerlink" title="Ⅱ.逻辑拓扑"></a>Ⅱ.逻辑拓扑</h3><p>Hadoop的结构为主从结构，即为master和slave，可能有一个master多个slave，也可能存在多个master节点，多个master节点中一个启用，其他的为备用。master节点维护Hadoop的namenode，维护着所存储文件的元数据，slave节点具体存储数据块。其中逻辑拓扑如图1-1所示。</p>
+<h3 id="2-逻辑拓扑"><a href="#2-逻辑拓扑" class="headerlink" title="2.逻辑拓扑"></a>2.逻辑拓扑</h3><p>Hadoop的结构为主从结构，即为master和slave，可能有一个master多个slave，也可能存在多个master节点，多个master节点中一个启用，其他的为备用。master节点维护Hadoop的namenode，维护着所存储文件的元数据，slave节点具体存储数据块。其中逻辑拓扑如图1-1所示。</p>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-tpg.png" alt="图1-1"></center><br><center style="color:purple"><strong>图1-1</strong></center>   
 
 <p>其中IP地址表为如表1-1所示。</p>
@@ -191,11 +191,11 @@
 <center style="color:purple"><strong>表1-1</strong></center>
 
 <hr>
-<h3 id="Ⅲ-环境搭建"><a href="#Ⅲ-环境搭建" class="headerlink" title="Ⅲ.环境搭建"></a>Ⅲ.环境搭建</h3><p>使用VirtualBox创建三个CentOS 6.x的虚拟机，这里建议创建CentOS minimal虚拟机，这样可以节省计算机内存，鉴于Hadoop的所有安装都是在命令行下， 所以极力建议只安装纯命令行的虚拟机。可以先创建一个虚拟机，然后克隆其他两个虚拟机。在虚拟机创建成功之后，关闭虚拟机并修改虚拟机的网卡文件。</p>
-<h4 id="▪-Windows环回端口"><a href="#▪-Windows环回端口" class="headerlink" title="▪ Windows环回端口"></a>▪ Windows环回端口</h4><p>添加Windows环回端口的意义在于可以把Windows加入到Hadoop虚拟机集群之间的局域网中，如何创建Windows环回端口，请自行Google或者Baidu，创建环回端口之后，设置环回端口的静态IP。如图2-1所示,将环回接口IP设置为10.10.10.10/24。</p>
+<h3 id="3-环境搭建"><a href="#3-环境搭建" class="headerlink" title="3.环境搭建"></a>3.环境搭建</h3><p>使用VirtualBox创建三个CentOS 6.x的虚拟机，这里建议创建CentOS minimal虚拟机，这样可以节省计算机内存，鉴于Hadoop的所有安装都是在命令行下， 所以极力建议只安装纯命令行的虚拟机。可以先创建一个虚拟机，然后克隆其他两个虚拟机。在虚拟机创建成功之后，关闭虚拟机并修改虚拟机的网卡文件。</p>
+<h4 id="Windows环回端口"><a href="#Windows环回端口" class="headerlink" title="Windows环回端口"></a>Windows环回端口</h4><p>添加Windows环回端口的意义在于可以把Windows加入到Hadoop虚拟机集群之间的局域网中，如何创建Windows环回端口，请自行Google或者Baidu，创建环回端口之后，设置环回端口的静态IP。如图2-1所示,将环回接口IP设置为10.10.10.10/24。</p>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Hadoop/loopback.jpg" alt=""></center><br><center style="color:purple"><strong>图2-1</strong></center>  
 
-<h4 id="▪-修改虚拟机网口接口"><a href="#▪-修改虚拟机网口接口" class="headerlink" title="▪ 修改虚拟机网口接口"></a>▪ 修改虚拟机网口接口</h4><p>为每个虚拟机添加三张网卡，第一张网卡VirtualBox配置如图2-2所示，网卡模式为NAT模式，用于虚拟机连接外网，对应CentOS的eth0。</p>
+<h4 id="修改虚拟机网口接口"><a href="#修改虚拟机网口接口" class="headerlink" title="修改虚拟机网口接口"></a>修改虚拟机网口接口</h4><p>为每个虚拟机添加三张网卡，第一张网卡VirtualBox配置如图2-2所示，网卡模式为NAT模式，用于虚拟机连接外网，对应CentOS的eth0。</p>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Hadoop/vm-net1.jpg" alt=""></center><br><center style="color:purple"><strong>图2-2</strong></center>   
 
 <p>第二张网卡如图2-3所示，对应CentOS的eth1，该网卡用于Windows SSH登录虚拟机，为host-only模式。</p>
@@ -210,7 +210,7 @@
 </blockquote>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Hadoop/vm-net3.jpg" alt=""></center><br><center style="color:purple"><strong>图2-4</strong></center> 
 
-<h4 id="▪-虚拟机网卡设置"><a href="#▪-虚拟机网卡设置" class="headerlink" title="▪ 虚拟机网卡设置"></a>▪ 虚拟机网卡设置</h4><p>删除克隆虚拟机网卡遗留信息，克隆的虚拟机会重置MAC地址，但是CentOS系统不会自动更新信息，需要清理清理历史网卡信息，删除如图2-5所示的文件。删除该文件之后，重启虚拟机。</p>
+<h4 id="虚拟机网卡设置"><a href="#虚拟机网卡设置" class="headerlink" title="虚拟机网卡设置"></a>虚拟机网卡设置</h4><p>删除克隆虚拟机网卡遗留信息，克隆的虚拟机会重置MAC地址，但是CentOS系统不会自动更新信息，需要清理清理历史网卡信息，删除如图2-5所示的文件。删除该文件之后，重启虚拟机。</p>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-1.png" alt=""></center>   <center style="color:purple"><strong>图2-5</strong></center>
 
 
@@ -236,7 +236,7 @@
 <li>Windows环回接口IP地址与虚拟机eth2的IP不在一个网段。</li>
 </ul>
 <hr>
-<h3 id="Ⅳ-Hadoop安装"><a href="#Ⅳ-Hadoop安装" class="headerlink" title="Ⅳ.Hadoop安装"></a>Ⅳ.Hadoop安装</h3><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>将<code>hadoop-2.6.0.tar.gz</code>和<code>jdk-7u75-linux-x64.tar</code>以及相关xml文件通过xftp传送不过到虚拟机/root目录下，三台虚拟机都如此操作。文件下载地址请点<a href="http://pan.baidu.com/s/1gdJgh4B" target="_blank" rel="external">这里</a>。</p>
+<h3 id="4-Hadoop安装"><a href="#4-Hadoop安装" class="headerlink" title="4.Hadoop安装"></a>4.Hadoop安装</h3><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>将<code>hadoop-2.6.0.tar.gz</code>和<code>jdk-7u75-linux-x64.tar</code>以及相关xml文件通过xftp传送不过到虚拟机/root目录下，三台虚拟机都如此操作。文件下载地址请点<a href="http://pan.baidu.com/s/1gdJgh4B" target="_blank" rel="external">这里</a>。</p>
 <h4 id="创建hadoop账户"><a href="#创建hadoop账户" class="headerlink" title="创建hadoop账户"></a>创建hadoop账户</h4><p>在三台虚拟机上均创建hadoop账户。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">useradd hadoop</div><div class="line">passwd hadoop</div></pre></td></tr></table></figure>
 <h4 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h4><p>Hadoop需要JDK的支持，需要在所有的虚拟机节点上安装JDK环境，首先解压安装JDK。</p>
@@ -297,7 +297,7 @@
 <p><span style="color:red"><strong>提示：</strong></span>以上关于免密码SSH登录的配置均在master和slave的hadoop账户下进行的， 免密码登录的是主机之间的hadoop账户，若需要root账户之间免密码登录，需要另行配置。还有很重要的一点是~/.ssh文件夹的权限必须是700</p>
 </blockquote>
 <hr>
-<h3 id="Ⅴ-hadoop启动运行"><a href="#Ⅴ-hadoop启动运行" class="headerlink" title="Ⅴ.hadoop启动运行"></a>Ⅴ.hadoop启动运行</h3><h4 id="脚本启动hadoop"><a href="#脚本启动hadoop" class="headerlink" title="脚本启动hadoop"></a>脚本启动hadoop</h4><p>以下操作均在master节点下<br>格式化master节点，即格式化namenode</p>
+<h3 id="5-hadoop启动运行"><a href="#5-hadoop启动运行" class="headerlink" title="5.hadoop启动运行"></a>5.hadoop启动运行</h3><h4 id="脚本启动hadoop"><a href="#脚本启动hadoop" class="headerlink" title="脚本启动hadoop"></a>脚本启动hadoop</h4><p>以下操作均在master节点下<br>格式化master节点，即格式化namenode</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">~/hadoop/bin/hdfs namenode -format</div></pre></td></tr></table></figure>
 <p>启动HDFS服务</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">~/hadoop/sbin/start-dfs.sh</div></pre></td></tr></table></figure>
@@ -353,7 +353,7 @@
     <div class="nav-links">
       
         <div class="nav-previous">
-          <a href="/2016/10/29/OpenWRT 无线中继/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+          <a href="/2016/09/29/CentOS Minimal X11转发/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
         </div>
       
       

@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-git服务器搭建"><a href="#Ⅰ-git服务器搭建" class="headerlink" title="Ⅰ.git服务器搭建"></a>Ⅰ.git服务器搭建</h3><h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><p>以root用户执行如下命令</p>
+          <h3 id="1-git服务器搭建"><a href="#1-git服务器搭建" class="headerlink" title="1.git服务器搭建"></a>1.git服务器搭建</h3><h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><p>以root用户执行如下命令</p>
 <pre><code>yum install python python-setuptools
 cd /usr/local/src
 git clone git://github.com/res0nat0r/gitosis.git
@@ -165,7 +165,7 @@ gitosis-init &lt; /tmp/id_rsa.pub
 Reinitialized existing Git repository in /home/git/repositories/gitosis-admin.git/
 </code></pre><p>删除之前上传的客户端密钥，同时要保证git用户文件夹下.ssh文件夹的权限为700，.ssh/中所有的文件权限为644，否则无法免密码登陆。也不要擅自修改.ssh文件夹中文件的权限。</p>
 <hr>
-<h3 id="Ⅱ-客户端设置"><a href="#Ⅱ-客户端设置" class="headerlink" title="Ⅱ.客户端设置"></a>Ⅱ.客户端设置</h3><h4 id="导出管理项目"><a href="#导出管理项目" class="headerlink" title="导出管理项目"></a>导出管理项目</h4><p>假设客户端为root@tokyo，在客户端的任意目录下，导出管理项目</p>
+<h3 id="2-客户端设置"><a href="#2-客户端设置" class="headerlink" title="2.客户端设置"></a>2.客户端设置</h3><h4 id="导出管理项目"><a href="#导出管理项目" class="headerlink" title="导出管理项目"></a>导出管理项目</h4><p>假设客户端为root@tokyo，在客户端的任意目录下，导出管理项目</p>
 <pre><code>mkdir repo
 cd repo
 git clone git@qingdao:gitosis-admin.git
@@ -212,7 +212,7 @@ git push
 <p><strong>提示：</strong> 在首次添加git项目时候，需要配置用户名和邮箱，命令如下<br>git config –global user.name “xxx”<br>git config –global user.email “xxx@example.com”</p>
 </blockquote>
 <hr>
-<h3 id="Ⅲ-Git常用命令"><a href="#Ⅲ-Git常用命令" class="headerlink" title="Ⅲ.Git常用命令"></a>Ⅲ.Git常用命令</h3><h4 id="远程仓库相关命令"><a href="#远程仓库相关命令" class="headerlink" title="远程仓库相关命令"></a>远程仓库相关命令</h4><ul>
+<h3 id="3-Git常用命令"><a href="#3-Git常用命令" class="headerlink" title="3.Git常用命令"></a>3.Git常用命令</h3><h4 id="远程仓库相关命令"><a href="#远程仓库相关命令" class="headerlink" title="远程仓库相关命令"></a>远程仓库相关命令</h4><ul>
 <li><p>检出仓库：        $ git clone git://github.com/jQuery/jquery.git</p>
 </li>
 <li><p>查看远程仓库：$ git remote -v</p>
@@ -287,7 +287,7 @@ $git clean -fdx
 </ul>
 <h4 id="忽略一些文件、文件夹不提交"><a href="#忽略一些文件、文件夹不提交" class="headerlink" title="忽略一些文件、文件夹不提交"></a>忽略一些文件、文件夹不提交</h4><p>在仓库根目录下创建名称为“.gitignore”的文件，写入不需要的文件夹名或文件，每个元素占一行即可，如<br>target<br>bin<br>*.db</p>
 <hr>
-<h3 id="Ⅳ-Git命令详解"><a href="#Ⅳ-Git命令详解" class="headerlink" title="Ⅳ.Git命令详解"></a>Ⅳ.Git命令详解</h3><ul>
+<h3 id="4-Git命令详解"><a href="#4-Git命令详解" class="headerlink" title="4.Git命令详解"></a>4.Git命令详解</h3><ul>
 <li><p><strong>git pull</strong>：从其他的版本库（既可以是远程的也可以是本地的）将代码更新到本地，例如：’git pull origin master’就是将origin这个版本库的代码更新到本地的master主枝，该功能类似于SVN的update</p>
 </li>
 <li><p><strong>git add</strong>：是将当前更改或者新增的文件加入到Git的索引中，加入到Git的索引中就表示记入了版本历史中，这也是提交之前所需要执行的一步，例如’git add app/model/user.rb’就会增加app/model/user.rb文件到Git的索引中，该功能类似于SVN的add</p>
@@ -339,7 +339,7 @@ $git clean -fdx
 </li>
 </ul>
 <hr>
-<h3 id="Ⅴ-Git服务器搭建排错"><a href="#Ⅴ-Git服务器搭建排错" class="headerlink" title="Ⅴ.Git服务器搭建排错"></a>Ⅴ.Git服务器搭建排错</h3><h4 id="Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting"><a href="#Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting" class="headerlink" title="Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting"></a>Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting</h4><p>需要执行下面的命令才能修复：</p>
+<h3 id="5-Git服务器搭建排错"><a href="#5-Git服务器搭建排错" class="headerlink" title="5.Git服务器搭建排错"></a>5.Git服务器搭建排错</h3><h4 id="Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting"><a href="#Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting" class="headerlink" title="Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting"></a>Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting</h4><p>需要执行下面的命令才能修复：</p>
 <pre><code>git reset --hard HEAD    
 git clean -f -d    
 git pull    

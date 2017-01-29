@@ -143,10 +143,10 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-申请Tunnel-Broke账号"><a href="#Ⅰ-申请Tunnel-Broke账号" class="headerlink" title="Ⅰ.申请Tunnel Broke账号"></a>Ⅰ.申请Tunnel Broke账号</h3><h4 id="账号注册"><a href="#账号注册" class="headerlink" title="账号注册"></a>账号注册</h4><p>账号注册如下图所示，具体流程略过。</p>
+          <h3 id="1-申请Tunnel-Broke账号"><a href="#1-申请Tunnel-Broke账号" class="headerlink" title="1.申请Tunnel Broke账号"></a>1.申请Tunnel Broke账号</h3><h4 id="账号注册"><a href="#账号注册" class="headerlink" title="账号注册"></a>账号注册</h4><p>账号注册如下图所示，具体流程略过。</p>
 <p><strong><em>图1-1</em></strong><br><img src="http://i.imgur.com/TT2bWgW.png" alt=""></p>
 <hr>
-<h3 id="Ⅱ-创建IPv6隧道"><a href="#Ⅱ-创建IPv6隧道" class="headerlink" title="Ⅱ.创建IPv6隧道"></a>Ⅱ.创建IPv6隧道</h3><p>创建常规隧道,如图2-1所示</p>
+<h3 id="2-创建IPv6隧道"><a href="#2-创建IPv6隧道" class="headerlink" title="2.创建IPv6隧道"></a>2.创建IPv6隧道</h3><p>创建常规隧道,如图2-1所示</p>
 <p><strong><em>图2-1</em></strong><br><img src="http://i.imgur.com/HkC2gLf.png" alt=""></p>
 <p>填写VPS的IP地址，注意，需要在系统防火墙将icmp协议打开，然后会检测是否已经绑定IPv6隧道，检测通过后可以选择Tunnel服务器。</p>
 <p><strong><em>图2-2</em></strong><br><img src="http://i.imgur.com/SihlUvg.png" alt=""></p>
@@ -170,7 +170,7 @@ ip -f inet6 addr
 <p>防火墙配置，在iptables上放行协议41，命令如下，这时候可以使用带有IPv6地址的主机ping一下该VPS。</p>
 <pre><code>iptables -A INPUT -p 41 -j ACCEPT
 </code></pre><hr>
-<h3 id="Ⅲ-删除隧道"><a href="#Ⅲ-删除隧道" class="headerlink" title="Ⅲ.删除隧道"></a>Ⅲ.删除隧道</h3><p>首先在VPS命令上上删除隧道适配器，命令为</p>
+<h3 id="3-删除隧道"><a href="#3-删除隧道" class="headerlink" title="3.删除隧道"></a>3.删除隧道</h3><p>首先在VPS命令上上删除隧道适配器，命令为</p>
 <pre><code>ip tunnel del he-ipv6
 </code></pre><p>删除隧道之后，在tunnelbroker上删除对应隧道，然后可以绑定新的隧道。</p>
 

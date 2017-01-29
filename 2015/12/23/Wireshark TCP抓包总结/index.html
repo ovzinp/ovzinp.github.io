@@ -139,7 +139,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-TCP"><a href="#Ⅰ-TCP" class="headerlink" title="Ⅰ.TCP"></a>Ⅰ.TCP</h3><h4 id="连接状态标记字段"><a href="#连接状态标记字段" class="headerlink" title="连接状态标记字段"></a>连接状态标记字段</h4><ul>
+          <h3 id="1-TCP"><a href="#1-TCP" class="headerlink" title="1.TCP"></a>1.TCP</h3><h4 id="连接状态标记字段"><a href="#连接状态标记字段" class="headerlink" title="连接状态标记字段"></a>连接状态标记字段</h4><ul>
 <li>SYN表示建立连接</li>
 <li>FIN表示关闭连接</li>
 <li>ACK表示响应</li>
@@ -189,7 +189,7 @@
 <li>TCP spurious retransmission(TCP伪重传)</li>
 </ul>
 <hr>
-<h3 id="Ⅱ-wireshark过滤器"><a href="#Ⅱ-wireshark过滤器" class="headerlink" title="Ⅱ.wireshark过滤器"></a>Ⅱ.wireshark过滤器</h3><h4 id="捕捉过滤器-CaptureFilters"><a href="#捕捉过滤器-CaptureFilters" class="headerlink" title="捕捉过滤器(CaptureFilters)"></a>捕捉过滤器(CaptureFilters)</h4><p>用于决定将什么样的信息记录在捕捉结果中。</p>
+<h3 id="2-wireshark过滤器"><a href="#2-wireshark过滤器" class="headerlink" title="2.wireshark过滤器"></a>2.wireshark过滤器</h3><h4 id="捕捉过滤器-CaptureFilters"><a href="#捕捉过滤器-CaptureFilters" class="headerlink" title="捕捉过滤器(CaptureFilters)"></a>捕捉过滤器(CaptureFilters)</h4><p>用于决定将什么样的信息记录在捕捉结果中。</p>
 <pre><code>语法： Protocol Direction    Host(s)    Value Logical Operations Other expression   
 例子： tcp dst 10.1.1.1 80 and tcp dst 10.2.2.2 3128
 </code></pre><blockquote>
@@ -237,7 +237,7 @@
 <p><span style="color:green"><strong>示例：</strong></span><br>upper(http.request.uri) contains “ONLINE”</p>
 </blockquote>
 <hr>
-<h3 id="Ⅲ-wireshark-TCP数据"><a href="#Ⅲ-wireshark-TCP数据" class="headerlink" title="Ⅲ.wireshark TCP数据"></a>Ⅲ.wireshark TCP数据</h3><h4 id="数据流追踪"><a href="#数据流追踪" class="headerlink" title="数据流追踪"></a>数据流追踪</h4><p>一下所有的wireshark都是以2.0为例子，点击任意一个TCP协议传输的数据帧，右键选择追踪流，选择TCP或者SSL，则可以追踪这个TCP连接的数据流。如图3-1所示。之后可以观察到这个TCP数据流传输的数据，并可以把数据保存。</p>
+<h3 id="3-wireshark-TCP数据"><a href="#3-wireshark-TCP数据" class="headerlink" title="3.wireshark TCP数据"></a>3.wireshark TCP数据</h3><h4 id="数据流追踪"><a href="#数据流追踪" class="headerlink" title="数据流追踪"></a>数据流追踪</h4><p>一下所有的wireshark都是以2.0为例子，点击任意一个TCP协议传输的数据帧，右键选择追踪流，选择TCP或者SSL，则可以追踪这个TCP连接的数据流。如图3-1所示。之后可以观察到这个TCP数据流传输的数据，并可以把数据保存。</p>
 <p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-1.png" alt=""></p>
 <h4 id="端点（Endpoints）"><a href="#端点（Endpoints）" class="headerlink" title="端点（Endpoints）"></a>端点（Endpoints）</h4><p>Statistics（统计） → Endpoints是统计当前抓包文件的重要工具，如图3-2所示，可以查看TCP/IP以及UDP等协议的统计结果，也可以根据统计结果进行过滤。</p>
 <p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-2.jpg" alt=""></p>

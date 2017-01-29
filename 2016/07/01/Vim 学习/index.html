@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-移动"><a href="#Ⅰ-移动" class="headerlink" title="Ⅰ. 移动"></a>Ⅰ. 移动</h3><h4 id="word为单位移动"><a href="#word为单位移动" class="headerlink" title="word为单位移动"></a>word为单位移动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line"> ---&gt;--&gt;-&gt;-----------------&gt;</div><div class="line">   w  w  w                3w</div></pre></td></tr></table></figure>
+          <h3 id="1-移动"><a href="#1-移动" class="headerlink" title="1. 移动"></a>1. 移动</h3><h4 id="word为单位移动"><a href="#word为单位移动" class="headerlink" title="word为单位移动"></a>word为单位移动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line"> ---&gt;--&gt;-&gt;-----------------&gt;</div><div class="line">   w  w  w                3w</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">&lt;----&lt;--&lt;-&lt;---------&lt;---</div><div class="line">     b     b  b        2b      b</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">    &lt;- &lt;--- -----&gt; ----&gt;</div><div class="line">     ge ge        e      e</div></pre></td></tr></table></figure>
 <p>有一些被认为是non-word的特殊字符, 比如”.”, “-“或”)”充当了word边界的作用。要改变Vim对word边界的定义, 请查看’iskeyword’选项.还可以以空白为分界的WORDs为单位进行移动. 这种WORD与通常意义上的word的边界不同.所以此处用了大写的WORD来区分于word. 它的移动命令也是相应字母的大写形式, 如下所示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">      ge          b          w                                       e</div><div class="line">     &lt;-          &lt;-         ---&gt;                                  ---&gt;</div><div class="line">This is-a line, with special/separated/words (and some more).</div><div class="line">     &lt;----&lt;-----            --------------------------&gt;             -----&gt;</div><div class="line">        gE     B                                  W                                    E</div></pre></td></tr></table></figure></p>
@@ -183,7 +183,7 @@
 <li>一次滚动一行可以使用CTRL-E(向上滚动)和CTRL-Y(向下滚动)</li>
 </ul>
 <hr>
-<h3 id="Ⅱ-删除"><a href="#Ⅱ-删除" class="headerlink" title="Ⅱ. 删除"></a>Ⅱ. 删除</h3><h4 id="操作符命令和位移"><a href="#操作符命令和位移" class="headerlink" title="操作符命令和位移"></a>操作符命令和位移</h4><p>“4w”命令是向前移动4个word. 所以”d4w”命令是删除4个word.</p>
+<h3 id="2-删除"><a href="#2-删除" class="headerlink" title="2. 删除"></a>2. 删除</h3><h4 id="操作符命令和位移"><a href="#操作符命令和位移" class="headerlink" title="操作符命令和位移"></a>操作符命令和位移</h4><p>“4w”命令是向前移动4个word. 所以”d4w”命令是删除4个word.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">                            ------------------&gt;</div><div class="line">                                    d4w</div><div class="line">To err is human. you need a computer.</div></pre></td></tr></table></figure>
 <p>Vim只删除到位移命令之后光标的前一个位置. 这是因为Vim知道你并不是要删除下一个word的第一个字符. 如果你用”e”命令来移动到word的末尾, Vim也会假设你是要包括那最后一个字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. you need a computer.</div><div class="line">                           --------&gt;</div><div class="line">                               d2e</div><div class="line">To err is human. a computer.</div></pre></td></tr></table></figure></p>
 <p>删除到行尾</p>
@@ -227,7 +227,7 @@
       
       
         <div class="nav-next">
-          <a href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2016/06/24/Linux 文件分割/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

@@ -130,12 +130,12 @@
           <div class="tags-links">
             
               
-                <a href="/tags/freeradius/" rel="tag">
-                  freeradius
-                </a>
-              
                 <a href="/tags/linux/" rel="tag">
                   linux
+                </a>
+              
+                <a href="/tags/freeradius/" rel="tag">
+                  freeradius
                 </a>
               
             
@@ -185,9 +185,9 @@
 <li>test：账户名</li>
 <li>test：密码</li>
 <li>localhost：Freeradius服务器地址，代表本地</li>
-<li>testing123：与Freeradius之间的共享密钥，在Freeradius服务器的配置目录下的raddb/clients.conf中定义，实际生产环境暗码需要设置很长而且复杂<h4 id="4-2-Freeradius运行"><a href="#4-2-Freeradius运行" class="headerlink" title="4.2 Freeradius运行"></a>4.2 Freeradius运行</h4></li>
+<li>testing123：与Freeradius之间的共享密钥，在Freeradius服务器的配置目录下的raddb/clients.conf中定义，实际生产环境暗码需要设置很长而且复杂</li>
 </ul>
-<p>若debug模式测试完毕，则可以正常启动radius，使用如下命令启动radius服务，如果要终止服务，通过kill命令来杀掉radius的服务进程</p>
+<h4 id="4-2-Freeradius运行"><a href="#4-2-Freeradius运行" class="headerlink" title="4.2 Freeradius运行"></a>4.2 Freeradius运行</h4><p>若debug模式测试完毕，则可以正常启动radius，使用如下命令启动radius服务，如果要终止服务，通过kill命令来杀掉radius的服务进程</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">radiusd</div></pre></td></tr></table></figure>
 <hr>
 <h3 id="5-流量限制模块添加"><a href="#5-流量限制模块添加" class="headerlink" title="5. 流量限制模块添加"></a>5. 流量限制模块添加</h3><h4 id="5-1-启用sqlcounter模块"><a href="#5-1-启用sqlcounter模块" class="headerlink" title="5.1 启用sqlcounter模块"></a>5.1 启用sqlcounter模块</h4><p>切换到<code>/usr/local/etc/raddb/mods-enabled</code>下，启用sqlcounter模块</p>
@@ -198,7 +198,7 @@
 <li>%{${key}}为上面设置的key</li>
 <li>%b为每个周期的第一天</li>
 <li>%e为每个周期的最后一天，这里只用到了第一天</li>
-<li>Freeradius流量按照字节（byte）统计，所以统计结果除以1048576（1024*1024），正好是1MB，则在数据库里可以直接按照MB统计，而不是字节。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">query = "\</div><div class="line">    <span class="keyword">SELECT</span> <span class="keyword">SUM</span>(acctinputoctets + acctoutputoctets) <span class="keyword">DIV</span> <span class="number">1048576</span> \                                                                             </div><div class="line">    <span class="keyword">FROM</span> radacct \</div><div class="line">    <span class="keyword">WHERE</span> UserName=<span class="string">'%&#123;$&#123;key&#125;&#125;'</span> \ </div><div class="line">    <span class="keyword">AND</span> <span class="keyword">UNIX_TIMESTAMP</span>(AcctStartTime) &gt; <span class="string">'%b'</span><span class="string">"</span></div></pre></td></tr></table></figure>
+<li>Freeradius流量按照字节（byte）统计，所以统计结果除以1048576（1024*1024），正好是1MB，则在数据库里可以直接按照MB统计，而不是字节。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">query = "\</div><div class="line">    <span class="keyword">SELECT</span> <span class="keyword">SUM</span>(acctinputoctets + acctoutputoctets) <span class="keyword">DIV</span> <span class="number">1048576</span> \</div><div class="line">	<span class="keyword">FROM</span> radacct \</div><div class="line">    <span class="keyword">WHERE</span> UserName=<span class="string">'%&#123;$&#123;key&#125;&#125;'</span> \ </div><div class="line">    <span class="keyword">AND</span> <span class="keyword">UNIX_TIMESTAMP</span>(AcctStartTime) &gt; <span class="string">'%b'</span><span class="string">"</span></div></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="5-3-授权启用自定义模块"><a href="#5-3-授权启用自定义模块" class="headerlink" title="5.3 授权启用自定义模块"></a>5.3 授权启用自定义模块</h4><p>修改<code>/usrlocal/etc/raddb/sites-available/default</code>，找到authorize字段，启用自定义模块。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">authorize &#123;</div><div class="line">	monthlytrafficcounter</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -225,12 +225,12 @@
     <div class="nav-links">
       
         <div class="nav-previous">
-          <a href="/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+          <a href="/2017/01/18/CentOS 6.x ocserv安装/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
         </div>
       
       
         <div class="nav-next">
-          <a href="/2017/01/18/CentOS 6.x ocserv安装/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2017/01/16/Linux重定向/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

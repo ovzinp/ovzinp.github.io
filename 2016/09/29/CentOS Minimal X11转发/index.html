@@ -139,23 +139,23 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-X11安装以SSH设置"><a href="#Ⅰ-X11安装以SSH设置" class="headerlink" title="Ⅰ. X11安装以SSH设置"></a>Ⅰ. X11安装以SSH设置</h3><h4 id="▪-X11安装"><a href="#▪-X11安装" class="headerlink" title="▪ X11安装"></a>▪ X11安装</h4><p>下载CentOS所需要的软件包，命令如下所示。安装xterm，以及xorg-x11-xauth和相关依赖。</p>
+          <h3 id="1-X11安装以SSH设置"><a href="#1-X11安装以SSH设置" class="headerlink" title="1. X11安装以SSH设置"></a>1. X11安装以SSH设置</h3><h4 id="X11安装"><a href="#X11安装" class="headerlink" title="X11安装"></a>X11安装</h4><p>下载CentOS所需要的软件包，命令如下所示。安装xterm，以及xorg-x11-xauth和相关依赖。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y install xterm xorg-x11-xauth</div><div class="line">yum -y  install libXext libXtst libXi twm</div></pre></td></tr></table></figure>
-<h4 id="▪-SSH设置"><a href="#▪-SSH设置" class="headerlink" title="▪ SSH设置"></a>▪ SSH设置</h4><p>修改/etc/ssh/sshd_config</p>
+<h4 id="SSH设置"><a href="#SSH设置" class="headerlink" title="SSH设置"></a>SSH设置</h4><p>修改/etc/ssh/sshd_config</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">AllowTcpForwarding yes</div><div class="line">X11Forwarding yes</div></pre></td></tr></table></figure>
 <p>修改之后，重启ssh服务</p>
-<h4 id="▪-其他问题"><a href="#▪-其他问题" class="headerlink" title="▪ 其他问题"></a>▪ 其他问题</h4><ul>
+<h4 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h4><ul>
 <li>若是postfix服务无法启动，则使用postfix set-permissions命令查看原因，可能原因之一因为hosts文件中缺失对localhost地址的解析，所以导致了postfix服务无法启动。</li>
 </ul>
 <ul>
 <li>hosts文件中确实对localhost的解析，可能导致了X11无法转发。</li>
 </ul>
 <hr>
-<h3 id="Ⅱ-软件设置"><a href="#Ⅱ-软件设置" class="headerlink" title="Ⅱ. 软件设置"></a>Ⅱ. 软件设置</h3><h4 id="▪-xshell设置"><a href="#▪-xshell设置" class="headerlink" title="▪ xshell设置"></a>▪ xshell设置</h4><p>在设置完基本的SSH登录之后，在隧道选项中添加如下信息，如图1-1所示。</p>
+<h3 id="2-软件设置"><a href="#2-软件设置" class="headerlink" title="2. 软件设置"></a>2. 软件设置</h3><h4 id="xshell设置"><a href="#xshell设置" class="headerlink" title="xshell设置"></a>xshell设置</h4><p>在设置完基本的SSH登录之后，在隧道选项中添加如下信息，如图1-1所示。</p>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/X11_forwarding/1-1.jpg" alt=""></center><br><center style="color:purple"><strong>图1-1</strong></center>
 
 <p>但是xshell在通过IPv6登录到主机时候，不能成功执行，根据strace的结果，应该是xshell软件的问题或者xshell设置的问题。</p>
-<h4 id="▪-putty设置"><a href="#▪-putty设置" class="headerlink" title="▪ putty设置"></a>▪ putty设置</h4><p>安装Xming，<a href="https://sourceforge.net/projects/xming/" target="_blank" rel="external">下载地址</a>，安装之后，在执行X11 Forwarding之前，需要启动X11。</p>
+<h4 id="putty设置"><a href="#putty设置" class="headerlink" title="putty设置"></a>putty设置</h4><p>安装Xming，<a href="https://sourceforge.net/projects/xming/" target="_blank" rel="external">下载地址</a>，安装之后，在执行X11 Forwarding之前，需要启动X11。</p>
 <p>启动putty，选择Connection-&gt;SSH-&gt;X11，启动X11 Forwarding，如图2-1所示。</p>
 <center> <img src="http://qingdao.icean.cc:11234/Imgbed/X11_forwarding/1-2.jpg" alt="1-2"></center>
 
@@ -181,12 +181,12 @@
     <div class="nav-links">
       
         <div class="nav-previous">
-          <a href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+          <a href="/2016/10/29/OpenWRT 无线中继/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
         </div>
       
       
         <div class="nav-next">
-          <a href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2016/09/29/Centos 6.x Hadoop 安装/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

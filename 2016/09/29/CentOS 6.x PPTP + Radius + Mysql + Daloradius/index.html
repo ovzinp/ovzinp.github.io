@@ -130,12 +130,12 @@
           <div class="tags-links">
             
               
-                <a href="/tags/linux/" rel="tag">
-                  linux
-                </a>
-              
                 <a href="/tags/VPN/" rel="tag">
                   VPN
+                </a>
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
                 </a>
               
             
@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-radius服务器安装"><a href="#Ⅰ-radius服务器安装" class="headerlink" title="Ⅰ. radius服务器安装"></a>Ⅰ. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
+          <h3 id="1-radius服务器安装"><a href="#1-radius服务器安装" class="headerlink" title="1. radius服务器安装"></a>1. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
 </code></pre><h4 id="mysql设置"><a href="#mysql设置" class="headerlink" title="mysql设置"></a>mysql设置</h4><p>启动mysql</p>
 <pre><code>service mysqld start
 </code></pre><p>设置mysql密码和安全设置<br>    /usr/bin/mysql_secure_installation</p>
@@ -191,7 +191,7 @@ radtest test test 127.0.0.1 0 3c23498n349c3yt290y93b4t3
 <p><span style="color:red"><strong>提示：</strong></span>若出现radtest测试出现radclient:: Failed to find IP address for servername，修改  /etc/hosts 添加：127.0.0.1 servername</p>
 </blockquote>
 <hr>
-<h3 id="Ⅱ-pptp服务器设置"><a href="#Ⅱ-pptp服务器设置" class="headerlink" title="Ⅱ.pptp服务器设置"></a>Ⅱ.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
+<h3 id="2-pptp服务器设置"><a href="#2-pptp服务器设置" class="headerlink" title="2.pptp服务器设置"></a>2.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
 <pre><code>plugin /usr/lib64/pppd/2.4.5/radius.so
 plugin /usr/lib64/pppd/2.4.5/radattr.so
 radius-config-file /etc/radiusclient/radiusclient.conf
@@ -229,7 +229,7 @@ INCLUDE /etc/radiusclient/dictionary.merit
 <p><span style="color:red"><strong>修订：</strong></span>需要将dictionary中所有关于IPv6的选项全部注释掉，否则无法鉴定成功。若出现鉴定失败字样，请使用tail -f /var/log/message来动态查看信息。</p>
 </blockquote>
 <hr>
-<h3 id="Ⅲ-Daloradius安装"><a href="#Ⅲ-Daloradius安装" class="headerlink" title="Ⅲ.Daloradius安装"></a>Ⅲ.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
+<h3 id="3-Daloradius安装"><a href="#3-Daloradius安装" class="headerlink" title="3.Daloradius安装"></a>3.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
 <h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><p>下载daloradius源码</p>
 <pre><code>cd usr/share
 wget http://downloads.sourceforge.net/project/daloradius/daloradius/daloradius0.9-9/daloradius-0.9-9.tar.gz
@@ -274,7 +274,7 @@ $configValues[&apos;CONFIG_DB_NAME&apos;] = &apos;radius&apos;;
       
       
         <div class="nav-next">
-          <a href="/2016/09/29/CentOS 7 ocserv IPv6支持实验分析/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2016/09/09/CentOS 批量添加SFTP用户/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

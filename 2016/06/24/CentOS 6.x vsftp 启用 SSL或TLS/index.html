@@ -143,7 +143,7 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <h3 id="Ⅰ-创建用户以及用户组"><a href="#Ⅰ-创建用户以及用户组" class="headerlink" title="Ⅰ. 创建用户以及用户组"></a>Ⅰ. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
+          <h3 id="1-创建用户以及用户组"><a href="#1-创建用户以及用户组" class="headerlink" title="1. 创建用户以及用户组"></a>1. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">useradd -s /sbin/nologin vxftp</div><div class="line">passwd vxftp</div></pre></td></tr></table></figure>
 <p>建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -p /home/vxftp/imgbed</div></pre></td></tr></table></figure>
@@ -154,7 +154,7 @@
 <p>更改文件夹属性</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chown -R vxftp.vsftp /home/vxftp/imgbed</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅱ-安装配置vsftp"><a href="#Ⅱ-安装配置vsftp" class="headerlink" title="Ⅱ.安装配置vsftp"></a>Ⅱ.安装配置vsftp</h3><h4 id="▪-不使用SSL-TLS配置"><a href="#▪-不使用SSL-TLS配置" class="headerlink" title="▪ 不使用SSL/TLS配置"></a>▪ 不使用SSL/TLS配置</h4><p>安装vsftpd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y vsftpd</div></pre></td></tr></table></figure></p>
+<h3 id="2-安装配置vsftp"><a href="#2-安装配置vsftp" class="headerlink" title="2.安装配置vsftp"></a>2.安装配置vsftp</h3><h4 id="不使用SSL-TLS配置"><a href="#不使用SSL-TLS配置" class="headerlink" title="不使用SSL/TLS配置"></a>不使用SSL/TLS配置</h4><p>安装vsftpd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y vsftpd</div></pre></td></tr></table></figure></p>
 <p>修改vsftpd配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/vsftpd/vsftpd.conf</div></pre></td></tr></table></figure>
 <p>检查一下是否正确</p>
@@ -170,12 +170,12 @@
 <p>在windows下打开任意一个文件夹窗口，输入如下地址</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ftp://ftp-server:11235</div></pre></td></tr></table></figure>
 <p>不使用SSL/TLS则可以不设置下面内容。</p>
-<h4 id="▪-SSL-TLS加密配置"><a href="#▪-SSL-TLS加密配置" class="headerlink" title="▪ SSL/TLS加密配置"></a>▪ SSL/TLS加密配置</h4><p>创建证书存放文件夹并生成证书</p>
+<h4 id="SSL-TLS加密配置"><a href="#SSL-TLS加密配置" class="headerlink" title="SSL/TLS加密配置"></a>SSL/TLS加密配置</h4><p>创建证书存放文件夹并生成证书</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/vsftpd/</div><div class="line">mkdir ssl</div><div class="line">sudo openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout /etc/vsftpd/ssl/vsftpd.pem -out /etc/vsftpd/ssl/vsftpd.pem</div></pre></td></tr></table></figure>
 <p>修改<code>/etc/vsftpd/vsftpd.conf</code>配置文件，如下所示</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">rsa_cert_file=/etc/vsftpd/ssl/vsftpd.pem           #证书路径</div><div class="line">ssl_enable=YES                                                   #是否启用 SSL,默认为no</div><div class="line">allow_anon_ssl=NO                                            #是否允许匿名用户使用SSL,默认为no</div><div class="line">force_local_data_ssl=YES                                    #非匿名用户传输数据时是否加密,默认为yes</div><div class="line">force_local_logins_ssl=YES                                  #非匿名用户登陆时是否加密,默认为yes</div><div class="line">ssl_tlsv1=YES                                                       #是否激活sslv1加密,默认no</div><div class="line">ssl_sslv2=NO                                                       #是否激活sslv2加密,默认no</div><div class="line">ssl_sslv3=NO                                                       #是否激活sslv3加密,默认no</div><div class="line">require_ssl_reuse=NO</div><div class="line">ssl_ciphers=HIGH</div></pre></td></tr></table></figure>
 <hr>
-<h3 id="Ⅲ-修改FTP端口号"><a href="#Ⅲ-修改FTP端口号" class="headerlink" title="Ⅲ.修改FTP端口号"></a>Ⅲ.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
+<h3 id="3-修改FTP端口号"><a href="#3-修改FTP端口号" class="headerlink" title="3.修改FTP端口号"></a>3.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
 <p>编辑/etc/vsftpd/vsftpd.conf文件，将预设端口号加入文件末尾，其中11235为修改后的端口号</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat &quot;listen_port=11235&quot; &gt;&gt; /etc/vsftpd/vsftpd.conf</div></pre></td></tr></table></figure>
 <p>编辑/etc/services 将其中的 ftp 21/tcp 改为 ftp 11235/tcp，ftp 21/udp 改为 ftp 11235/udp</p>
@@ -203,12 +203,12 @@
     <div class="nav-links">
       
         <div class="nav-previous">
-          <a href="/2016/07/01/Vim 学习/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+          <a href="/2016/06/24/Linux 文件分割/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
         </div>
       
       
         <div class="nav-next">
-          <a href="/2016/06/24/Linux 文件分割/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+          <a href="/2016/06/19/Linux Bash环境变量/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
         </div>
       
     </div>

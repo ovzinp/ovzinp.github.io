@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="IKEv2 用户配置手册（图文版）"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>IKEv2 用户配置手册（图文版） - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            IKEv2 用户配置手册（图文版）
+            
+          </h1>
+          <p class="posted-on">
+          2017-01-29
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/VPN/" rel="tag">
+                  VPN
+                </a>
+              
+                <a href="/tags/IKEv2/" rel="tag">
+                  IKEv2
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="提示-amp-FAQ"><a href="#提示-amp-FAQ" class="headerlink" title="提示 &amp; FAQ"></a>提示 &amp; FAQ</h3><h4 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h4><ul>
+<li><span style="color:red">红色字体</span>需要重点注意，带<span style="color:red"><strong>*</strong></span>标注信息客服会提供</li>
+<li>客服联系方式<ul>
+<li>QQ: 444080836</li>
+<li>Telegram: Mniulso</li>
+<li>Email: iceantale@gmail.com</li>
+</ul>
+</li>
+</ul>
+<h4 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h4><ul>
+<li>Windows、Android、iOS和Mac OS X使用的证书是相同的吗？<ul>
+<li>所有平台使用的证书均是同样的证书文件，不同平台导入方法不同而已。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><h4 id="系统版本要求"><a href="#系统版本要求" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">iOS 9</span>或者更高版本</p>
+<h4 id="证书导入"><a href="#证书导入" class="headerlink" title="证书导入"></a>证书导入</h4><ul>
+<li>Safari浏览器中输入CA证书下载地址: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem，然后选择安装证书" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem，然后选择安装证书</a></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/cert/cert-2.jpg" alt=""></center><center style="color:purple"><strong>图1-1</strong></center>
+
+<ul>
+<li>输入iOS密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/cert/cert-3.jpg" alt=""></center><center style="color:purple"><strong>图1-2</strong></center>
+
+<ul>
+<li>点击安装，导入证书</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/cert/cert-4.jpg" alt=""></center><center style="color:purple"><strong>图1-3</strong></center>
+
+<h4 id="VPN设置"><a href="#VPN设置" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
+<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/config/iOS-1.jpg" alt=""></center><center style="color:purple"><strong>图1-4</strong></center>
+
+<ul>
+<li>类型: IKEv2</li>
+<li>描述: 任意</li>
+<li>用户鉴定: 用户名</li>
+<li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
+<li>远程ID<span style="color:red"><strong>*</strong></span>: VPN远程ID</li>
+<li>本地ID: 留空</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/config/iOS-2.jpg" alt=""></center><center style="color:purple"><strong>图1-5</strong></center>
+
+<ul>
+<li>设置完毕后，连接VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/iOS/config/iOS-3.jpg" alt=""></center><center style="color:purple"><strong>图1-6</strong></center>
+
+<hr>
+<h3 id="MAC-OS-X"><a href="#MAC-OS-X" class="headerlink" title="MAC OS X"></a>MAC OS X</h3><h4 id="系统版本要求-1"><a href="#系统版本要求-1" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">OS X 10.11 (“El Capitan”)</span>或者更高版本</p>
+<h4 id="证书导入-1"><a href="#证书导入-1" class="headerlink" title="证书导入"></a>证书导入</h4><ul>
+<li>下载CA证书到本地，下载地址为: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem</a></li>
+<li>配置位置: <strong>钥匙串访问 -&gt; 钥匙串 -&gt; 系统</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/cert/cert-1.jpg" alt=""></center><center style="color:purple"><strong>图2-1</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/cert/cert-2.jpg" alt=""></center><center style="color:purple"><strong>图2-2</strong></center>
+
+<ul>
+<li>选择要添加的证书文件</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/cert/cert-3.jpg" alt=""></center><center style="color:purple"><strong>图2-3</strong></center>
+
+<ul>
+<li>导入证书</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/cert/cert-4.jpg" alt=""></center><center style="color:purple"><strong>图2-4</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/cert/cert-5.jpg" alt=""></center><center style="color:purple"><strong>图2-5</strong></center>
+
+<h4 id="VPN设置-1"><a href="#VPN设置-1" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
+<li>配置位置: <strong>设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/config/macosx-1.jpg" alt=""></center><center style="color:purple"><strong>图2-6</strong></center>
+
+<ul>
+<li>接口: VPN</li>
+<li>VPN类型: IKEv2</li>
+<li>服务名称: 任意</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/config/macosx-2.jpg" alt=""></center><center style="color:purple"><strong>图2-7</strong></center>
+
+<ul>
+<li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>远程ID<span style="color:red"><strong>*</strong></span>: VPN远程ID</li>
+<li>本地ID: 留空</li>
+<li>鉴定设置 -&gt; 用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
+<li>鉴定设置 -&gt; 密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/config/macosx-3.jpg" alt=""></center><center style="color:purple"><strong>图2-8</strong></center>
+
+<ul>
+<li>选择连接VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/config/macosx-4.png" alt=""></center><center style="color:purple"><strong>图2-9</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/MacOSX/config/macosx-5.jpg" alt=""></center><center style="color:purple"><strong>图2-10</strong></center>
+
+<hr>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><h4 id="系统版本要求-2"><a href="#系统版本要求-2" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">Android 4</span>或者更高版本，需要安装<a href="http://pan.baidu.com/s/1gfkEXKB" target="_blank" rel="external">Strongswan客户端</a>，下载地址为：<a href="http://pan.baidu.com/s/1gfkEXKB" target="_blank" rel="external">http://pan.baidu.com/s/1gfkEXKB</a></p>
+<h4 id="证书导入-2"><a href="#证书导入-2" class="headerlink" title="证书导入"></a>证书导入</h4><ul>
+<li>下载CA证书到本机，下载地址为: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem</a></li>
+<li>Strongswan客户端中导入服务器证书</li>
+<li>配置位置: <strong>CA certificates -&gt; Import certificates</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/cert/cert-1.jpg" alt=""></center><center style="color:purple"><strong>图3-1</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/cert/cert-2.jpg" alt=""></center><center style="color:purple"><strong>图3-2</strong></center>
+
+<ul>
+<li>选择证书文件</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/cert/cert-3.jpg" alt=""></center><center style="color:purple"><strong>图3-3</strong></center>
+
+<ul>
+<li>确认导入证书</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/cert/cert-4.jpg" alt=""></center><center style="color:purple"><strong>图3-4</strong></center>
+
+<ul>
+<li>可以查看导入的CA证书</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/cert/cert-5.jpg" alt=""></center><center style="color:purple"><strong>图3-5</strong></center>
+
+<h4 id="VPN设置-2"><a href="#VPN设置-2" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
+<li>配置位置：<strong>ADD VPN PROFILE</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/config/android-1.jpg" alt=""></center><center style="color:purple"><strong>图3-6</strong></center>
+
+
+<ul>
+<li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>VPN类型: IKEv2 EAP</li>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/config/android-2.jpg" alt=""></center><center style="color:purple"><strong>图3-7</strong></center>
+
+<ul>
+<li>添加完毕后，点击配置完毕的VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/config/android-3.jpg" alt=""></center><center style="color:purple"><strong>图3-8</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/android/config/android-4.jpg" alt=""></center><center style="color:purple"><strong>图3-9</strong></center>
+
+<hr>
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><h4 id="系统版本要求-3"><a href="#系统版本要求-3" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">Win 7</span>或者更高版本</p>
+<h4 id="证书导入-3"><a href="#证书导入-3" class="headerlink" title="证书导入"></a>证书导入</h4><p>Windows使用IKEv2 VPN需要导入服务器CA证书到<span style="color:red"><strong>信任根证书颁发机构</strong></span>，以win7为例，win8/10类似</p>
+<ul>
+<li>下载CA证书到本机，下载地址为: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem</a></li>
+<li>开始菜单搜索<strong>mmc（Microsoft 管理控制台）</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-1.jpg" alt=""></center><center style="color:purple"><strong>图4-1</strong></center>
+
+<ul>
+<li><strong>文件</strong>-<strong>添加/删除管理单元</strong>，添加<strong>证书</strong>单元</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-2.jpg" alt=""></center><center style="color:purple"><strong>图4-2</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-3.jpg" alt=""></center><center style="color:purple"><strong>图4-3</strong></center>
+
+<ul>
+<li>证书单元的弹出窗口中选<strong>计算机账户</strong>，之后选<strong>本地计算机</strong>，确定</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-4.jpg" alt=""></center><center style="color:purple"><strong>图4-4</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-5.jpg" alt=""></center><center style="color:purple"><strong>图4-5</strong></center>
+
+<ul>
+<li>在左边的<strong>控制台根节点</strong>下选择<strong>证书</strong> -&gt; <strong>受信任的根证书颁发机构</strong> -&gt; <strong>证书</strong>，右键 -&gt; <strong>所有任务</strong> -&gt; <strong>导入</strong>打开证书导入窗口。</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-6.jpg" alt=""></center><center style="color:purple"><strong>图4-6</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-7.jpg" alt=""></center><center style="color:purple"><strong>图4-7</strong></center>
+
+<ul>
+<li>选择证书文件导入即可</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-8.jpg" alt=""></center><center style="color:purple"><strong>图4-8</strong></center>
+
+
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/cert/cert-9.jpg" alt=""></center><center style="color:purple"><strong>图4-9</strong></center>
+
+<h4 id="VPN设置-3"><a href="#VPN设置-3" class="headerlink" title="VPN设置"></a>VPN设置</h4><h5 id="Win10-Win8"><a href="#Win10-Win8" class="headerlink" title="Win10/Win8"></a>Win10/Win8</h5><ul>
+<li>配置位置: <strong>设置 -&gt; 网络和Internet -&gt; VPN -&gt; 添加VPN</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-1.jpg" alt=""></center><center style="color:purple"><strong>图4-10</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-2.jpg" alt=""></center><center style="color:purple"><strong>图4-11</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-3.jpg" alt=""></center><center style="color:purple"><strong>图4-12</strong></center>
+
+<ul>
+<li>VPN提供商: Windows（内置）</li>
+<li>连接名称: 任意</li>
+<li>服务器名称或地址<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>VPN类型: IKEv2</li>
+<li>登录信息类型: 用户名和密码</li>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-4.jpg" alt=""></center><center style="color:purple"><strong>图4-13</strong></center>
+
+<ul>
+<li>连接VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-5.jpg" alt=""></center><center style="color:purple"><strong>图4-14</strong></center>
+
+<ul>
+<li>继续连接，信任证书</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-6.jpg" alt=""></center><center style="color:purple"><strong>图4-15</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-7.jpg" alt=""></center><center style="color:purple"><strong>图4-16</strong></center>
+
+<ul>
+<li>可以在<strong>控制面板 -&gt; 网络和 Internet -&gt; 网络连接</strong>中查看VPN虚拟网卡信息</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win10/win10-8.jpg" alt=""></center><center style="color:purple"><strong>图4-17</strong></center>
+
+<h5 id="Win7"><a href="#Win7" class="headerlink" title="Win7"></a>Win7</h5><p> 配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 连接新的网络或连接 -&gt; 连接到工作区 -&gt; 创建新连接 -&gt; 使用我的Internet连接(VPN)</strong></p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-1.jpg" alt=""></center><center style="color:purple"><strong>图4-18</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-2.jpg" alt=""></center><center style="color:purple"><strong>图4-19</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-3.jpg" alt=""></center><center style="color:purple"><strong>图4-20</strong></center>
+
+<ul>
+<li>Internet 地址<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>目标名称: 任意</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-4.jpg" alt=""></center><center style="color:purple"><strong>图4-21</strong></center>
+
+<ul>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-5.jpg" alt=""></center><center style="color:purple"><strong>图4-22</strong></center>
+
+<ul>
+<li><p>设置完毕后，先不连接</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-6.jpg" alt=""></center><center style="color:purple"><strong>图4-23</strong></center>
+</li>
+<li><p>配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 更改适配器设置</strong></p>
+</li>
+<li>在新建的 VPN 连接上右键<strong>属性</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-7.jpg" alt=""></center><center style="color:purple"><strong>图4-24</strong></center>
+
+<ul>
+<li>切换到<strong>安全</strong>选项卡<ul>
+<li>VPN 类型: IKEv2</li>
+<li>数据加密选: 需要加密</li>
+<li>身份验证：EAP-MSCHAP v2</li>
+</ul>
+</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-8.jpg" alt=""></center><center style="color:purple"><strong>图4-25</strong></center>
+
+<ul>
+<li>连接VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-9.jpg" alt=""></center><center style="color:purple"><strong>图4-26</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/ikev2-user/Windows/win7/win7-10.jpg" alt=""></center><center style="color:purple"><strong>图4-27</strong></center>
+
+<hr>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p>Linux 的版本众多，认证方法与协议支持也非常丰富，详细方法请根据 Linux 版本查询连接方法。一般而言，Linux 通过 NetworkManager-strongswan连接。</p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+      
+        <div class="nav-next">
+          <a href="/2017/01/29/IKEv2 用户配置手册（简版）/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="CentOS 批量添加 sftp 用户"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>CentOS 批量添加 sftp 用户 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            CentOS 批量添加 sftp 用户
+            
+          </h1>
+          <p class="posted-on">
+          2016-09-09
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="1-开启-SFTP服务"><a href="#1-开启-SFTP服务" class="headerlink" title="1.开启 SFTP服务"></a>1.开启 SFTP服务</h3><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><ul>
+<li>用户只能通过sftp访问，不能登录SSH</li>
+<li>用户要被锁定在特定的目录下，没有读写其它目录的权限</li>
+</ul>
+<h4 id="ssh配置文件修改"><a href="#ssh配置文件修改" class="headerlink" title="ssh配置文件修改"></a>ssh配置文件修改</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#Subsystem sftp /usr/lib/openssh/sftp-server</div><div class="line">Subsystem sftp internal-sftp</div></pre></td></tr></table></figure>
+<p>该行(上面这行)注释掉，并添加新配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Match group sftp</div></pre></td></tr></table></figure></p>
+<p>匹配sftp组，如为单个用户可用：Match user 用户名;  设置此用户登陆时的shell设为/bin/false,这样它就不能用ssh只能用sftp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ChrootDirectory /home/</div></pre></td></tr></table></figure></p>
+<p>指定用户被锁定到的那个目录，为了能够chroot成功，该目录必须属主是root，并且其他用户或组不能写</p>
+<hr>
+<h3 id="2-添加sftp用户"><a href="#2-添加sftp用户" class="headerlink" title="2.添加sftp用户"></a>2.添加sftp用户</h3><h4 id="创建sftp用户组"><a href="#创建sftp用户组" class="headerlink" title="创建sftp用户组"></a>创建sftp用户组</h4><p>创建sftp用户组，并查看group ID<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">groupadd sftp</div><div class="line">cat /etc/group | grep sftp | awk -F &apos;:&apos; &apos;&#123;print $3&#125;&apos;</div></pre></td></tr></table></figure></p>
+<h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><p>添加用户,并分配给sftp用户组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -d /home/test -m -s /bin/false -g sftp test</div></pre></td></tr></table></figure></p>
+<h4 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h4><p>修改添加用户的密码</p>
+<hr>
+<h3 id="3-批量添加sftp用户"><a href="#3-批量添加sftp用户" class="headerlink" title="3.批量添加sftp用户"></a>3.批量添加sftp用户</h3><h4 id="查看sftp组id"><a href="#查看sftp组id" class="headerlink" title="查看sftp组id"></a>查看sftp组id</h4><p>查看sftp的组id，假设组id是502<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cat /etc/group | grep sftp | awk -F &apos;:&apos; &apos;&#123;print $3&#125;&apos;</div><div class="line">502</div></pre></td></tr></table></figure></p>
+<h4 id="添加用户-1"><a href="#添加用户-1" class="headerlink" title="添加用户"></a>添加用户</h4><p>根据<code>/etc/passwd</code>中的格式，批量添加用户，其中<strong>503</strong>为<strong>用户id</strong>，<strong>502</strong>为<strong>组id</strong>，将如下内容保存到一个文件<strong>userlis</strong>t中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">asbd:x:503:502::/home/asbd:/bin/false</div><div class="line">baowentao:x:504:502::/home/baowentao:/bin/false</div><div class="line">fuzhangbin:x:505:502::/home/fuzhangbin:/bin/false</div><div class="line">hourui:x:506:502::/home/hourui:/bin/false</div><div class="line">ncis:x:507:502::/home/ncis:/bin/false</div><div class="line">network:x:508:502::/home/network:/bin/false</div><div class="line">network-system:x:509:502::/home/network-system:/bin/false</div><div class="line">storage:x:510:502::/home/storage:/bin/false</div><div class="line">yueyinliang:x:511:502::/home/yueyinliang:/bin/false</div></pre></td></tr></table></figure></p>
+<p>执行 newusers命令，添加用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">newusers userlist</div></pre></td></tr></table></figure></p>
+<h4 id="修改用户密码"><a href="#修改用户密码" class="headerlink" title="修改用户密码"></a>修改用户密码</h4><p>创建用户密码文件，内容如下，保存到名为<strong>passwd</strong>文件中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">asbd:123456</div><div class="line">baowentao:123456</div><div class="line">fuzhangbin:123456</div><div class="line">hourui:123456</div><div class="line">ncis:123456</div><div class="line">network:123456</div><div class="line">network-system:123456</div><div class="line">storage:123456</div><div class="line">yueyinliang:123456</div></pre></td></tr></table></figure></p>
+<p>执行命令<code>/usr/sbin/pwunconv</code>，将/etc/shadow产生的shadow密码解码，然后回写到/etc/passwd中， 并将<code>/etc/shadow的shadow</code>密码栏删掉。这是为了方便下一步的密码转换工作，即先取消shadow password功能，关闭影子文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pwunconv</div></pre></td></tr></table></figure></p>
+<p>用<code>chpasswd</code>批量修改密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chpasswd &lt; passwd</div></pre></td></tr></table></figure></p>
+<p>恢复影子文件，保证安全<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pwconv</div></pre></td></tr></table></figure></p>
+<h4 id="4-脚本"><a href="#4-脚本" class="headerlink" title="4.脚本"></a>4.脚本</h4><p>添加用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">newusers userlist</div><div class="line">pwunconv</div><div class="line">chpasswd &lt; passwd</div><div class="line">pwconv</div></pre></td></tr></table></figure></p>
+<p>更新密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pwunconv</div><div class="line">chpasswd &lt; passwd</div><div class="line">pwconv</div></pre></td></tr></table></figure></p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/09/29/CentOS 7 ocserv IPv6支持实验分析/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/09/02/CentOS 7 Minimal设置/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

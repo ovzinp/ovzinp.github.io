@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="CentOS 6.x whmcs"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>CentOS 6.x whmcs - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            CentOS 6.x whmcs
+            
+          </h1>
+          <p class="posted-on">
+          2016-05-18
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/web/" rel="tag">
+                  web
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-LAMP安装"><a href="#Ⅰ-LAMP安装" class="headerlink" title="Ⅰ.LAMP安装"></a>Ⅰ.LAMP安装</h3><h4 id="php安装"><a href="#php安装" class="headerlink" title="php安装"></a>php安装</h4><pre><code>yum install php php-mysql -y
+yum install php-mysql php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-pear -y
+</code></pre><h4 id="http-mysql-服务安装"><a href="#http-mysql-服务安装" class="headerlink" title="http mysql 服务安装"></a>http mysql 服务安装</h4><p>安装http mysql</p>
+<pre><code>yum install httpd -y
+yum install mysql-server mysql mysql-devel -y
+</code></pre><p>启动http mysql服务，并加入开机启动</p>
+<pre><code>service httpd start
+service mysqld start
+chkconfig httpd on
+chkconfig mysqld on
+</code></pre><h4 id="mysql配置"><a href="#mysql配置" class="headerlink" title="mysql配置"></a>mysql配置</h4><p>启动服务后，命令行下执行</p>
+<pre><code>/usr/bin/mysql_secure_installation
+</code></pre><p>出现如下几个选项，首次安装第一项直接回车即可，然后设置root密码，root远程登陆可以禁止</p>
+<pre><code>Enter current password for root (enter for none):
+Remove anonymous users? [Y/n] y
+Disallow root login remotely? [Y/n] n
+Remove test database and access to it? [Y/n] y
+Reload privilege tables now? [Y/n] y
+</code></pre><h4 id="phpmyadmin安装"><a href="#phpmyadmin安装" class="headerlink" title="phpmyadmin安装"></a>phpmyadmin安装</h4><p>yum安装phpmyadmin</p>
+<pre><code>yum install epel-release -y
+yum install phpmyadmin -y
+</code></pre><p>创建可以访问的软连接</p>
+<pre><code>ln -s /usr/share/phpMyAdmin /var/www/html/phpMyAdmin
+</code></pre><p>允许可以网页访问phpmyadmin，要不然会出现403错误</p>
+<pre><code>cat &lt;&lt;EOF&gt;&gt;/etc/httpd/conf/httpd.conf
+&lt;Directory &quot;/usr/share/phpMyAdmin/&quot;&gt;
+    AllowOverride None
+    Order allow,deny  
+    Allow from all  
+&lt;/Directory&gt;
+EOF
+</code></pre><blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>不同版本的phpmyadmin可能名称不同，有些版本的文件夹名字为phpmyadmin</p>
+</blockquote>
+<p>添加可以访问的IP地址，修改/etc/httpd/conf.d/phpMyAdmin.conf设置，其中192.168.86.104为可以通过IP地址访问phpmyadmin，不添加下面的选项，则无法通过非本地进行访问，配置完成后重启http和mysql服务。</p>
+<pre><code>&lt;Directory /usr/share/phpMyAdmin/&gt;
+   AddDefaultCharset UTF-8
+
+   &lt;IfModule mod_authz_core.c&gt;
+ # Apache 2.4
+ &lt;RequireAny&gt;
+   Require ip 127.0.0.1
+   Require ip ::1
+   Require ip 192.168.86.104
+ &lt;/RequireAny&gt;
+   &lt;/IfModule&gt;
+   &lt;IfModule !mod_authz_core.c&gt;
+ # Apache 2.2
+ Order Deny,Allow
+ Deny from All
+ Allow from 127.0.0.1
+ Allow from ::1
+   &lt;/IfModule&gt;
+&lt;/Directory&gt;
+</code></pre><p>如果是centos7，则删除上面的，添加如下，并重启httpd服务</p>
+<pre><code>&lt;Directory /usr/share/phpMyAdmin/&gt;
+    Options none
+    AllowOverride Limit
+    Require all granted
+&lt;/Directory&gt;
+</code></pre><blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>低版本的phpmyadmin可能不需要修改此文件</p>
+</blockquote>
+<h4 id="mysql添加whmcs用户"><a href="#mysql添加whmcs用户" class="headerlink" title="mysql添加whmcs用户"></a>mysql添加whmcs用户</h4><p>使用root用户登录mysql,选择mysql数据库</p>
+<pre><code>mysql -u root -p
+use mysql
+create user &apos;whmcs&apos;@&apos;localhost&apos; identified by &apos;whmcs&apos;
+flush privileges
+</code></pre><p>为用户创建数据库</p>
+<pre><code>create database whmcs;
+</code></pre><p>为用户赋予操作数据库testdb的所有权限</p>
+<pre><code>grant all privileges on whmcs.* to &apos;whmcs&apos;@&apos;localhost&apos; identified  by &apos;whmcs&apos;;
+flush privileges;
+</code></pre><p>用新用户登录</p>
+<pre><code>mysql -u whmcs -p
+</code></pre><hr>
+<h3 id="Ⅱ-whmcs安装配置"><a href="#Ⅱ-whmcs安装配置" class="headerlink" title="Ⅱ.whmcs安装配置"></a>Ⅱ.whmcs安装配置</h3><h4 id="ioncube安装"><a href="#ioncube安装" class="headerlink" title="ioncube安装"></a>ioncube安装</h4><ul>
+<li>whmcs的安装需要ioncube，首先需要安装ioncube，从官网下载linux的安装包，然后解压在/var/www/html目录下。</li>
+<li>将解压文件重命名为ioncube</li>
+<li>在浏览器下输入<a href="http://www.google.com" target="_blank" rel="external">http://[IP地址]/ioncube/loader-wizard.php</a>，启动ioncube安装向导。</li>
+<li>将ioncube_loader_lin_5.3.so拷贝到 /usr/lib64/php/modules目录下。</li>
+<li>将这个文件 <a href="">00-ioncube.ini</a>下载到/etc/php.d文件夹下。</li>
+<li>重启http服务器</li>
+<li>在浏览器上访问测试ioncube是否安装成功，若安装成功则进行下一步。</li>
+</ul>
+<h4 id="whmcs安装"><a href="#whmcs安装" class="headerlink" title="whmcs安装"></a>whmcs安装</h4><p>将whmcs解压到/var/www/html目录下。下载地址请点击<a href="http://pan.baidu.com/s/1bzu4kY" target="_blank" rel="external">这里</a>，将目录下的configuration.php.new重命名为或拷贝configuration.php</p>
+<pre><code>cp configuration.php.new configuration.php
+</code></pre><p>修改一些文件的权限为777</p>
+<pre><code>chmod -R 777  attachments downloads templates_c  configuration.php
+</code></pre><p>这时候使用浏览器访问<a href="http://192.168.86.104/whmcs/install/install.php" target="_blank" rel="external">http://192.168.86.104/whmcs/install/install.php</a>,按照提示，一步步进行安装设置，license填写任意数字，数据库一定按照之前创建的数据库填写，hosts，user，password。然后开始开始初始化。</p>
+<h4 id="whmcs安装完成"><a href="#whmcs安装完成" class="headerlink" title="whmcs安装完成"></a>whmcs安装完成</h4><ul>
+<li>删除install文件夹</li>
+<li>修改configuration.php的权限为755</li>
+<li>编辑configuration.php定义最高权限文件夹的路径，这样这三个文件夹对于网页访问者就不可见了。最后一项的myadminname，是指你将文件夹admin重命名成的新文件名！</li>
+</ul>
+<pre><code class="markdown">
+$templates_compiledir = "/root/whmcs/templates_c/";
+$attachments_dir = "/root/whmcs/attachments/";
+$downloads_dir = "/root/whmcs/downloads/";
+$customadminpath = "icean";
+</code></pre>
+
+<h4 id="whmcs破解"><a href="#whmcs破解" class="headerlink" title="whmcs破解"></a>whmcs破解</h4><p>使用破解文件中的class.license，替换掉include/class/class-license.php中的文件，破解文件下载请点击<a href="http://pan.baidu.com/s/1bo4ckeb" target="_blank" rel="external">这里</a>。</p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/05/28/TunnelBroker绑定Linux VPS/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/03/15/VirtualBox Linux Shrink/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="Linux Bash 环境变量"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>Linux Bash 环境变量 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            Linux Bash 环境变量
+            
+          </h1>
+          <p class="posted-on">
+          2016-06-19
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/shell/" rel="tag">
+                  shell
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-书签"><a href="#Ⅰ-书签" class="headerlink" title="Ⅰ.书签"></a>Ⅰ.书签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"># USAGE:</div><div class="line"># s bookmarkname - saves the curr dir as bookmarkname</div><div class="line"># g bookmarkname - jumps to the that bookmark</div><div class="line"># g b[TAB] - tab completion is available</div><div class="line"># l - list all bookmarks</div><div class="line"></div><div class="line"># save current directory to bookmarks</div><div class="line">touch ~/.sdirs</div><div class="line">function s &#123;</div><div class="line">cat ~/.sdirs | grep -v &quot;export DIR_$1=&quot; &gt; ~/.sdirs1</div><div class="line">mv ~/.sdirs1 ~/.sdirs</div><div class="line">echo &quot;export DIR_$1=$PWD&quot; &gt;&gt; ~/.sdirs</div><div class="line">&#125;</div><div class="line"></div><div class="line"># jump to bookmark</div><div class="line">function g &#123;</div><div class="line">source ~/.sdirs</div><div class="line">cd $(eval $(echo echo $(echo \$DIR_$1)))</div><div class="line">&#125;</div><div class="line"></div><div class="line"># list bookmarks with dirnam</div><div class="line">function l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot;</div><div class="line">&#125;</div><div class="line"># list bookmarks without dirname</div><div class="line">function _l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot; | cut -f1 -d &quot;=&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># completion command for g</div><div class="line">function _gcomp &#123;</div><div class="line">local curw</div><div class="line">COMPREPLY=()</div><div class="line">curw=$&#123;COMP_WORDS[COMP_CWORD]&#125;</div><div class="line">COMPREPLY=($(compgen -W &apos;`_l`&apos; -- $curw))</div><div class="line">return 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"># bind completion command for g to _gcomp</div><div class="line">complete -F _gcomp g</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Ⅱ-提取一列"><a href="#Ⅱ-提取一列" class="headerlink" title="Ⅱ.提取一列"></a>Ⅱ.提取一列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function col &#123;</div><div class="line">awk -v col=$1 &apos;&#123;print $col&#125;&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Ⅲ-其他"><a href="#Ⅲ-其他" class="headerlink" title="Ⅲ.其他"></a>Ⅲ.其他</h3><h4 id="Productivity"><a href="#Productivity" class="headerlink" title="Productivity"></a>Productivity</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">alias ls=&quot;ls --color=auto&quot;</div><div class="line">alias ll=&quot;ls --color -al&quot;</div><div class="line">alias grep=&apos;grep --color=auto&apos;</div><div class="line">alias makescript=&quot;fc -rnl | head -1 &gt;&quot;</div><div class="line">alias genpasswd=&quot;strings /dev/urandom | grep -o &apos;[[:alnum:]]&apos; | head -n 30 | tr -d &apos;\n&apos;; echo&quot;</div><div class="line">alias c=&quot;clear&quot;</div><div class="line">alias histg=&quot;history | grep&quot;</div><div class="line">alias ..=&apos;cd ..&apos;</div><div class="line">alias ...=&apos;cd ../..&apos;</div><div class="line"></div><div class="line">mcd() &#123; mkdir -p &quot;$1&quot;; cd &quot;$1&quot;;&#125;</div><div class="line">cls() &#123; cd &quot;$1&quot;; ls;&#125;</div><div class="line">backup() &#123; cp &quot;$1&quot;&#123;,.bak&#125;;&#125;</div><div class="line">md5check() &#123; md5sum &quot;$1&quot; | grep &quot;$2&quot;;&#125;</div><div class="line"></div><div class="line">extract() &#123;</div><div class="line">if [ -f $1 ] ; then</div><div class="line">case $1 in</div><div class="line">    *.tar.bz2) tar xjf $1 ;;</div><div class="line">    *.tar.gz) tar xzf $1 ;;</div><div class="line">    *.bz2) bunzip2 $1 ;;</div><div class="line">    *.rar) unrar e $1 ;;</div><div class="line">    *.gz) gunzip $1 ;;</div><div class="line">    *.tar) tar xf $1 ;;</div><div class="line">    *.tbz2) tar xjf $1 ;;</div><div class="line">    *.tgz) tar xzf $1 ;;</div><div class="line">    *.zip) unzip $1 ;;</div><div class="line">    *.Z) uncompress $1 ;;</div><div class="line">    *.7z) 7z x $1 ;;</div><div class="line">    *) echo &quot;&apos;$1&apos; cannot be extracted via extract()&quot; ;;</div><div class="line">esac</div><div class="line">else</div><div class="line">echo &quot;&apos;$1&apos; is not a valid file&quot;</div><div class="line">fi</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="System-info"><a href="#System-info" class="headerlink" title="System info"></a>System info</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">alias cmount=&quot;mount | column -t&quot;</div><div class="line">alias tree=&quot;ls -R | grep &quot;:$&quot; | sed -e &apos;s/:$//&apos; -e &apos;s/[^-][^\/]*\//--/g&apos; -e &apos;s/^/ /&apos; -e &apos;s/-/|/&apos;&quot;</div><div class="line">alias intercept=&quot;sudo strace -ff -e trace=write -e write=1,2 -p&quot;</div><div class="line">alias meminfo=&apos;free -m -l -t&apos;</div><div class="line">alias ps?=&quot;ps aux | grep&quot;</div><div class="line">alias volume=&quot;amixer get Master | sed &apos;1,4 d&apos; | cut -d [ -f 2 | cut -d ] -f 1&quot;</div><div class="line">sbs()&#123; du -b --max-depth 1 | sort -nr | perl -pe &apos;s&#123;([0-9]+)&#125;&#123;sprintf &quot;%.1f%s&quot;, $1&gt;=2**30? ($1/2**30, &quot;G&quot;): $1&gt;=2**20? ($1/2**20, &quot;M&quot;): $1&gt;=2**10? ($1/2**10, &quot;K&quot;): ($1, &quot;&quot;)&#125;e&apos;;&#125;</div></pre></td></tr></table></figure>
+<h4 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">alias websiteget=&quot;wget --random-wait -r -p -e robots=off -U mozilla&quot;</div><div class="line">alias listen=&quot;lsof -P -i -n&quot;</div><div class="line">alias port=&apos;netstat -tulanp&apos;</div><div class="line">alias ipinfo=&quot;curl ifconfig.me &amp;&amp; curl ifconfig.me/host&quot;</div></pre></td></tr></table></figure>
+<h4 id="Funny"><a href="#Funny" class="headerlink" title="Funny"></a>Funny</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kernelgraph() &#123; lsmod | perl -e &apos;print &quot;digraph \&quot;lsmod\&quot; &#123;&quot;;&lt;&gt;;while(&lt;&gt;)&#123;@_=split/\s+/; print &quot;\&quot;$_[0]\&quot; -&gt; \&quot;$_\&quot;\n&quot; for split/,/,$_[3]&#125;print &quot;&#125;&quot;&apos; | dot -Tpng | display -;&#125;</div><div class="line">alias busy=&quot;cat /dev/urandom | hexdump -C | grep \&quot;ca fe\&quot;&quot;</div></pre></td></tr></table></figure>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/06/24/Linux 文件分割/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/06/18/CentOS Git 服务器与客户端/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

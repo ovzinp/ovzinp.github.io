@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="TunnelBroker绑定Linux VPS"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>TunnelBroker绑定Linux VPS - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            TunnelBroker绑定Linux VPS
+            
+          </h1>
+          <p class="posted-on">
+          2016-05-28
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/vps/" rel="tag">
+                  vps
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-申请Tunnel-Broke账号"><a href="#Ⅰ-申请Tunnel-Broke账号" class="headerlink" title="Ⅰ.申请Tunnel Broke账号"></a>Ⅰ.申请Tunnel Broke账号</h3><h4 id="账号注册"><a href="#账号注册" class="headerlink" title="账号注册"></a>账号注册</h4><p>账号注册如下图所示，具体流程略过。</p>
+<p><strong><em>图1-1</em></strong><br><img src="http://i.imgur.com/TT2bWgW.png" alt=""></p>
+<hr>
+<h3 id="Ⅱ-创建IPv6隧道"><a href="#Ⅱ-创建IPv6隧道" class="headerlink" title="Ⅱ.创建IPv6隧道"></a>Ⅱ.创建IPv6隧道</h3><p>创建常规隧道,如图2-1所示</p>
+<p><strong><em>图2-1</em></strong><br><img src="http://i.imgur.com/HkC2gLf.png" alt=""></p>
+<p>填写VPS的IP地址，注意，需要在系统防火墙将icmp协议打开，然后会检测是否已经绑定IPv6隧道，检测通过后可以选择Tunnel服务器。</p>
+<p><strong><em>图2-2</em></strong><br><img src="http://i.imgur.com/SihlUvg.png" alt=""></p>
+<p>阿里云VPS禁用了IPv6模块，以CentOS为例，开启IPv6模块，注释禁用IPv6的配置，在/etc/sysconfig/network中，以及/etc/modprobe.d/disable_ipv6.conf 中所有的配置，然后重启服务器。</p>
+<pre><code>NETWORKING=yes
+HOSTNAME=XXXXXX
+NETWORKING_IPV6=no
+PEERNTP=no
+GATEWAY=115.28.XX.XXX
+</code></pre><p>亚马逊VPS则修改/etc/sysctl.conf，将其中的0改为1然后重启服务器。</p>
+<pre><code>net.ipv6.conf.all.disable_ipv6 = 0
+net.ipv6.conf.default.disable_ipv6 = 0 
+</code></pre><p>选择操作系统类型，如图2-3所示，然后执行对应的命令，以linux为例子，ssh登陆阿里云服务器，以root用户执行网站给出的example configuration配置。</p>
+<pre><code>modprobe ipv6
+ip tunnel add he-ipv6 mode sit remote 74.82.46.6 local 121.42.33.4 ttl 255
+ip link set he-ipv6 up
+ip addr add 2001:470:23:ed::2/64 dev he-ipv6
+ip route add ::/0 dev he-ipv6
+ip -f inet6 addr
+</code></pre><p><strong><em>图2-3</em></strong><br><img src="http://i.imgur.com/yNaoP6O.png" alt=""></p>
+<p>防火墙配置，在iptables上放行协议41，命令如下，这时候可以使用带有IPv6地址的主机ping一下该VPS。</p>
+<pre><code>iptables -A INPUT -p 41 -j ACCEPT
+</code></pre><hr>
+<h3 id="Ⅲ-删除隧道"><a href="#Ⅲ-删除隧道" class="headerlink" title="Ⅲ.删除隧道"></a>Ⅲ.删除隧道</h3><p>首先在VPS命令上上删除隧道适配器，命令为</p>
+<pre><code>ip tunnel del he-ipv6
+</code></pre><p>删除隧道之后，在tunnelbroker上删除对应隧道，然后可以绑定新的隧道。</p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/06/11/有道词典去广告/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/05/18/CentOS 6.x whmcs/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

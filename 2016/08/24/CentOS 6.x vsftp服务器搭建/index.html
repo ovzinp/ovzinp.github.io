@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="CentOS 6.x vsftp服务器搭建"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>CentOS 6.x vsftp服务器搭建 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            CentOS 6.x vsftp服务器搭建
+            
+          </h1>
+          <p class="posted-on">
+          2016-08-24
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/vsftp/" rel="tag">
+                  vsftp
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h2 id="CentOS-6-x搭建图床"><a href="#CentOS-6-x搭建图床" class="headerlink" title="CentOS 6.x搭建图床"></a>CentOS 6.x搭建图床</h2><h3 id="Ⅰ-创建用户以及用户组"><a href="#Ⅰ-创建用户以及用户组" class="headerlink" title="Ⅰ. 创建用户以及用户组"></a>Ⅰ. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
+<pre><code>useradd -s /sbin/nologin vxftp
+passwd vxftp
+</code></pre><p>建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令</p>
+<pre><code>mkdir -p /home/vxftp/imgbed
+</code></pre><p>创建一个单独的FTP用户组</p>
+<pre><code>groupadd vsftp
+</code></pre><p>把之前建立的图床文件夹分配给FTP用户,并更改其用户组</p>
+<pre><code>usermod -g vsftp -d /home/vxftp/imgbed -U vxftp
+</code></pre><p>更改文件夹属性</p>
+<pre><code>chown -R vxftp.vsftp /home/vxftp/imgbed
+</code></pre><hr>
+<h3 id="Ⅱ-安装配置vsftp"><a href="#Ⅱ-安装配置vsftp" class="headerlink" title="Ⅱ.安装配置vsftp"></a>Ⅱ.安装配置vsftp</h3><p>安装vsftpd<br>    yum install -y vsftpd</p>
+<p>修改vsftpd配置文件</p>
+<pre><code>vi /etc/vsftpd/vsftpd.conf
+</code></pre><p>检查一下是否正确</p>
+<pre><code>listen=YES
+local_enable=YES
+write_enable=YES
+local_umask=022
+pasv_promiscuous=YES
+</code></pre><p>禁止其他用户访问FTP,若userlist_enable=YES，则/etc/vsftpd/user_list中的用户将被禁止访问FTP，如果为NO，则只有user_list里面的用户可以访问FTP。禁用匿名，配置中修改如下</p>
+<pre><code>userlist_enable=NO
+anonymous_enable = NO
+</code></pre><p>把vxftp用户加入到user_list中</p>
+<pre><code>echo &quot;vxftp&quot; &gt;&gt; /etc/vsftpd/user_list
+</code></pre><p>把之前创建的图床目录路径加入到chroot_list中，并修改配置文件</p>
+<pre><code>echo &quot;/home/vxftp/imgbed&quot; &gt;&gt; /etc/vsftpd/chroot_list
+echo &quot;chroot_list_enable=YES&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf
+echo &quot;chroot_list_file=/etc/vsftpd/chroot_list&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf
+</code></pre><p>其中，服务并将其加入到开机自启动</p>
+<pre><code>service vsftpd start
+chkconfig --level 35 vsftpd on
+</code></pre><p>在windows下打开任意一个文件夹窗口，输入如下地址</p>
+<pre><code>ftp://ftp-server:11235
+</code></pre><p>然后会弹出登录框，登录成功后，可以创建一个文件夹，并把该文件夹收藏到收藏夹，方便上传图片</p>
+<hr>
+<h3 id="Ⅲ-修改FTP端口号"><a href="#Ⅲ-修改FTP端口号" class="headerlink" title="Ⅲ.修改FTP端口号"></a>Ⅲ.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
+<p>编辑/etc/vsftpd/vsftpd.conf文件，将预设端口号加入文件末尾，其中11235为修改后的端口号</p>
+<pre><code>cat &quot;listen_port=11235&quot; &gt;&gt; /etc/vsftpd/vsftpd.conf
+</code></pre><p>编辑/etc/services， 将其中的 ftp 21/tcp 改为 ftp 11235/tcp，ftp 21/udp 改为 ftp 11235/udp</p>
+<p>修改/etc/vsftpd/vsftpd.conf的配置文件，在文件末端添加如下，端口范围可以自己选定，这里选定的范围为2333到2343,vsftp会使用这个范围的端口号进行传输数据，如果在防火墙上不放行这个端口号范围，vsftp客户端可以登录，但是无法获取文件列表。</p>
+<pre><code>pasv_min_port=2333
+pasv_max_port=2343
+</code></pre><p>防火墙中加入条目，然后保存并重启防火墙</p>
+<pre><code>iptables -A INPUT -p tcp --dport 11235 -j ACCEPT
+iptables -A INPUT -p udp --dport 11235 -j ACCEPT
+iptables -A INPUT -p tcp --dport 2333:2343 -j ACCEPT
+service iptables save
+service iptabkes restart
+</code></pre><p>重新启动vsftpd服务</p>
+<pre><code>service vsftpd restart
+</code></pre><hr>
+<h3 id="Ⅳ-安装HTTP服务器"><a href="#Ⅳ-安装HTTP服务器" class="headerlink" title="Ⅳ.安装HTTP服务器"></a>Ⅳ.安装HTTP服务器</h3><p>安装httpd服务</p>
+<pre><code>yum install -y httpd
+</code></pre><p>启动httpd服务并加入到开机启动中</p>
+<pre><code>service httpd start
+chkconfig httpd on
+</code></pre><p>去掉缺省页面，将/etc/httpd/conf.d/welcome.conf内容全部注释掉，并重启服务</p>
+<pre><code>vi /etc/httpd/conf.d/welcome.conf 
+
+service httpd restart
+</code></pre><p>httpd默认文件夹在/var/www/html/，建立/home/vxftp/imgbed的软链接</p>
+<pre><code>ln -s /home/vxftp/imgbed
+</code></pre><p>此时在网页下还不能访问imgbed文件夹，因为权限问题，需要给vxftp的用户文件夹加上执行权限</p>
+<pre><code>chmod +x /home/vxftp
+</code></pre><p>这样在网页下就可以访问imgbed图床文件夹了</p>
+<hr>
+<h3 id="Ⅴ-修改HTTP端口"><a href="#Ⅴ-修改HTTP端口" class="headerlink" title="Ⅴ. 修改HTTP端口"></a>Ⅴ. 修改HTTP端口</h3><p>若不想用80端口，可以将端口修改为其他放，首先找到配置文件/etc/httpd/conf/httpd.conf</p>
+<pre><code>将Listen 80改为 Listen 11234
+</code></pre><p>11234为修改后的端口号，继续修改httpd.conf，找到#ServerName www.example.com:80，在下面添加一行</p>
+<pre><code>ServerName localhost:11234
+</code></pre><p>防火墙中加入条目，然后保存并重启防火墙</p>
+<pre><code>iptables -A INPUT -p tcp --dport 11234 -j ACCEPT
+service iptables save
+service iptabkes restart
+</code></pre><p>重新启动服务</p>
+<pre><code>service httpd restart
+</code></pre><hr>
+<h3 id="Ⅵ-Selinux问题"><a href="#Ⅵ-Selinux问题" class="headerlink" title="Ⅵ. Selinux问题"></a>Ⅵ. Selinux问题</h3><p>关闭selinux，否则网页上没有权限访问软链接的内容，或者查看selinux关于ftp相关的设置，命令如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getsebool -a| grep ftp</div></pre></td></tr></table></figure>
+<p>若不关闭设置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setsebool ftpd_disable_trans 1</div><div class="line">setsebool -P ftp_home_dir 1</div><div class="line">setsebool -P httpd_read_user_content 1</div></pre></td></tr></table></figure>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/08/31/CentOS 6.x Freeradius 3.0.11编译安装/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/07/18/OSPF 模拟入侵测试1-路由表获取&路由注入/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

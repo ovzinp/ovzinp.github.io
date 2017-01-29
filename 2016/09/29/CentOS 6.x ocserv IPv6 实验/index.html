@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="CentOS 6.x ocserv IPv6 实验"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>CentOS 6.x ocserv IPv6 实验 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            CentOS 6.x ocserv IPv6 实验
+            
+          </h1>
+          <p class="posted-on">
+          2016-09-29
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/VPN/" rel="tag">
+                  VPN
+                </a>
+              
+                <a href="/tags/ocserv/" rel="tag">
+                  ocserv
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-ocserv安装"><a href="#Ⅰ-ocserv安装" class="headerlink" title="Ⅰ.ocserv安装"></a>Ⅰ.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
+<hr>
+<h3 id="Ⅱ-配置"><a href="#Ⅱ-配置" class="headerlink" title="Ⅱ.配置"></a>Ⅱ.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
+
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 64
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
+</blockquote>
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 124
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
+<p>sysctl net.ipv6.conf.all.forwarding</p>
+<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
+</blockquote>
+<hr>
+<h3 id="Ⅲ-连接测试"><a href="#Ⅲ-连接测试" class="headerlink" title="Ⅲ.连接测试"></a>Ⅲ.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
+<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
+<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
+<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
+<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
+<hr>
+<h3 id="Ⅳ-排错流程"><a href="#Ⅳ-排错流程" class="headerlink" title="Ⅳ.排错流程"></a>Ⅳ.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
+</blockquote>
+<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
+</blockquote>
+<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
+<hr>
+<h3 id="Ⅴ-结论与猜想"><a href="#Ⅴ-结论与猜想" class="headerlink" title="Ⅴ.结论与猜想"></a>Ⅴ.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
+<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
+<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
+<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
+
+</li>
+</ul>
+<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
+<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
+<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
+<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/09/29/CentOS Minimal X11转发/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="Anyconnect 用户配置手册（图文版）"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>Anyconnect 用户配置手册（图文版） - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            Anyconnect 用户配置手册（图文版）
+            
+          </h1>
+          <p class="posted-on">
+          2017-01-29
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/VPN/" rel="tag">
+                  VPN
+                </a>
+              
+                <a href="/tags/Anyconnect/" rel="tag">
+                  Anyconnect
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><ul>
+<li><span style="color:red">红色字体</span>需要重点注意，带<span style="color:red"><strong>*</strong></span>标注信息客服会提供</li>
+<li>客服联系方式<ul>
+<li>QQ: 444080836</li>
+<li>Telegram: Mniulso</li>
+<li>Email: iceantale@gmail.com</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="客户端安装"><a href="#客户端安装" class="headerlink" title="客户端安装"></a>客户端安装</h3><p>AnyConnect为思科推出的VPN客户端，目前已有Windows、Android、iOS、OS X、Ubuntu等操作系统的客户端，根据操作系统的需求，下载Anyconnect安装包，并安装客户端。</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>官方下载途径</th>
+<th>个人分享</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iOS</td>
+<td>Appstore</td>
+<td></td>
+</tr>
+<tr>
+<td>Mac OS X</td>
+<td>从官网下载要求授权</td>
+<td><a href="http://pan.baidu.com/s/1mixwrm4" target="_blank" rel="external">下载链接</a></td>
+</tr>
+<tr>
+<td>Android</td>
+<td>GooglePlay或国内安卓商店</td>
+<td><a href="http://pan.baidu.com/s/1o8dAcm2" target="_blank" rel="external">下载链接</a></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>从官网下载要求授权</td>
+<td><a href="http://pan.baidu.com/s/1geIjFXL" target="_blank" rel="external">下载链接</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>用包管理器安装openconnect</td>
+<td><a href="http://pan.baidu.com/s/1kVm2Tk7" target="_blank" rel="external">下载链接</a></td>
+</tr>
+</tbody>
+</table>
+<p>如果需要下载其他平台客户端，请到这个<a href="http://pan.baidu.com/s/1c1Gnhrq" target="_blank" rel="external">链接</a>去下载对应的客户端。</p>
+<hr>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><ul>
+<li>选择连接，添加VPN连接</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-1.jpg" alt=""></center><center style="color:purple"><strong>图1-1</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-2.jpg" alt=""></center><center style="color:purple"><strong>图1-2</strong></center>
+
+<ul>
+<li>说明：任意</li>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器域名或者URL</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-3.jpg" alt=""></center><center style="color:purple"><strong>图1-3</strong></center>
+
+<ul>
+<li>选择刚创建的VPN，并连接</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-4.jpg" alt=""></center><center style="color:purple"><strong>图1-4</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-5.jpg" alt=""></center><center style="color:purple"><strong>图1-5</strong></center>
+
+<ul>
+<li>账号<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用账户</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-6.jpg" alt=""></center><center style="color:purple"><strong>图1-6</strong></center>
+
+<ul>
+<li>密码<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-7.jpg" alt=""></center><center style="color:purple"><strong>图1-7</strong></center>
+
+<ul>
+<li>Anyconnect连接成功，并可以查看详细信息</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-8.jpg" alt=""></center><center style="color:purple"><strong>图1-8</strong></center>
+
+<ul>
+<li>Anyconnect详细信息</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-9.jpg" alt=""></center><center style="color:purple"><strong>图1-9</strong></center>
+
+<ul>
+<li>如果出现<span style="color:red">不信任的服务器</span>警告，则修改设置，将<strong>阻止不信任的服务器</strong>的勾选去掉。</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/iOS/new/iOS-10.jpg" alt=""></center><center style="color:purple"><strong>图1-10</strong></center>
+
+<hr>
+<h3 id="MAC-OS-X"><a href="#MAC-OS-X" class="headerlink" title="MAC OS X"></a>MAC OS X</h3><ul>
+<li>启动Anyconnect</li>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器域名或者URL</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-1.jpg" alt=""></center><center style="color:purple"><strong>图2-1</strong></center>
+
+<ul>
+<li>继续连接，选择<strong>Connect Anyway</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-4.jpg" alt=""></center><center style="color:purple"><strong>图2-4</strong></center>
+
+<ul>
+<li>账号<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用账户</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-5.jpg" alt=""></center><center style="color:purple"><strong>图2-5</strong></center>
+
+<ul>
+<li>密码<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-6.jpg" alt=""></center><center style="color:purple"><strong>图2-6</strong></center>
+
+<ul>
+<li>继续连接，选择<strong>Connect Anyway</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-7.jpg" alt=""></center><center style="color:purple"><strong>图2-7</strong></center>
+
+<ul>
+<li>Anyconnect连接成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-8.jpg" alt=""></center><center style="color:purple"><strong>图2-8</strong></center>
+
+<ul>
+<li>查看连接数据</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-9.jpg" alt=""></center><center style="color:purple"><strong>图2-9</strong></center>
+
+<ul>
+<li>如果出现<span style="color:red">Untrusted Server Blocked</span>，则修改设置，将<strong>Block connections to untrusted servers</strong>的勾选去掉。</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-2.jpg" alt=""></center><center style="color:purple"><strong>图2-2</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/MACOSX/new/Macosx-3.jpg" alt=""></center><center style="color:purple"><strong>图2-3</strong></center>
+
+<hr>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ul>
+<li>选择连接，添加VPN连接</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-1.jpg" alt=""></center><center style="color:purple"><strong>图3-1</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-2.jpg" alt=""></center><center style="color:purple"><strong>图3-2</strong></center>
+
+<ul>
+<li>说明：任意</li>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器域名或者URL</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-3.jpg" alt=""></center><center style="color:purple"><strong>图3-3</strong></center>
+
+<ul>
+<li>选择刚创建的VPN，并连接</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-4.jpg" alt=""></center><center style="color:purple"><strong>图3-4</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-5.jpg" alt=""></center><center style="color:purple"><strong>图3-5</strong></center>
+
+<ul>
+<li>证书不可靠警告，选择<strong>继续</strong>进行连接</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-6.jpg" alt=""></center><center style="color:purple"><strong>图3-6</strong></center>
+
+<ul>
+<li>账号<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用账户</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-7.jpg" alt=""></center><center style="color:purple"><strong>图3-7</strong></center>
+
+<ul>
+<li>密码<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-8.jpg" alt=""></center><center style="color:purple"><strong>图3-8</strong></center>
+
+<ul>
+<li>选择<strong>我信任此应用</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-9.jpg" alt=""></center><center style="color:purple"><strong>图3-9</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-10.jpg" alt=""></center><center style="color:purple"><strong>图3-10</strong></center>
+
+<ul>
+<li>如果出现<span style="color:red">不信任的服务器</span>警告，则修改设置，将<strong>阻止不信任的服务器</strong>的勾选去掉。</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-11.jpg" alt=""></center><center style="color:purple"><strong>图3-11</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Android/new/Android-12.jpg" alt=""></center><center style="color:purple"><strong>图3-12</strong></center>
+
+<hr>
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><ul>
+<li>启动Anyconnect</li>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器域名或者URL</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-1.jpg" alt=""></center><center style="color:purple"><strong>图4-1</strong></center>
+
+<ul>
+<li>账号<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用账户</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-2.jpg" alt=""></center><center style="color:purple"><strong>图4-2</strong></center>
+
+<ul>
+<li>密码<span style="color:red"><strong>*</strong></span>：登录Anyconnect所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-3.jpg" alt=""></center><center style="color:purple"><strong>图4-3</strong></center>
+
+<ul>
+<li>选择连接VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-4.jpg" alt=""></center><center style="color:purple"><strong>图4-4</strong></center>
+
+<ul>
+<li>连接VPN成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-5.jpg" alt=""></center><center style="color:purple"><strong>图4-5</strong></center>
+
+<ul>
+<li>VPN连接详情</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-6.jpg" alt=""></center><center style="color:purple"><strong>图4-6</strong></center>
+
+<ul>
+<li>如果出现<span style="color:red">Untrusted Server Blocked</span>，则修改设置，将<strong>Block connections to untrusted servers</strong>的勾选去掉。</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-7.jpg" alt=""></center><center style="color:purple"><strong>图4-7</strong></center><br><center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-8.jpg" alt=""></center><center style="color:purple"><strong>图4-8</strong></center>
+
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2017/01/29/Anyconnect 用户配置手册（简版）/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

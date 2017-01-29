@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="X大 OSPFv3 入侵测试"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>X大 OSPFv3 入侵测试 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            X大 OSPFv3 入侵测试
+            
+          </h1>
+          <p class="posted-on">
+          2016-07-03
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/network/" rel="tag">
+                  network
+                </a>
+              
+                <a href="/tags/ospf/" rel="tag">
+                  ospf
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-准备工作"><a href="#Ⅰ-准备工作" class="headerlink" title="Ⅰ.准备工作"></a>Ⅰ.准备工作</h3><h4 id="▪-抓取OSPFv3-hello数据包"><a href="#▪-抓取OSPFv3-hello数据包" class="headerlink" title="▪ 抓取OSPFv3 hello数据包"></a>▪ 抓取OSPFv3 hello数据包</h4><p>计算机连接校园网，IPv4使用的是NAT模式，IPv6使用的是穿透模式。用WireShark抓去网卡的数据包，使用过滤器ospf，发现抓取到了OSPFv3的hello数据包，说明网络网络人员没有配置passive端口，在不必要的链路上禁止路由器发送hello数据包，点击其中的一个数据包，其结果如图1-1所示，竟然发现hello数据包为纯明文的。</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/1-1.jpg" alt=""></center><br><center style="color:purple"><strong>图1-1</strong></center>
+
+<p>从图1-1中可以看出路由器的router-id为2.2.2.29，区域ID为4，hello间隔为10，dead间隔为40。鉴于是明文的hello数据包，可以把主机伪装为路由器，来获取整个校园网OSPFv3协议的路由表。</p>
+<h4 id="▪-所需软件"><a href="#▪-所需软件" class="headerlink" title="▪ 所需软件"></a>▪ 所需软件</h4><ul>
+<li>VirtualBox，运行模拟路由器的虚拟机，虚拟机使用的系统为Junipor，镜像下载地址请点击<a href="http://pan.baidu.com/s/1hrz9nTi" target="_blank" rel="external">这里</a></li>
+<li>Named Pipe TCP Proxy，将虚拟机串口端命令行转化为TCP控制数据流，下载请点击<a href="http://pan.baidu.com/s/1o7tXKSE" target="_blank" rel="external">这里</a>。</li>
+<li>Xshell，连接虚拟机串口转化的TCP控制数据流</li>
+</ul>
+<h4 id="▪-基础知识"><a href="#▪-基础知识" class="headerlink" title="▪ 基础知识"></a>▪ 基础知识</h4><p>熟悉OSPF协议以及路由器配置流程</p>
+<hr>
+<h3 id="Ⅱ-虚拟机配置"><a href="#Ⅱ-虚拟机配置" class="headerlink" title="Ⅱ. 虚拟机配置"></a>Ⅱ. 虚拟机配置</h3><h4 id="▪-导入虚拟机"><a href="#▪-导入虚拟机" class="headerlink" title="▪ 导入虚拟机"></a>▪ 导入虚拟机</h4><p>计算机上安装VirtualBox之后，点击下载的Junipor镜像，即可导入Junipor虚拟机。</p>
+<h4 id="▪-配置网卡"><a href="#▪-配置网卡" class="headerlink" title="▪ 配置网卡"></a>▪ 配置网卡</h4><p>最多可以启动四张网卡，可以视为虚拟机Junipor路由器的四个接口，在本文中默认只启用了网卡一，网卡一使用桥接模式，桥接到可以抓取到OSPFv3 hello包的物理网卡。这样Junipor虚拟路由器也可以获取OSPFv3 hello数据包。网卡设置如图2-1所示。</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-1.jpg" alt=""></center><br><center style="color:purple"><strong>图2-1</strong></center>
+
+<h4 id="▪-配置串口"><a href="#▪-配置串口" class="headerlink" title="▪ 配置串口"></a>▪ 配置串口</h4><p>虚拟机Junipor路由器无法通过ssh或者telnet直接连接，只能通过串口来进行交互和配置，因此需要配置串口，串口编号默认即可，端口模式选“主机管道”，路由和地址的格式为\.\pip\xxxxx\xxxxxxxxxx，其串口设置如图2-2所示。</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-2.jpg" alt=""></center><br><center style="color:purple"><strong>图2-2</strong></center>
+
+<hr>
+<h3 id="Ⅲ-连接到虚拟机"><a href="#Ⅲ-连接到虚拟机" class="headerlink" title="Ⅲ. 连接到虚拟机"></a>Ⅲ. 连接到虚拟机</h3><h4 id="▪-安装-Named-Pipe-TCP-Proxy"><a href="#▪-安装-Named-Pipe-TCP-Proxy" class="headerlink" title="▪ 安装 Named Pipe TCP Proxy"></a>▪ 安装 Named Pipe TCP Proxy</h4><p>到Named Pipe TCP Proxy 下载，并安装，在其安装目录找启动文件</p>
+<h4 id="▪-添加管道配置"><a href="#▪-添加管道配置" class="headerlink" title="▪ 添加管道配置"></a>▪ 添加管道配置</h4><p>到Named Pipe TCP Proxy目录下，运行piped.exe，管道地址与第二章中设置的路由和地址格式中相同，端口为自定义一个高端口号，例如8000以后的。</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-1.jpg" alt=""></center><br><center style="color:purple"><strong>图3-1</strong></center>
+
+<p>添加成功后，如图3-2所示，这样可以从本地使用shell应用telnet到该端口号，图3-2中telnet地址应为127.0.0.1:8001</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-2.jpg" alt=""></center><br><center style="color:purple"><strong>图3-2</strong></center>
+
+<h4 id="▪-telnet到Junipor虚拟机路由器"><a href="#▪-telnet到Junipor虚拟机路由器" class="headerlink" title="▪ telnet到Junipor虚拟机路由器"></a>▪ telnet到Junipor虚拟机路由器</h4><p>启动Junipor路由器，启动成功后，使用xshell，配置如图3-3所示。连接成功后，如图3-4所示。</p>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-3.jpg" alt=""></center>
+
+<center style="color:purple"><strong>图3-3</strong></center><br><center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-4.jpg" alt=""></center>
+
+<center style="color:purple"><strong>图3-4</strong></center>
+
+<hr>
+<h3 id="Ⅳ-Junipor基础配置"><a href="#Ⅳ-Junipor基础配置" class="headerlink" title="Ⅳ. Junipor基础配置"></a>Ⅳ. Junipor基础配置</h3><p>第一设置时，输入cli进入运行模式</p>
+<pre><code>root@% cli
+root&gt;
+</code></pre><p>输入configure进入配置模式</p>
+<pre><code>root&gt;configure
+root#
+</code></pre><p>设置登录密码,至少字母加数字<br>​<br>    root#edit system<br>    root#set host-name host<br>    root#set domain-name example.com<br>    root#set root-authentication plain-text-password</p>
+<p>设置环回接口IPv4地址，用作OSPFv3协议中的router-id。</p>
+<pre><code>root#set interfaces lo0 unit 0 family inet address 9.9.9.9/24
+</code></pre><p>设置端口em0（eth0）的IPv6 eui-64地址，IPv6通告前缀可以到主机上查询，根据实际情况替换以下命令中的IPv6地址通告前缀，可以在运行模式下查看路由表来确认是否已经运行正常。</p>
+<pre><code>root#set interfaces em0 unit 0 family inet6 address 2001:cc0:2020:4008::/64 eui-64 
+</code></pre><p>启用OSPFv3协议，并把em0接口通告进入OSPFv3，区域ID根据前文抓取的hello数据包可以获知为4</p>
+<pre><code>root#set protocols ospf3 area 0.0.0.4 interface em0 
+</code></pre><p>根据抓取的hello明文数据包，来获悉学校路由器OSPFv3的hello time和dead time，若分别是10s和40s，则不用手动设置，若不为上述数值，则需要手动修改，修改命令如下</p>
+<pre><code>root#set protocols ospf3 area 0.0.0.4 interface em0 hello-interval x
+root#set protocols ospf3 area 0.0.0.4 interface em0 dead-interval x
+</code></pre><p>最后输入commit提交保存历史输入的命令</p>
+<pre><code>root#commit
+</code></pre><p>配置完毕后，可以在运行模式下，执行如下命令，来查看OSPFv3的状态，以及路由表</p>
+<pre><code>root&gt;show ospf3 neighbor
+root&gt;show route
+</code></pre><hr>
+<h3 id="Ⅴ-获取拓扑路由表"><a href="#Ⅴ-获取拓扑路由表" class="headerlink" title="Ⅴ. 获取拓扑路由表"></a>Ⅴ. 获取拓扑路由表</h3><p>执行完上述所有操作之后，在运行模式下，可以通过show route来查看整个学校拓扑的IPv6路由表，这时候可以路由条目并通告到OSPFv3中，整个拓扑中的路由器都会学习到该路由，由此可能造成对正常网络的影响。完整的IPv6路由表如下所示。</p>
+<pre><code>::/0   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1::/64
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1003::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1004::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1005::/64 
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1006::/64
+   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1007::/64
+   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1008::/64
+   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1010::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1032::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1033::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:1041::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2000::/64
+   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2010::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2011::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2012::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2013::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2014::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2015::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2016::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2017::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2018::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2020::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2021::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2022::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:2030::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:3001::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:3002::/64 
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:3003::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4001::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4002::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4004::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4005::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4006::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4007::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4008::/64
+   *[Direct/0] 00:02:14
+&gt; via em1.0
+2001:cc0:2020:4008:a00:27ff:fe9b:28c7/128
+   *[Local/0] 00:02:14
+  Local via em1.0
+2001:cc0:2020:4009::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4010::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4012::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4013::/64
+   *[OSPF3/150] 00:01:56, metric 20, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4014::/64
+   *[OSPF3/150] 00:01:56, metric 1, tag 0
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:1::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:2::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:3::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:4::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:5::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:6::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:7::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:8::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:9::/80   
+   *[OSPF3/10] 00:01:56, metric 2
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:10::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:11::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:12::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:13::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:14::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:15::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:16::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:17::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:20::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:21::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:22::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:23::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:24::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:25::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:26::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:27::/80
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4015:28::/80
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4016::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4017::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4018::/64
+   *[OSPF3/10] 00:01:56, metric 2
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4020::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4021::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4022::/64 
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4023::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4024::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4025::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4026::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4027::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4028::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4029::/64
+   *[OSPF3/10] 00:01:56, metric 5
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4030::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4049::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:4050::/64
+   *[OSPF3/10] 00:01:56, metric 3
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:5001::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:5002::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+2001:cc0:2020:5005::/64
+   *[OSPF3/10] 00:01:56, metric 4
+&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
+</code></pre><p>查看OSPFv3邻居如下所示</p>
+<pre><code>root@R3&gt; show ospf3 neighbor 
+ID          Interface   State Pri   Dead
+2.2.2.29    em1.0       Full1       37
+  Neighbor-address fe80::7625:8aff:fe0e:b250
+</code></pre><hr>
+<h3 id="Ⅵ-改进措施"><a href="#Ⅵ-改进措施" class="headerlink" title="Ⅵ. 改进措施"></a>Ⅵ. 改进措施</h3><ul>
+<li>在不必要的链路上，将OSPF端口设置为passive</li>
+<li>OSPF应配置链路认证，防止非法攻击者的入侵。</li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/07/05/OSPF 真实入侵测试/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/07/01/Vim 学习/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="Vim 学习"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>Vim 学习 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            Vim 学习
+            
+          </h1>
+          <p class="posted-on">
+          2016-07-01
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/linux/" rel="tag">
+                  linux
+                </a>
+              
+                <a href="/tags/vim/" rel="tag">
+                  vim
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-移动"><a href="#Ⅰ-移动" class="headerlink" title="Ⅰ. 移动"></a>Ⅰ. 移动</h3><h4 id="word为单位移动"><a href="#word为单位移动" class="headerlink" title="word为单位移动"></a>word为单位移动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line"> ---&gt;--&gt;-&gt;-----------------&gt;</div><div class="line">   w  w  w                3w</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">&lt;----&lt;--&lt;-&lt;---------&lt;---</div><div class="line">     b     b  b        2b      b</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">    &lt;- &lt;--- -----&gt; ----&gt;</div><div class="line">     ge ge        e      e</div></pre></td></tr></table></figure>
+<p>有一些被认为是non-word的特殊字符, 比如”.”, “-“或”)”充当了word边界的作用。要改变Vim对word边界的定义, 请查看’iskeyword’选项.还可以以空白为分界的WORDs为单位进行移动. 这种WORD与通常意义上的word的边界不同.所以此处用了大写的WORD来区分于word. 它的移动命令也是相应字母的大写形式, 如下所示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">      ge          b          w                                       e</div><div class="line">     &lt;-          &lt;-         ---&gt;                                  ---&gt;</div><div class="line">This is-a line, with special/separated/words (and some more).</div><div class="line">     &lt;----&lt;-----            --------------------------&gt;             -----&gt;</div><div class="line">        gE     B                                  W                                    E</div></pre></td></tr></table></figure></p>
+<h4 id="移动到行首或者行尾"><a href="#移动到行首或者行尾" class="headerlink" title="移动到行首或者行尾"></a>移动到行首或者行尾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">            ^</div><div class="line">    &lt;------------</div><div class="line">.....This is a line with example text</div><div class="line">&lt;----------------- ---------------&gt;</div><div class="line">            0                        $</div></pre></td></tr></table></figure>
+<p>“\$”命令还可接受一个计数, 就象其它的移动命令一样.但是移动到一行的行尾多于一次没有任何意义. 所以它的功能被赋予为移动到下一行的行尾. 如”1\$”会将光标移动到当前行行尾, “2\$”则会移动到下一行的行尾, 如此类推.</p>
+<p>####移动到指定字符 </p>
+<p>一个最有用的移动命令是单字符搜索命令. 命令”fx”在当前行上查找下一个字符x. 提示: “f”意为”find”.例如, 光标位于下行的开头, 假如你要移动到单词human中的字符h上去. 只要执行命令”fh”就可以了,命令”fy”会将光标定位于单词really的尾部.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">---------&gt;---------------&gt;</div><div class="line">       fh               fy</div></pre></td></tr></table></figure>
+<p>该命令可以带一个命令计数; 命令”3fl”会把光标定位于”foul” 的”l”上:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">               ---------------------&gt;</div><div class="line">                            3fl</div></pre></td></tr></table></figure>
+<p>F向左搜索</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">	      &lt;---------------------</div><div class="line">                               Fh</div></pre></td></tr></table></figure>
+<p>“tx”命令形同”fx”命令, 只不过它不是把光标停留在被搜索字符上, 而是在它之前的一个字符上. 提示: “t”意为”To”. 该命令的反方向版是”Tx”:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">                &lt;------------    -------------&gt;</div><div class="line">                          Th                  tn</div></pre></td></tr></table></figure>
+<p>这4个命令都可以用”;”来重复. 以”,”也是重复同样的命令, 但是方向与原命令的方向相反 1 . 无论如何, 这4个命令都不会使光标跑到其它行上去. 即使当前的句子还没有结束</p>
+<p>####匹配一个括号为目的的移动 </p>
+<p>这对方括号[]和花括号{}同样适用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">                  %</div><div class="line">             &lt;-----&gt;</div><div class="line">if (a == (b  *  c) / d)</div><div class="line">   &lt;----------------&gt;</div><div class="line">               %</div></pre></td></tr></table></figure>
+<h4 id="移动到指定行"><a href="#移动到指定行" class="headerlink" title="移动到指定行"></a>移动到指定行</h4><p>没有指定命令计数作为参数的话 3 , “G”会把光标定位到最后一行上.”gg”命令是跳转到第一行的快捷的方法. “1G”效果也是一样,但是敲起来就没那么顺手了.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">|    first line of a file     ^</div><div class="line">|    text text text text    |</div><div class="line">|    text text text text    |  gg</div><div class="line"> 7G  |    text text text text    |</div><div class="line">|    text text text text</div><div class="line">|    text text text text</div><div class="line">       V   text text text text    |</div><div class="line">     text text text text    |  G</div><div class="line">     text text text text    |</div><div class="line">             last line of a file     V</div></pre></td></tr></table></figure>
+<p>另一个移动到某行的方法是在命令”%”之前指定一个命令计数 1 . 比如”50%”将会把光标定位在文件的中间 2 . “90%”跳到接近文件尾的地方 3 .</p>
+<p>上面的这些命令都假设你只是想跳转到文件中的某一行上, 不管该行当前是否显示在屏幕上.但如果你只是想移动到目前显示在屏幕上的那些行呢? 下图展示了达到这一目标的几个命令:”H”意为Home, “M”为Middle, “L”为Last.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">		+---------------------------+</div><div class="line">H --&gt;        |  text sample text              |</div><div class="line">		|  sample text		        |</div><div class="line">		|  text sample text              |</div><div class="line">  		  |  sample text                     |</div><div class="line">M --&gt;       |  text sample text              |</div><div class="line">		|  sample text 		         |</div><div class="line">		|  text sample text	            |</div><div class="line">		|  sample text		        |</div><div class="line">L --&gt;         |  text sample text              |</div><div class="line">		+---------------------------+</div></pre></td></tr></table></figure>
+<p>Vim允许你在文本中定义你自己的标记. 命令”ma”将当前光标下的位置名之为标记”a”.从a到z一共可以使用26个自定义的标记. 定义后的标记在屏幕上也看不出来. 不过Vim在内部记录了它们所代表的位置.</p>
+<p>要跳转到一个你定义过的标记, 使用命令`{mark}, {mark}就是你定义的标记的名字.就象这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`a</div></pre></td></tr></table></figure>
+<p>命令’mark(单引号, 或者叫呼应单引号)会使你跳转到mark所在行的行首.这与`mark略有不同, `mark会精准地把你带到你定义mark时所在的行和列.</p>
+<p>你可以移动到文件开始处并在此放置一个名为s(start)的标记:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ms</div></pre></td></tr></table></figure>
+<h4 id="修改历史光标跳转"><a href="#修改历史光标跳转" class="headerlink" title="修改历史光标跳转"></a>修改历史光标跳转</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Ctrl-O  前一个修改所在光标位置 </div><div class="line">Ctrl-I   后一个修改所在光标位置</div></pre></td></tr></table></figure>
+<h4 id="滚动"><a href="#滚动" class="headerlink" title="滚动"></a>滚动</h4><ul>
+<li>CTRL-U命令会使文本向下滚动半屏. 也可以想象为在显示文本的窗<br>口向上滚动了半屏. 不要担心这种容易混淆的解释, 不是只有你一个人<br>搞不清楚.</li>
+<li>CTRL-D命令将窗口向下移动半屏, 所以相当于文本向上滚动了半屏:</li>
+<li>“zz”命令 会把当前行置为屏幕正中央</li>
+<li>“zt”命令会把当前行置于屏幕顶端  </li>
+<li>“zb”则把当前行置于屏幕底端 </li>
+<li>一次滚动一行可以使用CTRL-E(向上滚动)和CTRL-Y(向下滚动)</li>
+</ul>
+<hr>
+<h3 id="Ⅱ-删除"><a href="#Ⅱ-删除" class="headerlink" title="Ⅱ. 删除"></a>Ⅱ. 删除</h3><h4 id="操作符命令和位移"><a href="#操作符命令和位移" class="headerlink" title="操作符命令和位移"></a>操作符命令和位移</h4><p>“4w”命令是向前移动4个word. 所以”d4w”命令是删除4个word.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">                            ------------------&gt;</div><div class="line">                                    d4w</div><div class="line">To err is human. you need a computer.</div></pre></td></tr></table></figure>
+<p>Vim只删除到位移命令之后光标的前一个位置. 这是因为Vim知道你并不是要删除下一个word的第一个字符. 如果你用”e”命令来移动到word的末尾, Vim也会假设你是要包括那最后一个字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. you need a computer.</div><div class="line">                           --------&gt;</div><div class="line">                               d2e</div><div class="line">To err is human. a computer.</div></pre></td></tr></table></figure></p>
+<p>删除到行尾</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. a computer.</div><div class="line">                           ------------&gt;</div><div class="line">                               d$</div><div class="line">To err is human</div></pre></td></tr></table></figure>
+<p>删除换行符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">命令J</div></pre></td></tr></table></figure></p>
+<h4 id="改变文本"><a href="#改变文本" class="headerlink" title="改变文本"></a>改变文本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human</div><div class="line">     -------&gt;</div><div class="line">      c2wbe&lt;Esc&gt;</div><div class="line">To be human</div></pre></td></tr></table></figure>
+<p>快捷命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">x      代表dl(删除当前光标下的字符)</div><div class="line">X 	代表dh(删除当前光标左边的字符)</div><div class="line">D     代表d$(删除到行尾的内容)</div><div class="line">C 	代表c$(修改到行尾的内容)</div><div class="line">s 	代表cl(修改一个字符)</div><div class="line">S 	代表cc(修改一整行)</div></pre></td></tr></table></figure>
+<h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><p>单个替换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">there is somerhing grong here</div><div class="line">rT                  rt       rw</div><div class="line">There is something wrong here</div></pre></td></tr></table></figure>
+<h4 id="重复改动"><a href="#重复改动" class="headerlink" title="重复改动"></a>重复改动</h4><p>“.”命令是Vim中一个简单而强大的命令. 它会重复上一次做出的改动. 例如, 假设你在编辑一个HTML文件, 想删除其中所有的\<b\>标签. 你把光标置于\<b\>的&lt;字符上然后命令”df&gt;”. 然后到\</b\>的&lt;上用”.”命令做同样的事. “.”命令会执行上一次所执行的更改命令( 此例中是”df&gt;”).要删除另一个标签, 同样把光标置于&lt;字符上然后执行”.”命令即可.</b\></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">                                       To &lt;B&gt;generate&lt;/B&gt; a table of &lt;B&gt;contents</div><div class="line">f&lt;           找到第一个 &lt;     ---&gt;</div><div class="line">df&gt;         删除到 &gt;处的内容   --&gt;</div><div class="line">f&lt;           找到下一个 &lt;                  ---------&gt;</div><div class="line">.              重复 df&gt;                                      ---&gt;</div><div class="line">f&lt;           找到下一个 &lt;                                    -------------&gt;</div><div class="line">.              重复 df&gt;                                                                --&gt;</div></pre></td></tr></table></figure>
+<p>把”four”改为”five”. 它在你的文件里多次出现. 你可以用以下命令来做出修改:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/four&lt;Enter&gt;     找到第一个字符串&quot;four&quot;</div><div class="line">cwfive&lt;Esc&gt;      把它改为&quot;five&quot;</div><div class="line">n 	  		    找到下一个字符串&quot;four&quot;</div><div class="line">. 			   同样改为&quot;five&quot;</div><div class="line">n 		          继续找下一个</div><div class="line">. 			   做同样的修改</div><div class="line">			等等</div></pre></td></tr></table></figure>
+<p>如果光标位于一个单词的中间而你要删除这个单词, 通常你需要把光标移到该单词的开头然后用”dw”命令. 不过有一个更简单的办法:”daw”，同时也删除掉单词后的空格，若不打算删除单词后的空格，使用:”diw”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">this is some example text.</div><div class="line">		    daw</div><div class="line">this is some text.</div></pre></td></tr></table></figure>
+<p>删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">x       删除当前光标下的字符(&quot;dl&quot;的快捷命令)</div><div class="line">X       删除当前光标之前的字符(&quot;dh&quot;的快捷命令)</div><div class="line">D      删除自当前光标至行尾的内容(&quot;d$&quot;的快捷命令)</div><div class="line">dw    删除自当前光标至下一个word的开头</div><div class="line">db     删除自当前光标至前一个word的开始</div><div class="line">diw    删除当前光标所在的word(不包括空白字符)</div><div class="line">daw   删除当前光标所在的word(包括空白字符)</div><div class="line">dG     删除当前行至文件尾的内容</div><div class="line">dgg   删除当前行至文件头的内容</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">~      改变当前光标下字符的大小写, 并将光标移至下一个字符. 这不是一个操作符命令(除非你设置了&apos;tildeop&apos;3 选项), 所以你不能让它与一个位移命令搭配使用. 但它可以在Visual模式下改变所有被选中的文本的大小写.</div><div class="line">I       将光标置于当前行第一个非空白字符处并进入Insert模式</div><div class="line">A     当光标置于当前行尾并进入Insert模式</div></pre></td></tr></table></figure>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/07/03/X大_OSPFv3_入侵测试/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

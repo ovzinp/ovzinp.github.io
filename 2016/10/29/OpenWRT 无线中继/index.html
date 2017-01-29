@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="OpenWRT 无线中继"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>OpenWRT 无线中继 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            OpenWRT 无线中继
+            
+          </h1>
+          <p class="posted-on">
+          2016-10-29
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/openwrt/" rel="tag">
+                  openwrt
+                </a>
+              
+                <a href="/tags/router/" rel="tag">
+                  router
+                </a>
+              
+                <a href="/tags/network/" rel="tag">
+                  network
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h3><h4 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h4><ul>
+<li>主路由器Netgear位置远，影响网络体验</li>
+<li>设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信。</li>
+<li>构思通过中继路由器对主路由器的SSID进行中继</li>
+</ul>
+<h4 id="WDS"><a href="#WDS" class="headerlink" title="WDS"></a>WDS</h4><p>WDS连接，再购买一个Netgear路由器，使得主从路由器通过WDS连接，实现无缝漫游。查阅了NetGear的<a href="http://club.netgear.cn/Knowledgebase/Document.aspx?Did=234" target="_blank" rel="external">官方资料</a>之后，再综合其他资料，如下理由放弃该方案：</p>
+<ul>
+<li>WDS是非标准协议，不同厂商很可能不兼容，而且芯片、固件版本最好一致。</li>
+<li>Netgear官方支持的WDS协议，路由器的加密只支持WEP方式，不支持WPA2。</li>
+</ul>
+<h4 id="OpenWRT"><a href="#OpenWRT" class="headerlink" title="OpenWRT"></a>OpenWRT</h4><ul>
+<li><p>Routed Client Mode， 拓展的路由器网络还有经过一个NAT到上级网络</p>
+<center><img src="http://i.imgur.com/OA0NKDF.png" alt=""></center><center style="color:purple"><strong>图1-2 路由客户端模式</strong></center>
+</li>
+<li><p>Bridged Client Mode (brcm-2.4 only)，拓展的路由器可以和原来的路由器位于同一个网络，后来买路由器网卡不支持，放弃。</p>
+<center><img src="http://i.imgur.com/IoXvhfk.png" alt=""></center><center style="color:purple"><strong>图1-3 桥接客户端模式(仅仅brcm-2.4)</strong></center>
+</li>
+<li><p>Bridged Client Mode (with relayd)，使用relayed软件进行中继，伪桥接方式，<a href="https://wiki.openwrt.org/doc/recipes/relayclient" target="_blank" rel="external">介绍资料</a>。</p>
+<center><img src="http://i.imgur.com/uKnMcxw.png" alt=""></center><center style="color:purple"><strong>图1-4 使用relayed桥接客户端模式</strong></center>
+
+</li>
+</ul>
+<hr>
+<h3 id="2-路由客户端模式"><a href="#2-路由客户端模式" class="headerlink" title="2.  路由客户端模式"></a>2.  路由客户端模式</h3><h4 id="连接无线网络"><a href="#连接无线网络" class="headerlink" title="连接无线网络"></a>连接无线网络</h4><ul>
+<li>配置位置：Network → WiFi → 选择5G/2.4G网卡 → Scan</li>
+<li>出现无线网络列表之后，选择要中继的SSID，本文要中继的SSID是Onion-5G，然后输入无线网路密码</li>
+<li>Network选择创建一个新的虚拟适配器WWAN</li>
+<li>保存之后，过一会在Network → Interface 会看到一个WWAN的虚拟适配器，并从Onion-5G获取到了IP地址，假设这里是192.168.1.7/24</li>
+</ul>
+<h4 id="防火墙设置"><a href="#防火墙设置" class="headerlink" title="防火墙设置"></a>防火墙设置</h4><ul>
+<li>配置位置：Network → Interface</li>
+<li>选择刚才生成的wwan虚拟适配器，然后转到Firewall Settings，确认分配到防火墙区域为wan</li>
+<li>保存生效</li>
+</ul>
+<h4 id="IPv6中继设置"><a href="#IPv6中继设置" class="headerlink" title="IPv6中继设置"></a>IPv6中继设置</h4><p>与之前设置OpenWRT IPv6中继的方法相同</p>
+<h4 id="LAN配置"><a href="#LAN配置" class="headerlink" title="LAN配置"></a>LAN配置</h4><p>修改LAN接口IP地址段，因为使用的NAT模式，所以LAN接口的IP地址段不能与主路由器的IP段（192.168.1.0/24）重复，主假设修改的IP地址段为10.10.10.0/24</p>
+<h4 id="无线配置"><a href="#无线配置" class="headerlink" title="无线配置"></a>无线配置</h4><p>创建一个新的SSID，并桥接到LAN接口</p>
+<ul>
+<li>配置位置：Network → WiFi → 选择5G/2.4G网卡 → Add</li>
+<li>ESSID：Onion-5G+<ul>
+<li>疑问：此处可以设置为Onion-5G吗？SSID相同会有什么干扰吗？</li>
+</ul>
+</li>
+<li>Mode：Access Point</li>
+<li>Network： LAN</li>
+</ul>
+<h4 id="终端连接测试"><a href="#终端连接测试" class="headerlink" title="终端连接测试"></a>终端连接测试</h4><p>此时连接到Onion-5G+的终端设备，可以从主路由器获取192.168.1.0/24地址段的IP地址了</p>
+<h4 id="失败总结"><a href="#失败总结" class="headerlink" title="失败总结"></a>失败总结</h4><p>无法将wifi虚拟适配器直接桥接到WWAN接口，如果这样设置，会导致导致WWAN虚拟适配器变为Bridge interface类型，这样WWAN接口无法从主路由器获取IP地址，因此整个路由器也不能连接到网络了。</p>
+<hr>
+<h3 id="3-使用relayd桥接客户端模式"><a href="#3-使用relayd桥接客户端模式" class="headerlink" title="3. 使用relayd桥接客户端模式"></a>3. 使用relayd桥接客户端模式</h3><h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><ul>
+<li>relayd</li>
+<li>luci-proto-relay<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4></li>
+<li>创建一个新的网络192.168.2.0/24, 用来正常访问路由器，<span style="color:red">否则在完成relay桥接模式后无法访问从路由器</span>，所以创建一个LAN2用来保证可以正常访问路由器</li>
+<li>ssh管理切换到LAN2</li>
+<li>无法通过WAN，WWAN接口的IP地址段访问luci网页管理端，只能通过LAN地址段访问luci网页管理端。</li>
+</ul>
+<h4 id="连接无线网络-1"><a href="#连接无线网络-1" class="headerlink" title="连接无线网络"></a>连接无线网络</h4><ul>
+<li>配置位置：Network → WiFi → 选择5G/2.4G网卡 → Scan</li>
+<li>出现无线网络列表之后，选择要中继的SSID，本文要中继的SSID是Onion-5G，然后输入无线网路密码</li>
+<li>Network选择创建一个新的虚拟适配器WWAN</li>
+<li>保存之后，过一会在Network → Interface 会看到一个WWAN的虚拟适配器，并从Onion-5G获取到了IP地址，假设这里是192.168.1.7/24</li>
+</ul>
+<h4 id="防火墙设置-1"><a href="#防火墙设置-1" class="headerlink" title="防火墙设置"></a>防火墙设置</h4><ul>
+<li>配置位置：Network → Interface</li>
+<li>选择刚才生成的wwan虚拟适配器，然后转到Firewall Settings，<span style="color:red">确认分配到防火墙区域为lan，不是wan</span></li>
+<li>保存生效</li>
+</ul>
+<h4 id="关闭LAN接口-DHCP功能"><a href="#关闭LAN接口-DHCP功能" class="headerlink" title="关闭LAN接口 DHCP功能"></a>关闭LAN接口 DHCP功能</h4><p>关闭lLAN接口的DHCP功能，保证客户端可以从主路由器获取IP地址</p>
+<h4 id="桥接适配器创建"><a href="#桥接适配器创建" class="headerlink" title="桥接适配器创建"></a>桥接适配器创建</h4><ul>
+<li>配置位置：Network → Interface → Add new interface</li>
+<li>Protocol：Relay Bridge</li>
+<li>Relay between Network：lan wwan</li>
+<li>保存设置</li>
+</ul>
+<h4 id="无线配置-1"><a href="#无线配置-1" class="headerlink" title="无线配置"></a>无线配置</h4><ul>
+<li>配置位置：Network → WiFi → 选择5G/2.4G网卡 → Add</li>
+<li>ESSID：Onion-5G<ul>
+<li>疑问：此处可以设置为Onion-5G吗？SSID相同会有什么干扰吗？</li>
+</ul>
+</li>
+<li>Mode：Access Point</li>
+<li>Network： LAN</li>
+</ul>
+<h4 id="终端连接测试-1"><a href="#终端连接测试-1" class="headerlink" title="终端连接测试"></a>终端连接测试</h4><p>此时连接到Onion-5G的终端设备，可以从主路由器获取192.168.1.0/24地址段的IP地址了，可以实现设备无缝漫游了</p>
+<h4 id="配置文件示例"><a href="#配置文件示例" class="headerlink" title="配置文件示例"></a>配置文件示例</h4><p>使用luci网页配置可能有问题，可以直接修改配置文件并重启网络</p>
+<ul>
+<li><p>/etc/config/network</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">config interface &apos;lan&apos;</div><div class="line">	option ifname &apos;eth0&apos;</div><div class="line">	option type &apos;bridge&apos;</div><div class="line">	option proto &apos;static&apos;</div><div class="line">	option netmask &apos;255.255.255.0&apos;</div><div class="line">	option ipaddr &apos;192.168.2.1&apos; </div><div class="line"></div><div class="line">config interface &apos;stabridge&apos; </div><div class="line">	option proto &apos;relay&apos;</div><div class="line">	option network &apos;lan wwan&apos;</div><div class="line"></div><div class="line">config interface &apos;wwan&apos;</div><div class="line">	option proto &apos;dhcp&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>/etc/config/dhcp</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">option interface        lan</div><div class="line">	option start         100</div><div class="line">	option limit        150</div><div class="line">	option leasetime        12h</div><div class="line">	option ignore 1          #这一行添加，关掉lan的dhcp功能</div></pre></td></tr></table></figure>
+</li>
+<li><p>/etc/config/firewall</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">config zone</div><div class="line">	option name &apos;lan&apos;</div><div class="line">	option input &apos;ACCEPT&apos;</div><div class="line">	option output &apos;ACCEPT&apos;</div><div class="line">	option forward &apos;ACCEPT&apos;       #修改前为REJECT</div><div class="line">	option network &apos;lan wwan&apos;     #添加了wwan</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="测试后记"><a href="#测试后记" class="headerlink" title="测试后记"></a>测试后记</h4><p>试用了一天之后，发现通过relayd方式分别连接到主从路由器的设备之间ping延时很高，因此不得不放弃这种方式。</p>
+<hr>
+<h3 id="4-局域网之间路由模式"><a href="#4-局域网之间路由模式" class="headerlink" title="4. 局域网之间路由模式"></a>4. 局域网之间路由模式</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>OpenWRT固件和Netgear官方固件都拥有自定义路由表的接口，两个路由器之间通过无线进行连接，分别在两个路由器上配置相互局域网转发的路由表。</p>
+<h4 id="防火墙设置-2"><a href="#防火墙设置-2" class="headerlink" title="防火墙设置"></a>防火墙设置</h4><ul>
+<li>创建wlan区域，为Netgear固件路由器所在区域</li>
+<li>允许wlan转到lan，同时lan也可以转发到wlan，其中lan为OpenWRT固件所在区域。</li>
+<li>只允许IPv4转发，禁止IPv6转发</li>
+</ul>
+<h4 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h4><h5 id="OpenWRT静态路由设置"><a href="#OpenWRT静态路由设置" class="headerlink" title="OpenWRT静态路由设置"></a>OpenWRT静态路由设置</h5><ul>
+<li>配置位置：Network → WiFi → 选择5G/2.4G网卡 → Scan</li>
+<li>出现无线网络列表之后，选择要中继的SSID，本文要中继的SSID是Onion-2.4G，然后输入无线网路密码</li>
+<li>Network选择创建一个新的虚拟适配器WLAN，防火墙区域为wlan</li>
+<li>保存之后，过一会在Network → Interface 会看到一个WLAN的虚拟适配器，并从Onion-2.4G获取到了IP地址，假设这里是192.168.1.2/24</li>
+</ul>
+<p>SSH连接到路由器后查看路由表，如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Kernel IP routing table</div><div class="line">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface</div><div class="line">default         192.168.1.1     0.0.0.0         UG    0      0        0 eth1</div><div class="line">10.30.0.0       *               255.255.224.0   U     0      0        0 eth1</div><div class="line">10.30.0.254     *               255.255.255.255 UH    0      0        0 eth1</div><div class="line">192.168.1.0     *               255.255.255.0   U     0      0        0 wlan0</div><div class="line">192.168.1.1     *               255.255.255.255 UH    0      0        0 wlan0</div><div class="line">192.168.2.0     *               255.255.255.0   U     0      0        0 br-lan</div></pre></td></tr></table></figure></p>
+<p>从上述路由表可以看出，这时候所有本地的流量也被转发到192.168.1.1，不需要转发所有的流量，因为需要避免wlan0成为默认路由的出口，修改虚拟适配器WLAN的选项，修改文件/etc/conf/network<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">config interface &apos;wlan&apos;       </div><div class="line">        option proto &apos;dhcp&apos;  </div><div class="line">        option defaultroute &apos;0&apos;</div></pre></td></tr></table></figure></p>
+<p>手动修改回正确的默认路由，这样路由器每次重启之后，或者连接到Onion-2.4G后，不会把Onion-2.4G的网络当作默认路由了。</p>
+<h5 id="Netgear静态路由设置"><a href="#Netgear静态路由设置" class="headerlink" title="Netgear静态路由设置"></a>Netgear静态路由设置</h5><p>添加到192.168.2.0/24的路由表条目，网关地址为192.168.2.1，即为OpenWRT的IP的地址。</p>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><ul>
+<li>速度不稳定，ping延时有时候会很高</li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/11/14/NetGear 刷 OpenWrt/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/09/29/Centos 6.x Hadoop 安装/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

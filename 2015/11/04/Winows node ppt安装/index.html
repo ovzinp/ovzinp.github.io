@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="Windows下nodeppt安装"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>Windows下nodeppt安装 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            Windows下nodeppt安装
+            
+          </h1>
+          <p class="posted-on">
+          2015-11-04
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/Windows/" rel="tag">
+                  Windows
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>nodeppt可能是最好的网页ppt</p>
+<h3 id="下载官方Nodejs的版本"><a href="#下载官方Nodejs的版本" class="headerlink" title="下载官方Nodejs的版本"></a>下载官方Nodejs的版本</h3><p>下载官方的nodejs，下载官方的安装包之后，可以将安装路径加入系统环境变量，我的安装路径为:<br><code>D:\Program Files\nodejs</code><br>也可以下载官方的.exe版本，将.exe文件所在路径写入系统环境变量。</p>
+<blockquote>
+<p><a href="https://nodejs.org/en/" target="_blank" rel="external">下载链接</a></p>
+</blockquote>
+<hr>
+<h3 id="下载npm代码"><a href="#下载npm代码" class="headerlink" title="下载npm代码"></a>下载npm代码</h3><p>下载npm代码，并把代码解压到<code>D:\Program Files\nodejs</code>中，解压后的路径例如：<code>D:\Program Files\nodejs\npm-3.3.12</code>,从命令行进入该路径下，执行如下命令：</p>
+<p><code>D:\Program Files\nodejs\npm-3.3.12\node cli.js install -gf</code>   </p>
+<blockquote>
+<p>node cli.js install npm -gf 可以安装最新版的NPMnode cli.js install npm@1.0.105 -gf 可以安装指定版本的NPM</p>
+</blockquote>
+<p>NPM安装完成后，将<code>D:\Program Files\nodejs\node_modules</code>加入系统环境变量中。</p>
+<hr>
+<h3 id="安装express"><a href="#安装express" class="headerlink" title="安装express"></a>安装express</h3><pre><code>npm install express -g
+</code></pre><blockquote>
+<p> 安装最新版expressnpm install express@2.5.0 安装指定版本express</p>
+</blockquote>
+<pre><code>npm remove express -g
+</code></pre><blockquote>
+<p>删除express</p>
+</blockquote>
+<hr>
+<h3 id="nodeppt安装"><a href="#nodeppt安装" class="headerlink" title="nodeppt安装"></a>nodeppt安装</h3><p>安装命令如下   </p>
+<pre><code>npm install -g nodeppt
+</code></pre><p><strong>shell使用</strong></p>
+<pre><code>nodeppt start -h
+</code></pre><blockquote>
+<p>获取帮助</p>
+</blockquote>
+<pre><code>nodeppt start -p port
+nodeppt start -p 8090 -d path//ppts
+</code></pre><blockquote>
+<p>绑定端口</p>
+</blockquote>
+<pre><code>nodeppt start -p 8080 -d path//ppts -H 127.0.0.1
+</code></pre><blockquote>
+<p>绑定host，默认绑定0.0.0.0</p>
+</blockquote>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2015/12/01/小米路由器mini 刷 PandoraBox/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2015/01/29/hello-world/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

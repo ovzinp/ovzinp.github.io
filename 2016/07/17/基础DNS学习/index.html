@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Icean L">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="基础DNS学习"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Kompass"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>基础DNS学习 - Kompass</title>
+
+
+  <link rel="shortcut icon" href="/">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  主页
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  归档
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  关于
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            基础DNS学习
+            
+          </h1>
+          <p class="posted-on">
+          2016-07-17
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/network/" rel="tag">
+                  network
+                </a>
+              
+                <a href="/tags/dns/" rel="tag">
+                  dns
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h3 id="Ⅰ-常用命令"><a href="#Ⅰ-常用命令" class="headerlink" title="Ⅰ. 常用命令"></a>Ⅰ. 常用命令</h3><h4 id="▪-nslookup"><a href="#▪-nslookup" class="headerlink" title="▪ nslookup"></a>▪ nslookup</h4><p>查询域名命令，Windows自带该工具，Linux一般自带，有一些distribution没有，可以通过如下命令安装该工具。可以列出查询出来的IP，可以执行正解和反解查询。</p>
+<p>Ubuntu:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install dnsutils</div></pre></td></tr></table></figure>
+<p>Debian:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install dnsutils</div></pre></td></tr></table></figure>
+<p>Fedora / Centos:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install bind-utils</div></pre></td></tr></table></figure>
+<h4 id="▪-dig"><a href="#▪-dig" class="headerlink" title="▪ dig"></a>▪ dig</h4><p>使用方法，可以执行正解和反解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig [options] FQDN [@server]</div></pre></td></tr></table></figure>
+<p>输出说明</p>
+<ul>
+<li>QUESTION（问题）: 要查询的IP</li>
+<li>ANSWER（回答）: 应答结果</li>
+<li>AUTHORITY（验证）: 哪个DNS给出的回答。</li>
+</ul>
+<h4 id="▪-whois"><a href="#▪-whois" class="headerlink" title="▪ whois"></a>▪ whois</h4><p>查询领域设定，管理者是谁。</p>
+<h4 id="▪-host"><a href="#▪-host" class="headerlink" title="▪ host"></a>▪ host</h4><p>把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名</p>
+<hr>
+<h3 id="Ⅱ-DNS记录类型"><a href="#Ⅱ-DNS记录类型" class="headerlink" title="Ⅱ. DNS记录类型"></a>Ⅱ. DNS记录类型</h3><h4 id="▪-正解"><a href="#▪-正解" class="headerlink" title="▪ 正解"></a>▪ 正解</h4><p>正解符合规范即可设定，取得域名授权就可以设定。</p>
+<table>
+<thead>
+<tr>
+<th>domain</th>
+<th>IN</th>
+<th>RR type</th>
+<th>RR data</th>
+<th>command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主机名.</td>
+<td>IN</td>
+<td>A</td>
+<td>IPv4 的 IP 地址</td>
+<td>dig [-t a] domain</td>
+</tr>
+<tr>
+<td>主机名.</td>
+<td>IN</td>
+<td>AAAA</td>
+<td>IPv6 的 IP 地址</td>
+<td>dig -t aaaa domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>NS</td>
+<td>管理域名的服务器主机名字</td>
+<td>dig -t ns domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>SOA</td>
+<td>管理域名的七个重要参数</td>
+<td>dig -t soa domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>MX</td>
+<td>接收邮件的服务器主机名字</td>
+<td>dig -t mx domain</td>
+</tr>
+<tr>
+<td>主机别名.</td>
+<td>IN</td>
+<td>CNAME</td>
+<td>代表主机别名的主机名字</td>
+<td>dig domain</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span> domain一列后面一定要加一个.，例如www.test.com的格式为www.test.com.</p>
+</blockquote>
+<p>SOA七个重要参数</p>
+<ol>
+<li><strong>Master DNS 服务器主机名：</strong>这个领域主要是哪部 DNS 作为 master 的意思</li>
+<li><strong>管理员的 email</strong>：那么管理员的 email 为何？发生问题可以联络这个管理员。要注意的是， 由于 @ 在数据库档案中是有特别意义的，所以改为.。</li>
+<li><strong>序号 (Serial)</strong>：这个序号代表的是这个数据库档案的新旧，序号越大代表越新。 当 slave 要判断是否主动下载新的数据库时，就以序号是否比 slave 上的还要新来判断，若是则下载，若不是则不下载。 所以当你修订了数据库内容时，记得要将这个数值放大才行！ 为了方便用户记忆，通常序号都会使用日期格式『YYYYMMDDNU』来记忆，例如昆山科大的 2010080369 序号代表 2010/08/03当天的第 69 次更新的感觉。不过，序号不可大于 2 的 32 次方，亦即必须小于 4294967296 才行。</li>
+<li><strong>更新频率 (Refresh)</strong>：那么啥时 slave 会去向 master 要求数据更新的判断？ 就是这个数值定义的。那每次 slave 去更新时， 如果发现序号没有比较大，那就不会下载数据库档案。</li>
+<li><strong>失败重新尝试时间 (Retry)</strong>：如果因为某些因素，导致 slave 无法对master 达成联机， 那么在多久的时间内，slave 会尝试重新联机到 master。</li>
+<li><strong>失效时间 (Expire)</strong>：如果一直失败尝试时间，持续联机到达这个设定值时限， 那么 slave 将不再继续尝试联机，并且尝试删除这份下载的 zone file 信息。</li>
+<li><strong>快取时间 (Minumum TTL)</strong>：如果这个数据库 zone file 中，每笔 RR 记录都没有写到 TTL 快取时间的话，那么就以这个 SOA 的设定值为主。</li>
+</ol>
+<h4 id="▪-反解"><a href="#▪-反解" class="headerlink" title="▪ 反解"></a>▪ 反解</h4><p>除非取得的是整个 class C 以上等级的 IP 网段，ISP 才有可能给 IP 反解授权。否则，若有反解的需求，就得要向直属上层 ISP 申请。</p>
+<table>
+<thead>
+<tr>
+<th>domain</th>
+<th>IN</th>
+<th>Type</th>
+<th>IP Address</th>
+<th>command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[ip反写].in-addr.arpa.</td>
+<td>IN</td>
+<td>PTR</td>
+<td>IP</td>
+<td>dig IP</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="Ⅲ-DNS服务搭建"><a href="#Ⅲ-DNS服务搭建" class="headerlink" title="Ⅲ. DNS服务搭建"></a>Ⅲ. DNS服务搭建</h3><p>安装bind套件，CentOS命令如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y bind*</div></pre></td></tr></table></figure>
+<h4 id="▪-转发DNS"><a href="#▪-转发DNS" class="headerlink" title="▪ 转发DNS"></a>▪ 转发DNS</h4><p>只需要.这个zonefile的简单DNS服务器，只有快速搜索功能，没有本地主机IP正反解配置文件。需要指定一个上层DNS服务器。只需要编辑/etc/named.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vim /etc/named.conf</div><div class="line">  // 在预设的情况下，这个档案会去读取 /etc/named.rfc1912.zones 这个领域定义档</div><div class="line">  // 所以请记得要修改成底下的样式</div><div class="line">  options &#123;</div><div class="line">          listen-on port 53 &#123; any; &#125;;                                             //可不设定，代表全部接受</div><div class="line">          directory &quot;/var/named&quot;;                                              //数据库默认放置的目录所在</div><div class="line">          dump-file &quot;/var/named/data/cache_dump.db&quot;;         //一些统计信息</div><div class="line">          statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">          memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">          allow-query &#123; any; &#125;;                                                    //可不设定，代表全部接受</div><div class="line">          recursion yes;                                                              //将自己视为客户端的一种查询模式</div><div class="line">          forward only;                                                               //可暂时不设定</div><div class="line">          forwarders &#123;                                                                //是重点！</div><div class="line">          168.95.1.1;                                                                  //先用中华电信的 DNS 当上层</div><div class="line">          139.175.10.20;                                                            //再用 seednet 当上层</div><div class="line">          &#125;;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
+<p>启动服务，注意开启iptables的tcp和udp的53端口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named start</div></pre></td></tr></table></figure>
+<h4 id="▪-权威DNS-amp-递归DNS"><a href="#▪-权威DNS-amp-递归DNS" class="headerlink" title="▪ 权威DNS &amp; 递归DNS"></a>▪ 权威DNS &amp; 递归DNS</h4><ul>
+<li><p>规划IP地址和域名对应关系</p>
+</li>
+<li><p>主配置文件 /etc/named.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim  /etc/named.conf</div><div class="line">options &#123;</div><div class="line">	directory &quot;/var/named&quot;;</div><div class="line">	dump-file &quot;/var/named/data/cache_dump.db&quot;;</div><div class="line">	statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">	memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">	allow-query &#123; any; &#125;;</div><div class="line">	recursion yes;</div><div class="line">	allow-transfer &#123; none; &#125;;      // 不许别人进行 zone 转移</div><div class="line">&#125;;</div><div class="line">zone &quot;.&quot; IN &#123;</div><div class="line">	type hint;</div><div class="line">	file &quot;named.ca&quot;;</div><div class="line">&#125;;</div><div class="line">zone &quot;ucas.edu.cn&quot; IN &#123;                // 这个 zone 的名称</div><div class="line">	type master;                         // 是什么类型</div><div class="line">	file &quot;named.ucas.edu.cn&quot;;    // 档案放在哪里</div><div class="line">&#125;;</div><div class="line">zone &quot;100.168.192.in-addr.arpa&quot; IN &#123;</div><div class="line">	type master;</div><div class="line">	file &quot;named.192.168.100&quot;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>zone内相关参数说明</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>设定值</th>
+<th style="text-align:left">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td style="text-align:left">该 zone 的类型，主要的类型有针对 . 的 hint，以及自己手动修改数据库档案的 master，与可自动更新数据库的 slave。</td>
+</tr>
+<tr>
+<td>file</td>
+<td style="text-align:left">zonefile 的对应的名称</td>
+</tr>
+<tr>
+<td>反解zone</td>
+<td style="text-align:left">in-addr.arpa</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>顶级.(root)数据库档案设定</p>
+<p>由INTERNIC 所管理维护的，全世界共有 13 部管理 . 的 DNS 服务器，在<code>/var/named/named.ca</code>中</p>
+</li>
+<li><p>正解数据库文件设置</p>
+<p>​     少应该要有 $TTL, SOA, NS (与这部 NS 主机名的 A)，仍以上面<code>/etc/named.conf</code>为例，在/var/named/配置文件named.ucas.edu.cn内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.                       #DNS服务器名称</div><div class="line">gsns.ucas.edu.cn. IN A 30.30.30.30           #DNS服务器IP地址</div><div class="line"></div><div class="line">@ IN MX 10 gsns.ucas.edu.cn.                  #域名邮件服务器</div><div class="line">										</div><div class="line">www.ucas.edu.cn. IN A 30.30.30.30           #相关正解</div><div class="line">linux.ucas.edu.cn. IN CNAME www.ucas.edu.cn.</div></pre></td></tr></table></figure>
+<blockquote>
+<p><span style="color:red">提示：</span> 域名后面有一个点，不要落下，例如<strong>www.ucas.edu.cn.</strong></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>反解数据库文件设置</p>
+<p>需要 $TTL, SOA, NS，正解里面有 A，反解里面则仅有 PTR 。另外，由于反解的 zone 名称是zz.yy.xx.in-addr.arpa.的模样，因此只要在反解里面要用到主机名时，192.168.100.0/24 这个网域的 DNS 反解则成为如/var/named/named.192.168.100所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.</div><div class="line">30 IN PTR gsns.ucas.edu.cn.</div><div class="line">254 IN PTR gate.ucas.edu.cn.</div><div class="line">30 IN PTR www.ucas.edu.cn.</div><div class="line">30 IN PTR linux.ucas.edu.cn.</div></pre></td></tr></table></figure>
+</li>
+<li><p>DNS启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named restart</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="▪-授权子域"><a href="#▪-授权子域" class="headerlink" title="▪ 授权子域"></a>▪ 授权子域</h4><ul>
+<li>需要在上层DNS服务器的zonefile内指定增加NS并指向下层DNS的主机名和IP（A）即可，zonefile的序号也需要增加。</li>
+<li>下层DNS服务器必须上层DNS所提供的可用子域名，并被上层DNS管理员所获知。</li>
+</ul>
+<p>假设上层DNS管理edu.cn这个域名。其对应的zonefile为<code>/var/named/named.edu.cn</code>，内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA dns.edu.cn. admin.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS dns.edu.cn.</div><div class="line">dns.edu.cn. IN A 210.76.211.1</div><div class="line">@ IN MX 10 dns.edu.cn.</div><div class="line"></div><div class="line">ucas.edu.cn IN NS gsns.ucas.edu.cn      #子DNS服务器名称</div><div class="line">gsns.ucas.edu.cn IN A 30.30.30.30         #子DNS服务器IP地址</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Ⅳ-相关操作"><a href="#Ⅳ-相关操作" class="headerlink" title="Ⅳ. 相关操作"></a>Ⅳ. 相关操作</h3><h4 id="▪-日志功能"><a href="#▪-日志功能" class="headerlink" title="▪ 日志功能"></a>▪ 日志功能</h4><p>检查 /var/log/messages 的内容讯息 (极重要！)，</p>
+<h4 id="▪-数据库更新"><a href="#▪-数据库更新" class="headerlink" title="▪ 数据库更新"></a>▪ 数据库更新</h4><ul>
+<li>先针对要更改的那个 zone 的数据库档案去做更新，就是加入 RR 的标志即是！</li>
+</ul>
+<ul>
+<li>更改该 zone file 的序号 (Serial) ，就是那个 SOA 的第三个参数 (第一个数字)，因为这个数字会影响到 master/slave 的判定更新与否！</li>
+</ul>
+<ul>
+<li>重新启动 named ，或者是让 named 重新读取配置文件即可。</li>
+</ul>
+<h4 id="▪-其他"><a href="#▪-其他" class="headerlink" title="▪ 其他"></a>▪ 其他</h4><p>有待补充</p>
+<hr>
+<h3 id="Ⅴ-实验测试"><a href="#Ⅴ-实验测试" class="headerlink" title="Ⅴ. 实验测试"></a>Ⅴ. 实验测试</h3><h4 id="▪-实验拓扑"><a href="#▪-实验拓扑" class="headerlink" title="▪ 实验拓扑"></a>▪ 实验拓扑</h4><center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-1.jpg" alt="5-1"></center><center style="color:purple"><strong>图5-1 实验拓扑</strong></center>
+
+<h4 id="▪-设备信息"><a href="#▪-设备信息" class="headerlink" title="▪ 设备信息"></a>▪ 设备信息</h4><table>
+<thead>
+<tr>
+<th>设备名</th>
+<th>端口</th>
+<th>IP地址</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dns.edu.cn</td>
+<td>e2</td>
+<td>210.76.211.1/24</td>
+<td>管理edu.cn域名</td>
+</tr>
+<tr>
+<td>gsns.ucas.edu.cn</td>
+<td>e2</td>
+<td>30.30.30.30/24</td>
+<td>管理ucas.edu.cn域名，dns.edu.cn授权</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>f1/1</td>
+<td>211.76.211.254/24</td>
+<td></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>f1/0</td>
+<td>30.30.30.254/24</td>
+<td></td>
+</tr>
+<tr>
+<td>Winxp2</td>
+<td>e1</td>
+<td>30.30.30.2/24</td>
+<td>测试客户机</td>
+</tr>
+</tbody>
+</table>
+<h4 id="▪-DNS测试"><a href="#▪-DNS测试" class="headerlink" title="▪ DNS测试"></a>▪ DNS测试</h4><p>Winxp2的DNS地址为gsns.ucas.edu.cn时，可以进行nslookup测试，如图5-2所示</p>
+<center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-2.jpg" alt="5-2"></center><center style="color:purple"><strong>图5-2 nslookup</strong></center>
+
+
+
+<p>在<strong>Winxp2</strong>上使用如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig www.ucas.edu.cn @210.76.211.1</div></pre></td></tr></table></figure>
+<p>在dns.edu.cn没有关闭递归查询的情况下，首先向gsns.ucas.edu.cn查询www.ucas.edu.cn，然后继续向根进行递归查询,因为实验环境是模拟环境,所以还无法确认,可以模拟使用虚拟机模拟根DNS服务器进行测试.</p>
+<p>在dns.edu.cn关闭递归查询的情况下，查询www.ucas.edu.cn, 然后返回结果给<strong>Winxp2</strong>为管理其域名的DNS服务器。</p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/07/18/OSPF 模拟入侵测试2-劫持指定主机IP/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/07/05/OSPF 真实入侵测试/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
+            
+              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="搜索..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Kompass &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

@@ -16,7 +16,7 @@
 
 
 
-  <meta name="keywords" content="VPN,linux,Strongswan," />
+  <meta name="keywords" content="linux,VPN,Strongswan," />
 
 
 
@@ -186,14 +186,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Jan 26, 2017
+          2017年1月26日
         </span>
       </div>
     </header>
 
     
       <div class="post-toc" id="post-toc">
-        <h2 class="post-toc-title">Contents</h2>
+        <h2 class="post-toc-title">文章目录</h2>
         <div class="post-toc-content">
           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-编译安装Strongswan"><span class="toc-text">1. 编译安装Strongswan</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#环境准备"><span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载源码"><span class="toc-text">下载源码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编译安装"><span class="toc-text">编译安装</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-证书配置"><span class="toc-text">2. 证书配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Let’s-Encrypt免费服务器证书"><span class="toc-text">Let’s Encrypt免费服务器证书</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#生成证书"><span class="toc-text">生成证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#安装证书"><span class="toc-text">安装证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#证书自动续期"><span class="toc-text">证书自动续期</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自签名CA颁发服务器证书"><span class="toc-text">自签名CA颁发服务器证书</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#CA证书"><span class="toc-text">CA证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器证书"><span class="toc-text">服务器证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#客户端证书（可选）"><span class="toc-text">客户端证书（可选）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#安装证书-1"><span class="toc-text">安装证书</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Strongswan配置"><span class="toc-text">3. Strongswan配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ipsec-conf配置"><span class="toc-text">ipsec.conf配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#日志配置"><span class="toc-text">日志配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ipsec-secrets设置"><span class="toc-text">ipsec.secrets设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DNS设置"><span class="toc-text">DNS设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Freeradius-服务器设置"><span class="toc-text">Freeradius 服务器设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iptables设置"><span class="toc-text">iptables设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-服务启动"><span class="toc-text">4. 服务启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-IKEv2-VPN配置"><span class="toc-text">5. IKEv2 VPN配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iOS"><span class="toc-text">iOS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#系统版本要求"><span class="toc-text">系统版本要求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#证书导入"><span class="toc-text">证书导入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VPN设置"><span class="toc-text">VPN设置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OS-X"><span class="toc-text">OS X</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#系统版本要求-1"><span class="toc-text">系统版本要求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#证书导入-1"><span class="toc-text">证书导入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VPN设置-1"><span class="toc-text">VPN设置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Android"><span class="toc-text">Android</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#系统版本要求-2"><span class="toc-text">系统版本要求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#证书导入-2"><span class="toc-text">证书导入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VPN设置-2"><span class="toc-text">VPN设置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows"><span class="toc-text">Windows</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#系统版本要求-3"><span class="toc-text">系统版本要求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#证书导入-3"><span class="toc-text">证书导入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#VPN设置-3"><span class="toc-text">VPN设置</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Win10-Win8"><span class="toc-text">Win10/Win8</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Win7"><span class="toc-text">Win7</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-IPsec-VPN配置"><span class="toc-text">6. IPsec VPN配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iOS-1"><span class="toc-text">iOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OS-X-1"><span class="toc-text">OS X</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Android-1"><span class="toc-text">Android</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-1"><span class="toc-text">Linux</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-参考-amp-问题"><span class="toc-text">7. 参考 & 问题</span></a></li></ol>
         </div>
@@ -406,9 +406,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/VPN/">VPN</a>
-          
             <a href="/tags/linux/">linux</a>
+          
+            <a href="/tags/VPN/">VPN</a>
           
             <a href="/tags/Strongswan/">Strongswan</a>
           
@@ -420,13 +420,13 @@
       <a class="prev" href="/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
-      <a class="next" href="/2017/01/18/CentOS 6.x ocserv安装/">
-        <span class="next-text nav-default">CentOS 6.x ocserv 安装</span>
-        <span class="prev-text nav-mobile">Next</span>
+      <a class="next" href="/2017/01/18/CentOS 6.x Freeradius 3.0.12编译安装/">
+        <span class="next-text nav-default">CentOS 6.x Freeradius 3.0.12编译安装</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -490,11 +490,11 @@
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
   </span>
   
   <span class="theme-info">
-    Theme - 
+    主题 - 
     <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
   </span>
 

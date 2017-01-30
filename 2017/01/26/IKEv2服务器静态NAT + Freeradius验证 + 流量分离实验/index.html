@@ -16,7 +16,7 @@
 
 
 
-  <meta name="keywords" content="VPN,linux,Strongswan," />
+  <meta name="keywords" content="linux,VPN,Strongswan," />
 
 
 
@@ -242,14 +242,14 @@ Ce">
 
       <div class="post-meta">
         <span class="post-time">
-          Jan 26, 2017
+          2017年1月26日
         </span>
       </div>
     </header>
 
     
       <div class="post-toc" id="post-toc">
-        <h2 class="post-toc-title">Contents</h2>
+        <h2 class="post-toc-title">文章目录</h2>
         <div class="post-toc-content">
           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-需求分析"><span class="toc-text">1. 需求分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-实验环境"><span class="toc-text">2. 实验环境</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-实验拓扑"><span class="toc-text">2.1 实验拓扑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-设备信息"><span class="toc-text">2.2 设备信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-路由器配置"><span class="toc-text">3. 路由器配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Strongswan编译安装"><span class="toc-text">4. Strongswan编译安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-环境准备"><span class="toc-text">4.1 环境准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-下载源码"><span class="toc-text">4.2 下载源码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-编译安装"><span class="toc-text">4.3 编译安装</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-证书配置"><span class="toc-text">5. 证书配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-自签名CA证书"><span class="toc-text">5.1 自签名CA证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-服务器证书"><span class="toc-text">5.2 服务器证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-安装证书"><span class="toc-text">5.3 安装证书</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Strongswan配置-amp-启动"><span class="toc-text">6. Strongswan配置&启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-ipsec-conf设置"><span class="toc-text">6.1 ipsec.conf设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-strongswan-conf设置"><span class="toc-text">6.2 strongswan.conf设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-ipsec-secrets设置"><span class="toc-text">6.3 ipsec.secrets设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-Freeradius设置"><span class="toc-text">6.4 Freeradius设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-iptables设置"><span class="toc-text">6.5 iptables设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-Strongswan服务启动"><span class="toc-text">6.6 Strongswan服务启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-客户端设置-Windows"><span class="toc-text">7. 客户端设置-Windows</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-1-系统版本要求"><span class="toc-text">7.1 系统版本要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-证书导入"><span class="toc-text">7.2 证书导入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-3-DNS设置"><span class="toc-text">7.3 DNS设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-4-VPN设置"><span class="toc-text">7.4 VPN设置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#7-4-1-Win10-Win8"><span class="toc-text">7.4.1 Win10/Win8</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7-4-2-Win7"><span class="toc-text">7.4.2 Win7</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-5-网关设置"><span class="toc-text">7.5 网关设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-6-连接测试"><span class="toc-text">7.6 连接测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-客户端设置-MacOSX"><span class="toc-text">8. 客户端设置-MacOSX</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-系统版本要求"><span class="toc-text">8.1 系统版本要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-证书导入"><span class="toc-text">8.2 证书导入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-DNS设置"><span class="toc-text">8.3 DNS设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-4-VPN设置"><span class="toc-text">8.4 VPN设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-5-连接测试"><span class="toc-text">8.5 连接测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-实验脚本"><span class="toc-text">9. 实验脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#9-1-证书相关脚本"><span class="toc-text">9.1 证书相关脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-2-配置文件"><span class="toc-text">9.2 配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-3-系统设置"><span class="toc-text">9.3 系统设置</span></a></li></ol></li></ol>
         </div>
@@ -490,9 +490,9 @@ Ce">
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/VPN/">VPN</a>
-          
             <a href="/tags/linux/">linux</a>
+          
+            <a href="/tags/VPN/">VPN</a>
           
             <a href="/tags/Strongswan/">Strongswan</a>
           
@@ -504,13 +504,13 @@ Ce">
       <a class="prev" href="/2017/01/29/IKEv2 用户配置手册（图文版）/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">IKEv2 用户配置手册（图文版）</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/">
         <span class="next-text nav-default">CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -574,11 +574,11 @@ Ce">
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
   </span>
   
   <span class="theme-info">
-    Theme - 
+    主题 - 
     <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
   </span>
 

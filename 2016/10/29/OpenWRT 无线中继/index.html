@@ -16,7 +16,7 @@
 
 
 
-  <meta name="keywords" content="router,network,openwrt," />
+  <meta name="keywords" content="openwrt,router,network," />
 
 
 
@@ -199,14 +199,14 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
 
       <div class="post-meta">
         <span class="post-time">
-          Oct 29, 2016
+          2016年10月29日
         </span>
       </div>
     </header>
 
     
       <div class="post-toc" id="post-toc">
-        <h2 class="post-toc-title">Contents</h2>
+        <h2 class="post-toc-title">文章目录</h2>
         <div class="post-toc-content">
           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-前言"><span class="toc-text">1. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#起因"><span class="toc-text">起因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WDS"><span class="toc-text">WDS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenWRT"><span class="toc-text">OpenWRT</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-路由客户端模式"><span class="toc-text">2.  路由客户端模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#连接无线网络"><span class="toc-text">连接无线网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防火墙设置"><span class="toc-text">防火墙设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IPv6中继设置"><span class="toc-text">IPv6中继设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LAN配置"><span class="toc-text">LAN配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无线配置"><span class="toc-text">无线配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#终端连接测试"><span class="toc-text">终端连接测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#失败总结"><span class="toc-text">失败总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-使用relayd桥接客户端模式"><span class="toc-text">3. 使用relayd桥接客户端模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#软件安装"><span class="toc-text">软件安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意事项"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连接无线网络-1"><span class="toc-text">连接无线网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防火墙设置-1"><span class="toc-text">防火墙设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关闭LAN接口-DHCP功能"><span class="toc-text">关闭LAN接口 DHCP功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#桥接适配器创建"><span class="toc-text">桥接适配器创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无线配置-1"><span class="toc-text">无线配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#终端连接测试-1"><span class="toc-text">终端连接测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件示例"><span class="toc-text">配置文件示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试后记"><span class="toc-text">测试后记</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-局域网之间路由模式"><span class="toc-text">4. 局域网之间路由模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防火墙设置-2"><span class="toc-text">防火墙设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#路由表"><span class="toc-text">路由表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#OpenWRT静态路由设置"><span class="toc-text">OpenWRT静态路由设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Netgear静态路由设置"><span class="toc-text">Netgear静态路由设置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题总结"><span class="toc-text">问题总结</span></a></li></ol></li></ol>
         </div>
@@ -340,11 +340,11 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
       <footer class="post-footer">
         <div class="post-tags">
           
+            <a href="/tags/openwrt/">openwrt</a>
+          
             <a href="/tags/router/">router</a>
           
             <a href="/tags/network/">network</a>
-          
-            <a href="/tags/openwrt/">openwrt</a>
           
         </div>
 
@@ -354,13 +354,13 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
       <a class="prev" href="/2016/11/14/NetGear 刷 OpenWrt/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">NetGear 刷OpenWRT</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2016/09/29/CentOS Minimal X11转发/">
         <span class="next-text nav-default">CentOS Minimal X11转发</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -424,11 +424,11 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
   </span>
   
   <span class="theme-info">
-    Theme - 
+    主题 - 
     <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
   </span>
 

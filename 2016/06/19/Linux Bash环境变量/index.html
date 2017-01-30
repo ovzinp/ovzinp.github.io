@@ -1,149 +1,196 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-<!-- Head tag -->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!--Description-->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Linux Bash 环境变量"/>
+
+
+
+
+  <meta name="keywords" content="shell,linux," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Kompass">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.x" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2016/06/19/Linux Bash环境变量/"/>
+
+
+<meta name="description" content="1.书签123456789101112131415161718192021222324252627282930313233343536373839404142# USAGE:# s bookmarkname - saves the curr dir as bookmarkname# g bookmarkname - jumps to the that bookmark# g b[TAB] - ta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Bash 环境变量">
+<meta property="og:url" content="http://yoursite.com/2016/06/19/Linux Bash环境变量/index.html">
+<meta property="og:site_name" content="Kompass">
+<meta property="og:description" content="1.书签123456789101112131415161718192021222324252627282930313233343536373839404142# USAGE:# s bookmarkname - saves the curr dir as bookmarkname# g bookmarkname - jumps to the that bookmark# g b[TAB] - ta">
+<meta property="og:updated_time" content="2017-01-29T07:25:20.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux Bash 环境变量">
+<meta name="twitter:description" content="1.书签123456789101112131415161718192021222324252627282930313233343536373839404142# USAGE:# s bookmarkname - saves the curr dir as bookmarkname# g bookmarkname - jumps to the that bookmark# g b[TAB] - ta">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
   
 
-  <!--Author-->
+
+
+    <title> Linux Bash 环境变量 · Kompass </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo"><img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" height="58" width="58">  Kompass</a>
   
-  <meta name="author" content="Icean L">
+</div>
+
+<nav class="site-nav">
   
-
-  <!--Open Graph Title-->
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              主页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+      
+    </ul>
   
-      <meta property="og:title" content="Linux Bash 环境变量"/>
-  
-  <!--Open Graph Description-->
-  
-  <!--Open Graph Site Name-->
-  <meta property="og:site_name" content="Kompass"/>
-  <!--Type page-->
-  
-      <meta property="og:type" content="article" />
-  
-  <!--Page Cover-->
-  
+</nav>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  <!-- Title -->
-  
-  <title>Linux Bash 环境变量 - Kompass</title>
-
-
-  <link rel="shortcut icon" href="/">
-
-  <!-- Custom CSS/Sass -->
-  <link rel="stylesheet" href="/css/style.css">
-
-  <!----------------------------
-  https://github.com/GallenHu/hexo-theme-Daily
-
- _____            _   _
-|  __ \          (_) | |
-| |  | |   __ _   _  | |  _   _
-| |  | |  / _` | | | | | | | | |
-| |__| | | (_| | | | | | | |_| |
-|_____/   \__,_| |_| |_|  \__, |
-                          __/ |
-                         |___/
-
-    --------------------------->
-  <!-- <link href="/plugins/prettify/prettify.css" rel="stylesheet"> -->
-</head>
-
-
-<body>
-
-  <!-- Nav -->
-  <header class="site-header">
-  <div class="header-inside">
-    <div class="logo">
-      <a href="/" rel="home">
-        
-        <img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" alt="Kompass" height="60">
-        
-      </a>
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Kompass</a>
     </div>
-    <!-- Navigation -->
-    <nav class="navbar">
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse">
-        <ul class="navbar-nav">
-          
-          
-            <li>
-              <a href="/.">
-                
-                  主页
-                
-              </a>
-            </li>
-          
-            <li>
-              <a href="/archives">
-                
-                  归档
-                
-              </a>
-            </li>
-          
-            <li>
-              <a href="/about">
-                
-                  关于
-                
-              </a>
-            </li>
-          
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </nav>
-    <div class="button-wrap">
-      <button class="menu-toggle">Primary Menu</button>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   </div>
-</header>
+  <nav class="mobile-menu">
+    
+      <a class="mobile-menu-item" href="/">
+        
+        
+          主页
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/archives/">
+        
+        
+          归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/tags">
+        
+        
+          标签
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/about">
+        
+        
+          关于
+        
+      </a>
+    
+  </nav>
+</div>
+      </header>
 
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Linux Bash 环境变量
+        
+      </h1>
 
-  <!-- Main Content -->
-  <div class="content-area">
-  <div class="post">
-    <!-- Post Content -->
-    <div class="container">
-      <article>
-        <!-- Title date & tags -->
-        <div class="post-header">
-          <h1 class="entry-title">
-            Linux Bash 环境变量
-            
-          </h1>
-          <p class="posted-on">
-          2016-06-19
-          </p>
-          <div class="tags-links">
-            
-              
-                <a href="/tags/shell/" rel="tag">
-                  shell
-                </a>
-              
-                <a href="/tags/linux/" rel="tag">
-                  linux
-                </a>
-              
-            
-          </div>
+      <div class="post-meta">
+        <span class="post-time">
+          Jun 19, 2016
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-书签"><span class="toc-text">1.书签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-提取一列"><span class="toc-text">2.提取一列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其他"><span class="toc-text">3.其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Productivity"><span class="toc-text">Productivity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#System-info"><span class="toc-text">System info</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Network"><span class="toc-text">Network</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Funny"><span class="toc-text">Funny</span></a></li></ol></li></ol>
         </div>
-        <!-- Post Main Content -->
-        <div class="entry-content">
-          <h3 id="1-书签"><a href="#1-书签" class="headerlink" title="1.书签"></a>1.书签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"># USAGE:</div><div class="line"># s bookmarkname - saves the curr dir as bookmarkname</div><div class="line"># g bookmarkname - jumps to the that bookmark</div><div class="line"># g b[TAB] - tab completion is available</div><div class="line"># l - list all bookmarks</div><div class="line"></div><div class="line"># save current directory to bookmarks</div><div class="line">touch ~/.sdirs</div><div class="line">function s &#123;</div><div class="line">cat ~/.sdirs | grep -v &quot;export DIR_$1=&quot; &gt; ~/.sdirs1</div><div class="line">mv ~/.sdirs1 ~/.sdirs</div><div class="line">echo &quot;export DIR_$1=$PWD&quot; &gt;&gt; ~/.sdirs</div><div class="line">&#125;</div><div class="line"></div><div class="line"># jump to bookmark</div><div class="line">function g &#123;</div><div class="line">source ~/.sdirs</div><div class="line">cd $(eval $(echo echo $(echo \$DIR_$1)))</div><div class="line">&#125;</div><div class="line"></div><div class="line"># list bookmarks with dirnam</div><div class="line">function l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot;</div><div class="line">&#125;</div><div class="line"># list bookmarks without dirname</div><div class="line">function _l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot; | cut -f1 -d &quot;=&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># completion command for g</div><div class="line">function _gcomp &#123;</div><div class="line">local curw</div><div class="line">COMPREPLY=()</div><div class="line">curw=$&#123;COMP_WORDS[COMP_CWORD]&#125;</div><div class="line">COMPREPLY=($(compgen -W &apos;`_l`&apos; -- $curw))</div><div class="line">return 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"># bind completion command for g to _gcomp</div><div class="line">complete -F _gcomp g</div></pre></td></tr></table></figure>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <h3 id="1-书签"><a href="#1-书签" class="headerlink" title="1.书签"></a>1.书签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"># USAGE:</div><div class="line"># s bookmarkname - saves the curr dir as bookmarkname</div><div class="line"># g bookmarkname - jumps to the that bookmark</div><div class="line"># g b[TAB] - tab completion is available</div><div class="line"># l - list all bookmarks</div><div class="line"></div><div class="line"># save current directory to bookmarks</div><div class="line">touch ~/.sdirs</div><div class="line">function s &#123;</div><div class="line">cat ~/.sdirs | grep -v &quot;export DIR_$1=&quot; &gt; ~/.sdirs1</div><div class="line">mv ~/.sdirs1 ~/.sdirs</div><div class="line">echo &quot;export DIR_$1=$PWD&quot; &gt;&gt; ~/.sdirs</div><div class="line">&#125;</div><div class="line"></div><div class="line"># jump to bookmark</div><div class="line">function g &#123;</div><div class="line">source ~/.sdirs</div><div class="line">cd $(eval $(echo echo $(echo \$DIR_$1)))</div><div class="line">&#125;</div><div class="line"></div><div class="line"># list bookmarks with dirnam</div><div class="line">function l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot;</div><div class="line">&#125;</div><div class="line"># list bookmarks without dirname</div><div class="line">function _l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot; | cut -f1 -d &quot;=&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># completion command for g</div><div class="line">function _gcomp &#123;</div><div class="line">local curw</div><div class="line">COMPREPLY=()</div><div class="line">curw=$&#123;COMP_WORDS[COMP_CWORD]&#125;</div><div class="line">COMPREPLY=($(compgen -W &apos;`_l`&apos; -- $curw))</div><div class="line">return 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"># bind completion command for g to _gcomp</div><div class="line">complete -F _gcomp g</div></pre></td></tr></table></figure>
 <hr>
 <h3 id="2-提取一列"><a href="#2-提取一列" class="headerlink" title="2.提取一列"></a>2.提取一列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function col &#123;</div><div class="line">awk -v col=$1 &apos;&#123;print $col&#125;&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
@@ -152,129 +199,159 @@
 <h4 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">alias websiteget=&quot;wget --random-wait -r -p -e robots=off -U mozilla&quot;</div><div class="line">alias listen=&quot;lsof -P -i -n&quot;</div><div class="line">alias port=&apos;netstat -tulanp&apos;</div><div class="line">alias ipinfo=&quot;curl ifconfig.me &amp;&amp; curl ifconfig.me/host&quot;</div></pre></td></tr></table></figure>
 <h4 id="Funny"><a href="#Funny" class="headerlink" title="Funny"></a>Funny</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kernelgraph() &#123; lsmod | perl -e &apos;print &quot;digraph \&quot;lsmod\&quot; &#123;&quot;;&lt;&gt;;while(&lt;&gt;)&#123;@_=split/\s+/; print &quot;\&quot;$_[0]\&quot; -&gt; \&quot;$_\&quot;\n&quot; for split/,/,$_[3]&#125;print &quot;&#125;&quot;&apos; | dot -Tpng | display -;&#125;</div><div class="line">alias busy=&quot;cat /dev/urandom | hexdump -C | grep \&quot;ca fe\&quot;&quot;</div></pre></td></tr></table></figure>
 
-        </div>
-      </article>
-    </div>
-    <!-- Comments -->
-    <div class="container">
       
-<section id="comment">
-  <!-- <h1 class="title">留言</h1> -->
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/shell/">shell</a>
+          
+            <a href="/tags/linux/">linux</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CentOS 6.x vsftp 启用 SSL或TLS</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/06/18/CentOS Git 服务器与客户端/">
+        <span class="next-text nav-default">CentOS Git 服务器与客户端使用</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/19/Linux Bash环境变量/"
+           data-title="Linux Bash 环境变量" data-url="http://yoursite.com/2016/06/19/Linux Bash环境变量/">
+      </div>
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:mailto:iceanness@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://twitter.com/Iceanian" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/icean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="http://weibo.com/1509230644" class="iconfont icon-weibo" title="weibo"></a>
+        
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <! --<i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Icean L</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"kompass"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+    
+  
+
+
+
+
 
   
-    <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="post-Linux Bash环境变量" data-title="Linux Bash 环境变量" data-url="http://yoursite.com/2016/06/19/Linux Bash环境变量/"></div>
-    <!-- 多说评论框 end -->
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
   
-</section>
 
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
 
-    </div>
-    <!-- Pre or Next -->
-    <div class="nav-links">
-      
-        <div class="nav-previous">
-          <a href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
-        </div>
-      
-      
-        <div class="nav-next">
-          <a href="/2016/06/18/CentOS Git 服务器与客户端/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
-        </div>
-      
-    </div>
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.x"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.x"></script>
 
-  </div>
-</div>
-
-
-  <!-- Footer -->
-  <!-- Footer-widgets -->
-<div class="footer-widgets">
-  <div class="row inside-wrapper">
-    <div class="col-1-3">
-      <aside>
-        <h1 class="widget-title">关于本站</h1>
-        <div class="custom-widget-content">
-          
-          <p>分享技术心得，笑谈樯橹灰飞烟灭</p>
-        </div>
-      </aside>
-    </div>
-    <div class="col-1-3">
-      <aside>
-        <h1 class="widget-title">与我联系</h1>
-        <div class="widget-text">
-          
-            
-              <a href="https://github.com/icean" class="icon icon-github" target="_blank">github</a>
-            
-              <a href="http://weibo.com/1509230644" class="icon icon-weibo" target="_blank">weibo</a>
-            
-              <a href="mailto:iceanness@gmail.com" class="icon icon-mail" target="_blank">mail</a>
-            
-              <a href="https://twitter.com/Iceanian" class="icon icon-twitter" target="_blank">twitter</a>
-            
-          
-        </div>
-      </aside>
-    </div>
-    <div class="col-1-3">
-      <aside>
-        <h1 class="widget-title">站内搜索</h1>
-        <div class="widget-text">
-          <form onSubmit="return appDaily.submitSearch('')">
-            <p>
-              <input type="text" placeholder="搜索..." id="homeSearchInput">
-            </p>
-            <!-- <input type="submit" value="GO"> -->
-          </form>
-        </div>
-      </aside>
-    </div>
-  </div>
-</div>
-<!-- Footer -->
-<footer class="site-info">
-  <p>
-    <span>Kompass &copy; 2017</span>
-    
-      <span class="split">|</span>
-      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
-    
-  </p>
-</footer>
-
-
-  <!-- After footer scripts -->
-  <!-- scripts -->
-<script src="/js/app.js"></script>
-
-  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <script type="text/javascript">
-    var duoshuoQuery = {short_name:'kompass'};
-      (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0]
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-      })();
-      </script>
-    <!-- 多说公共JS代码 end -->
-
-
-<!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<!--<script src="/plugins/prettify/prettify.js" type="text/javascript"></script>
-<!--<script type="text/javascript">
-<!--$(window).load(function(){
- <!--$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
- <!--  prettyPrint();
- <!--}) -->
-<!--</script>
-  <!--prettify代码高亮脚本引入-->
-
-</body>
-
+  </body>
 </html>

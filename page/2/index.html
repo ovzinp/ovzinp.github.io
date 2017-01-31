@@ -49,6 +49,7 @@
   
 
 
+<!-- <link href="/plugins/prettify/prettify.css" rel="stylesheet"> -->
 
     <title> Kompass </title>
   </head>
@@ -156,64 +157,6 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts">
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2017/01/16/AWK学习/">AWK 学习</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2017年1月16日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-示例文件"><a href="#1-示例文件" class="headerlink" title="1. 示例文件"></a>1. 示例文件</h3><p>示例文件内容如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cat file</div><div class="line">Unix,10,A</div><div class="line">Linux,30,B</div><div class="line">Solaris,40,C</div><div class="line">Fedora,20,D</div><div class="line">Ubuntu,50,E</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><h4 id="在原第一列前处添加新的一列"><a href="#在原第一列前处添加新的一列" class="headerlink" title="在原第一列前处添加新的一列"></a>在原第一列前处添加新的一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">1,Unix,10,A</div><div class="line">2,Linux,30,B</div><div class="line">3,Solaris,40,C</div><div class="line">4,Fedora,20,D</div><div class="line">5,Ubuntu,50,E</div></pre></td></tr></table></figure>
-<p><strong>F</strong>代表分隔符，使用的分割符为 <strong>,</strong> ，将<strong>\$1</strong>替换为<strong>++i</strong> 的结果 加<strong>FS</strong>（分隔符）加原<strong>\$1</strong>，可以理解为<code>\$1=(++i) + FS + $1</code>。后面的<strong>1</strong>代表打印全部。可以通过下面方式设置<strong>i</strong>的初始值。<strong>OFS</strong>代表输出的分隔符，也为 <strong>,</strong> </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ awk -F,  -v=10 <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">$ awk -F,   <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> i=10 OFS=, file</div></pre></td></tr></table></figure>
-<p>如果不只是添加数字，还要添加个前缀，如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1="VM"++i FS $1;&#125;1'</span> OFS=, file</div></pre></td></tr></table></figure>
-<h4 id="在原最后一列后添加一列"><a href="#在原最后一列后添加一列" class="headerlink" title="在原最后一列后添加一列"></a>在原最后一列后添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i;&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1</div><div class="line">Linux,30,B,2</div><div class="line">Solaris,40,C,3</div><div class="line">Fedora,20,D,4</div><div class="line">Ubuntu,50,E,5</div></pre></td></tr></table></figure>
-<p><strong>NF</strong>代表一行的列数，<strong>NF+1</strong>列为循环产生的数字，然后打印出来</p>
-<h4 id="在原最后一列后添加两列"><a href="#在原最后一列后添加两列" class="headerlink" title="在原最后一列后添加两列"></a>在原最后一列后添加两列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i FS "X";&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1,X</div><div class="line">Linux,30,B,2,X</div><div class="line">Solaris,40,C,3,X</div><div class="line">Fedora,20,D,4,X</div><div class="line">Ubuntu,50,E,5,X</div></pre></td></tr></table></figure>
-<h4 id="在原倒数第二列前添加一列"><a href="#在原倒数第二列前添加一列" class="headerlink" title="在原倒数第二列前添加一列"></a>在原倒数第二列前添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF-1)=++i FS $(NF-1);&#125;1'</span> OFS=, file</div><div class="line">Unix,1,10,A</div><div class="line">Linux,2,30,B</div><div class="line">Solaris,3,40,C</div><div class="line">Fedora,4,20,D</div><div class="line">Ubuntu,5,50,E</div></pre></td></tr></table></figure>
-<p><strong>NF-1</strong>指倒数第二列</p>
-<h4 id="更新一列的内容"><a href="#更新一列的内容" class="headerlink" title="更新一列的内容"></a>更新一列的内容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2+=10;&#125;1'</span> OFS=, file</div><div class="line">Unix,20,A</div><div class="line">Linux,40,B</div><div class="line">Solaris,50,C</div><div class="line">Fedora,30,D</div><div class="line">Ubuntu,60,E</div></pre></td></tr></table></figure>
-<h4 id="大小写转化"><a href="#大小写转化" class="headerlink" title="大小写转化"></a>大小写转化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=toupper($1)&#125;1'</span> OFS=, file</div><div class="line">UNIX,10,A</div><div class="line">LINUX,30,B</div><div class="line">SOLARIS,40,C</div><div class="line">FEDORA,20,D</div><div class="line">UBUNTU,50,E</div></pre></td></tr></table></figure>
-<h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=substr($1,0,3)&#125;1'</span> OFS=, file</div><div class="line">Uni,10,A</div><div class="line">L<span class="keyword">in</span>,30,B</div><div class="line">Sol,40,C</div><div class="line">Fed,20,D</div><div class="line">Ubu,50,E</div></pre></td></tr></table></figure>
-<h4 id="清空某一列"><a href="#清空某一列" class="headerlink" title="清空某一列"></a>清空某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2="";&#125;1'</span> OFS=, file</div><div class="line">Unix,,A</div><div class="line">Linux,,B</div><div class="line">Solaris,,C</div><div class="line">Fedora,,D</div><div class="line">Ubuntu,,E</div></pre></td></tr></table></figure>
-<h4 id="删除某一列"><a href="#删除某一列" class="headerlink" title="删除某一列"></a>删除某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f; f=""&#125;'</span> x=2 file</div><div class="line">Unix,A</div><div class="line">Linux,B</div><div class="line">Solaris,C</div><div class="line">Fedora,D</div><div class="line">Ubuntu,E</div></pre></td></tr></table></figure>
-<p><strong>for(i=1;i&lt;=NF;i++)</strong>处理每一行的每一列， <strong>if(i!=x)</strong>判断当前列号是否要删除，如果要删除的，不执行下面的步骤。 <strong>f=f?f FS \$i:\$i</strong>，如果f没被赋值，则是<strong>$i</strong>，如果已经赋值了，则为<strong>f FS \$i</strong></p>
-<h4 id="修改分隔符"><a href="#修改分隔符" class="headerlink" title="修改分隔符"></a>修改分隔符</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2=$2":"$x; for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f;f=""&#125;'</span> x=3 file</div><div class="line">Unix,10:A</div><div class="line">Linux,30:B</div><div class="line">Solaris,40:C</div><div class="line">Fedora,20:D</div><div class="line">Ubuntu,50:E</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-拓展"><a href="#3-拓展" class="headerlink" title="3. 拓展"></a>3. 拓展</h3><ul>
-<li>head和tail如果选择多个范围</li>
-</ul>
-<hr>
-<h3 id="4-例子"><a href="#4-例子" class="headerlink" title="4. 例子"></a>4. 例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk  <span class="string">'&#123;$(NF+1)="z52-vm"++i; $(NF+1)="130.5.70."++j;print&#125;'</span> j=131 floating_ip_disassociate.sh</div></pre></td></tr></table></figure>
-
-        
-      
-    </div>
-
-    
-  </article>
-
     
       
   <article class="post">
@@ -412,6 +355,64 @@
 <li><a href="http://blog.csdn.net/cjfeii/article/details/10084343" target="_blank" rel="external">http://blog.csdn.net/cjfeii/article/details/10084343</a></li>
 <li><a href="http://blog.chinaunix.net/uid-20671208-id-3588619.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-20671208-id-3588619.html</a></li>
 </ul>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2017/01/16/AWK学习/">AWK 学习</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017年1月16日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-示例文件"><a href="#1-示例文件" class="headerlink" title="1. 示例文件"></a>1. 示例文件</h3><p>示例文件内容如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cat file</div><div class="line">Unix,10,A</div><div class="line">Linux,30,B</div><div class="line">Solaris,40,C</div><div class="line">Fedora,20,D</div><div class="line">Ubuntu,50,E</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><h4 id="在原第一列前处添加新的一列"><a href="#在原第一列前处添加新的一列" class="headerlink" title="在原第一列前处添加新的一列"></a>在原第一列前处添加新的一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">1,Unix,10,A</div><div class="line">2,Linux,30,B</div><div class="line">3,Solaris,40,C</div><div class="line">4,Fedora,20,D</div><div class="line">5,Ubuntu,50,E</div></pre></td></tr></table></figure>
+<p><strong>F</strong>代表分隔符，使用的分割符为 <strong>,</strong> ，将<strong>\$1</strong>替换为<strong>++i</strong> 的结果 加<strong>FS</strong>（分隔符）加原<strong>\$1</strong>，可以理解为<code>\$1=(++i) + FS + $1</code>。后面的<strong>1</strong>代表打印全部。可以通过下面方式设置<strong>i</strong>的初始值。<strong>OFS</strong>代表输出的分隔符，也为 <strong>,</strong> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ awk -F,  -v=10 <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">$ awk -F,   <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> i=10 OFS=, file</div></pre></td></tr></table></figure>
+<p>如果不只是添加数字，还要添加个前缀，如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1="VM"++i FS $1;&#125;1'</span> OFS=, file</div></pre></td></tr></table></figure>
+<h4 id="在原最后一列后添加一列"><a href="#在原最后一列后添加一列" class="headerlink" title="在原最后一列后添加一列"></a>在原最后一列后添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i;&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1</div><div class="line">Linux,30,B,2</div><div class="line">Solaris,40,C,3</div><div class="line">Fedora,20,D,4</div><div class="line">Ubuntu,50,E,5</div></pre></td></tr></table></figure>
+<p><strong>NF</strong>代表一行的列数，<strong>NF+1</strong>列为循环产生的数字，然后打印出来</p>
+<h4 id="在原最后一列后添加两列"><a href="#在原最后一列后添加两列" class="headerlink" title="在原最后一列后添加两列"></a>在原最后一列后添加两列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i FS "X";&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1,X</div><div class="line">Linux,30,B,2,X</div><div class="line">Solaris,40,C,3,X</div><div class="line">Fedora,20,D,4,X</div><div class="line">Ubuntu,50,E,5,X</div></pre></td></tr></table></figure>
+<h4 id="在原倒数第二列前添加一列"><a href="#在原倒数第二列前添加一列" class="headerlink" title="在原倒数第二列前添加一列"></a>在原倒数第二列前添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF-1)=++i FS $(NF-1);&#125;1'</span> OFS=, file</div><div class="line">Unix,1,10,A</div><div class="line">Linux,2,30,B</div><div class="line">Solaris,3,40,C</div><div class="line">Fedora,4,20,D</div><div class="line">Ubuntu,5,50,E</div></pre></td></tr></table></figure>
+<p><strong>NF-1</strong>指倒数第二列</p>
+<h4 id="更新一列的内容"><a href="#更新一列的内容" class="headerlink" title="更新一列的内容"></a>更新一列的内容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2+=10;&#125;1'</span> OFS=, file</div><div class="line">Unix,20,A</div><div class="line">Linux,40,B</div><div class="line">Solaris,50,C</div><div class="line">Fedora,30,D</div><div class="line">Ubuntu,60,E</div></pre></td></tr></table></figure>
+<h4 id="大小写转化"><a href="#大小写转化" class="headerlink" title="大小写转化"></a>大小写转化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=toupper($1)&#125;1'</span> OFS=, file</div><div class="line">UNIX,10,A</div><div class="line">LINUX,30,B</div><div class="line">SOLARIS,40,C</div><div class="line">FEDORA,20,D</div><div class="line">UBUNTU,50,E</div></pre></td></tr></table></figure>
+<h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=substr($1,0,3)&#125;1'</span> OFS=, file</div><div class="line">Uni,10,A</div><div class="line">L<span class="keyword">in</span>,30,B</div><div class="line">Sol,40,C</div><div class="line">Fed,20,D</div><div class="line">Ubu,50,E</div></pre></td></tr></table></figure>
+<h4 id="清空某一列"><a href="#清空某一列" class="headerlink" title="清空某一列"></a>清空某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2="";&#125;1'</span> OFS=, file</div><div class="line">Unix,,A</div><div class="line">Linux,,B</div><div class="line">Solaris,,C</div><div class="line">Fedora,,D</div><div class="line">Ubuntu,,E</div></pre></td></tr></table></figure>
+<h4 id="删除某一列"><a href="#删除某一列" class="headerlink" title="删除某一列"></a>删除某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f; f=""&#125;'</span> x=2 file</div><div class="line">Unix,A</div><div class="line">Linux,B</div><div class="line">Solaris,C</div><div class="line">Fedora,D</div><div class="line">Ubuntu,E</div></pre></td></tr></table></figure>
+<p><strong>for(i=1;i&lt;=NF;i++)</strong>处理每一行的每一列， <strong>if(i!=x)</strong>判断当前列号是否要删除，如果要删除的，不执行下面的步骤。 <strong>f=f?f FS \$i:\$i</strong>，如果f没被赋值，则是<strong>$i</strong>，如果已经赋值了，则为<strong>f FS \$i</strong></p>
+<h4 id="修改分隔符"><a href="#修改分隔符" class="headerlink" title="修改分隔符"></a>修改分隔符</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2=$2":"$x; for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f;f=""&#125;'</span> x=3 file</div><div class="line">Unix,10:A</div><div class="line">Linux,30:B</div><div class="line">Solaris,40:C</div><div class="line">Fedora,20:D</div><div class="line">Ubuntu,50:E</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-拓展"><a href="#3-拓展" class="headerlink" title="3. 拓展"></a>3. 拓展</h3><ul>
+<li>head和tail如果选择多个范围</li>
+</ul>
+<hr>
+<h3 id="4-例子"><a href="#4-例子" class="headerlink" title="4. 例子"></a>4. 例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk  <span class="string">'&#123;$(NF+1)="z52-vm"++i; $(NF+1)="130.5.70."++j;print&#125;'</span> j=131 floating_ip_disassociate.sh</div></pre></td></tr></table></figure>
 
         
       
@@ -1177,6 +1178,90 @@
     <header class="post-header">
       <h1 class="post-title">
         
+          <a class="post-link" href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/">CentOS 6.x ocserv IPv6 实验</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年9月29日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
+<hr>
+<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
+
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 64
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
+</blockquote>
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 124
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
+<p>sysctl net.ipv6.conf.all.forwarding</p>
+<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
+</blockquote>
+<hr>
+<h3 id="3-连接测试"><a href="#3-连接测试" class="headerlink" title="3.连接测试"></a>3.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
+<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
+<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
+<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
+<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
+<hr>
+<h3 id="4-排错流程"><a href="#4-排错流程" class="headerlink" title="4.排错流程"></a>4.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
+</blockquote>
+<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
+</blockquote>
+<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
+<hr>
+<h3 id="5-结论与猜想"><a href="#5-结论与猜想" class="headerlink" title="5.结论与猜想"></a>5.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
+<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
+<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
+<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
+
+</li>
+</ul>
+<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
+<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
+<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
+<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
+</ul>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
           <a class="post-link" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">CentOS 6.x PPTP + Radius + Mysql + Daloradius</a>
         
       </h1>
@@ -1488,90 +1573,6 @@ ipv6 route [destination network] [out port] [destination gloab address]
   </article>
 
     
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/">CentOS 6.x ocserv IPv6 实验</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月29日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
-<hr>
-<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
-
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 64
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
-</blockquote>
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 124
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
-<p>sysctl net.ipv6.conf.all.forwarding</p>
-<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
-</blockquote>
-<hr>
-<h3 id="3-连接测试"><a href="#3-连接测试" class="headerlink" title="3.连接测试"></a>3.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
-<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
-<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
-<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
-<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
-<hr>
-<h3 id="4-排错流程"><a href="#4-排错流程" class="headerlink" title="4.排错流程"></a>4.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
-
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
-</blockquote>
-<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
-
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
-</blockquote>
-<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
-<hr>
-<h3 id="5-结论与猜想"><a href="#5-结论与猜想" class="headerlink" title="5.结论与猜想"></a>5.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
-<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
-<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
-<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
-
-</li>
-</ul>
-<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
-<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
-<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
-<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
   </section>
 
   
@@ -1682,7 +1683,6 @@ ipv6-dns = 2001:4860:4860::8844
   </script>
 
 
-
     
   
 
@@ -1701,5 +1701,14 @@ ipv6-dns = 2001:4860:4860::8844
     <script type="text/javascript" src="/js/src/even.js?v=2.1.x"></script>
 <script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.x"></script>
 
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="/plugins/prettify/prettify.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(window).load(function(){
+      $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+      prettyPrint();
+    }) 
+    </script> -->
   </body>
+
 </html>

@@ -16,7 +16,7 @@
 
 
 
-  <meta name="keywords" content="linux,VPN,Strongswan," />
+  <meta name="keywords" content="VPN,linux,Strongswan," />
 
 
 
@@ -43,7 +43,7 @@
 <meta property="og:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖以及软件1yum -y install pam-devel openssl-devel make gcc curl wget
 下载源码从Strongswan官网下载最新Strongswan 5.5.0源码到主机并解压
 编译安装切换到Strongswan源码解压的目录，执行配置与编译安装1234567./configure  --enable">
-<meta property="og:updated_time" content="2017-01-29T07:25:19.915Z">
+<meta property="og:updated_time" content="2017-01-30T12:18:32.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2">
 <meta name="twitter:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖以及软件1yum -y install pam-devel openssl-devel make gcc curl wget
@@ -63,6 +63,7 @@
   
 
 
+<!-- <link href="/plugins/prettify/prettify.css" rel="stylesheet"> -->
 
     <title> CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2 · Kompass </title>
   </head>
@@ -256,7 +257,7 @@
 <blockquote>
 <p><span style="color:red"><strong>提示：</strong></span>leftid需要和服务器URL或者IP地址一致，否则无法登录。</p>
 </blockquote>
-<h4 id="日志配置"><a href="#日志配置" class="headerlink" title="日志配置"></a>日志配置</h4><p>修改/usr/local/etc/strongswan.conf，内容如下，添加filelog选项。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">j</div></pre></td></tr></table></figure></p>
+<h4 id="日志配置"><a href="#日志配置" class="headerlink" title="日志配置"></a>日志配置</h4><p>修改/usr/local/etc/strongswan.conf，内容如下，添加filelog选项。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">charon &#123;</div><div class="line">    load_modular = yes </div><div class="line">    filelog &#123;</div><div class="line">        /var/<span class="built_in">log</span>/charon.log &#123;</div><div class="line">            time_format = %b %e %T</div><div class="line">            ike_name = yes </div><div class="line">            append = no</div><div class="line">            default = 2 </div><div class="line">            flush_line = yes </div><div class="line">        &#125;   </div><div class="line">        stderr &#123;</div><div class="line">            ike = 2 </div><div class="line">            knl = 3 </div><div class="line">        &#125;                                                                                                                                                            </div><div class="line">    &#125;   </div><div class="line">    syslog &#123;</div><div class="line">        identifier = charon-custom</div><div class="line">        daemon &#123;</div><div class="line">        &#125;   </div><div class="line">        auth &#123;</div><div class="line">            default = -1</div><div class="line">            ike = 0 </div><div class="line">        &#125;   </div><div class="line">    &#125;                                                                                                                                                </div><div class="line">    plugins &#123;</div><div class="line">        include strongswan.d/charon/*.conf</div><div class="line">    &#125;   </div><div class="line">&#125;</div><div class="line">include strongswan.d/*.conf</div></pre></td></tr></table></figure></p>
 <h4 id="ipsec-secrets设置"><a href="#ipsec-secrets设置" class="headerlink" title="ipsec.secrets设置"></a>ipsec.secrets设置</h4><p>配置验证方式的用户名与密码，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">: RSA server.key.pem 		<span class="comment">#使用证书验证时的服务器端私钥</span></div><div class="line">: PSK <span class="string">"pskkey"</span>                           <span class="comment">#使用预设加密密钥, 越长越好</span></div><div class="line">: XAUTH <span class="string">"pskkey"</span>		     <span class="comment">#使用XAUTH预设加密密钥, 越长越好</span></div><div class="line"><span class="built_in">test</span> : EAP <span class="string">"test"</span>		          <span class="comment">#验证的账户和密码，如果配置了RADIUS ，账户密码无法进行有效验证</span></div><div class="line"><span class="built_in">test</span>2 : XAUTH <span class="string">"test2"</span></div></pre></td></tr></table></figure></p>
 <blockquote>
 <p><span style="color:red"><strong>修订：</strong></span>2016/9/2 17:25:54 PSK和XAUTH可以设置一样，这样可以避免已配置的麻烦，同时共享密钥中不能有符号等，否则登录不成功。</p>
@@ -397,9 +398,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/linux/">linux</a>
-          
             <a href="/tags/VPN/">VPN</a>
+          
+            <a href="/tags/linux/">linux</a>
           
             <a href="/tags/Strongswan/">Strongswan</a>
           
@@ -527,7 +528,6 @@
   </script>
 
 
-
     
   
 
@@ -546,5 +546,14 @@
     <script type="text/javascript" src="/js/src/even.js?v=2.1.x"></script>
 <script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.x"></script>
 
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="/plugins/prettify/prettify.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(window).load(function(){
+      $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+      prettyPrint();
+    }) 
+    </script> -->
   </body>
+
 </html>

@@ -163,143 +163,6 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/29/IPsec VPN用户配置手册（图文版）/">IPsec 用户配置手册（图文版）</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2017年1月29日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><ul>
-<li><span style="color:red">红色字体</span>需要重点注意，带<span style="color:red"><strong>*</strong></span>标注信息客服会提供</li>
-<li>客服联系方式<ul>
-<li>QQ: 444080836</li>
-<li>Telegram: Mniulso</li>
-<li>Email: iceantale@gmail.com</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><ul>
-<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置 -&gt; IPSec</strong></li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-1.jpg" alt=""></center><center style="color:purple"><strong>图1-1</strong></center>
-
-<ul>
-<li>描述: 任意</li>
-<li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
-<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
-<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
-<li>密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-2.jpg" alt=""></center><center style="color:purple"><strong>图1-2</strong></center>
-
-<ul>
-<li>连接刚创建的VPN</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-3.jpg" alt=""></center><center style="color:purple"><strong>图1-3</strong></center>
-
-<ul>
-<li>VPN连接成功</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-4.jpg" alt=""></center><center style="color:purple"><strong>图1-4</strong></center>
-
-<hr>
-<h3 id="MAC-OS-X"><a href="#MAC-OS-X" class="headerlink" title="MAC OS X"></a>MAC OS X</h3><ul>
-<li>配置位置: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-1.jpg" alt=""></center><center style="color:purple"><strong>图2-1</strong></center>
-
-<ul>
-<li>接口: VPN</li>
-<li>VPN类型: Cisco IPsec</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-2.jpg" alt=""></center><center style="color:purple"><strong>图2-2</strong></center>
-
-<ul>
-<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器URL或者IP地址</li>
-<li>账户名称<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
-<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-3.jpg" alt=""></center><center style="color:purple"><strong>图2-3</strong></center>
-
-<ul>
-<li>鉴定设置 -&gt; 共享的密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-4.jpg" alt=""></center><center style="color:purple"><strong>图2-4</strong></center>
-
-<ul>
-<li>连接刚创建的VPN</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-5.jpg" alt=""></center><center style="color:purple"><strong>图2-5</strong></center>
-
-<ul>
-<li>VPN连接成功</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-6.jpg" alt=""></center><center style="color:purple"><strong>图2-6</strong></center>
-
-<hr>
-<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ul>
-<li>配置位置: <strong>设置 -&gt; 其它连接方式 -&gt; VPN -&gt; 添加 VPN</strong></li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-1.jpg" alt=""></center><center style="color:purple"><strong>图3-1</strong></center>
-
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-2.jpg" alt=""></center><center style="color:purple"><strong>图3-2</strong></center>
-
-<ul>
-<li>名称: 任意</li>
-<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器URL或者IP地址</li>
-<li>类型: IPSec Xauth PSK</li>
-<li>IPsec 标识符: 不更改</li>
-<li>预共享密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-3.jpg" alt=""></center><center style="color:purple"><strong>图3-3</strong></center>
-
-<ul>
-<li>选择连接刚创建的VPN</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-4.jpg" alt=""></center><center style="color:purple"><strong>图3-4</strong></center>
-
-<ul>
-<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
-<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-5.jpg" alt=""></center><center style="color:purple"><strong>图3-5</strong></center>
-
-<ul>
-<li>VPN连接成功</li>
-</ul>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-6.jpg" alt=""></center><center style="color:purple"><strong>图3-6</strong></center>
-
-<hr>
-<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p><span style="color:red">Windows系统推荐使用IKEv2 VPN<span></span></span></p>
-<hr>
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p>Linux 的版本众多，认证方法与协议支持也非常丰富，详细方法请根据 Linux 版本查询连接方法。一般而言，Linux 通过 NetworkManager-strongswan。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2017/01/29/Anyconnect 用户配置手册（简版）/">Anyconnect 用户配置手册（简单版）</a>
         
       </h1>
@@ -712,6 +575,143 @@
 </ul>
 <center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-7.jpg" alt=""></center><center style="color:purple"><strong>图4-7</strong></center><br><center><img src="http://qingdao.icean.cc:11234/Imgbed/Anyconnect/Windows/new/win-8.jpg" alt=""></center><center style="color:purple"><strong>图4-8</strong></center>
 
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2017/01/29/IPsec VPN用户配置手册（图文版）/">IPsec 用户配置手册（图文版）</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017年1月29日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><ul>
+<li><span style="color:red">红色字体</span>需要重点注意，带<span style="color:red"><strong>*</strong></span>标注信息客服会提供</li>
+<li>客服联系方式<ul>
+<li>QQ: 444080836</li>
+<li>Telegram: Mniulso</li>
+<li>Email: iceantale@gmail.com</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><ul>
+<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置 -&gt; IPSec</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-1.jpg" alt=""></center><center style="color:purple"><strong>图1-1</strong></center>
+
+<ul>
+<li>描述: 任意</li>
+<li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
+<li>密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-2.jpg" alt=""></center><center style="color:purple"><strong>图1-2</strong></center>
+
+<ul>
+<li>连接刚创建的VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-3.jpg" alt=""></center><center style="color:purple"><strong>图1-3</strong></center>
+
+<ul>
+<li>VPN连接成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/iOS-4.jpg" alt=""></center><center style="color:purple"><strong>图1-4</strong></center>
+
+<hr>
+<h3 id="MAC-OS-X"><a href="#MAC-OS-X" class="headerlink" title="MAC OS X"></a>MAC OS X</h3><ul>
+<li>配置位置: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-1.jpg" alt=""></center><center style="color:purple"><strong>图2-1</strong></center>
+
+<ul>
+<li>接口: VPN</li>
+<li>VPN类型: Cisco IPsec</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-2.jpg" alt=""></center><center style="color:purple"><strong>图2-2</strong></center>
+
+<ul>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器URL或者IP地址</li>
+<li>账户名称<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-3.jpg" alt=""></center><center style="color:purple"><strong>图2-3</strong></center>
+
+<ul>
+<li>鉴定设置 -&gt; 共享的密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-4.jpg" alt=""></center><center style="color:purple"><strong>图2-4</strong></center>
+
+<ul>
+<li>连接刚创建的VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-5.jpg" alt=""></center><center style="color:purple"><strong>图2-5</strong></center>
+
+<ul>
+<li>VPN连接成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Macosx-6.jpg" alt=""></center><center style="color:purple"><strong>图2-6</strong></center>
+
+<hr>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ul>
+<li>配置位置: <strong>设置 -&gt; 其它连接方式 -&gt; VPN -&gt; 添加 VPN</strong></li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-1.jpg" alt=""></center><center style="color:purple"><strong>图3-1</strong></center>
+
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-2.jpg" alt=""></center><center style="color:purple"><strong>图3-2</strong></center>
+
+<ul>
+<li>名称: 任意</li>
+<li>服务器地址<span style="color:red"><strong>*</strong></span>: 服务器URL或者IP地址</li>
+<li>类型: IPSec Xauth PSK</li>
+<li>IPsec 标识符: 不更改</li>
+<li>预共享密钥<span style="color:red"><strong>*</strong></span>: IPsec VPN预共享密钥</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-3.jpg" alt=""></center><center style="color:purple"><strong>图3-3</strong></center>
+
+<ul>
+<li>选择连接刚创建的VPN</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-4.jpg" alt=""></center><center style="color:purple"><strong>图3-4</strong></center>
+
+<ul>
+<li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN所用账户</li>
+<li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN所用密码</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-5.jpg" alt=""></center><center style="color:purple"><strong>图3-5</strong></center>
+
+<ul>
+<li>VPN连接成功</li>
+</ul>
+<center><img src="http://qingdao.icean.cc:11234/Imgbed/IPsec/new/Android-6.jpg" alt=""></center><center style="color:purple"><strong>图3-6</strong></center>
+
+<hr>
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p><span style="color:red">Windows系统推荐使用IKEv2 VPN<span></span></span></p>
+<hr>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p>Linux 的版本众多，认证方法与协议支持也非常丰富，详细方法请根据 Linux 版本查询连接方法。一般而言，Linux 通过 NetworkManager-strongswan。</p>
 
         
       

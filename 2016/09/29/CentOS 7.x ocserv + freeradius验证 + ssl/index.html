@@ -46,7 +46,7 @@
 自签名证书生成创建相关文件夹ocserv服务的启动需要证书，这里介绍的是如何使用自签证书。首先创建相关文件夹
 12345mkdir -p /etc/ocserv/ssl/private">
 <meta property="og:image" content="http://i.imgur.com/aUSEeOG.png">
-<meta property="og:updated_time" content="2017-02-09T09:04:05.572Z">
+<meta property="og:updated_time" content="2017-02-09T09:18:07.724Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 7.x ocserv + freeradius验证 + SSL">
 <meta name="twitter:description" content="1.ocserv安装yum安装相关软件在CentOS7中，可以直接使用yum安装ocserv
@@ -220,7 +220,7 @@
 <p>创建CA</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/ca</div><div class="line">certtool --generate-self-signed --load-privkey ../private/ca-key.pem \</div><div class="line">--template ca.tmpl --outfile ca-cert.pem</div></pre></td></tr></table></figure>
 <h5 id="创建服务器证书"><a href="#创建服务器证书" class="headerlink" title="创建服务器证书"></a>创建服务器证书</h5><p>创建服务器私钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile server-key.pem</div></pre></td></tr></table></figure>
 <p>创建服务器模板，其中$1为参数，该参数为本机的域名或者IP，如果以域名登录，例如VPS域名为<code>test.com</code>，则<code>cn=&quot;test.com&quot;</code>，organization字段随意填写，可以和cn一样，然后生成服务器证书模板</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/server</div><div class="line">cat &lt;&lt; EOF &gt; server.tmpl</div><div class="line">  cn = <span class="string">"test.com"</span></div><div class="line">  organization  = <span class="string">"test.com"</span></div><div class="line">  expiration_days = 3650</div><div class="line">  signing_key</div><div class="line">  encryption_key </div><div class="line">  tls_www_server</div><div class="line">EOF</div></pre></td></tr></table></figure>
 <p>生成服务器证书</p>

@@ -734,6 +734,179 @@
     <header class="post-header">
       <h1 class="post-title">
         
+          <a class="post-link" href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/">CentOS 7.x ocserv + freeradius验证 + SSL</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年9月29日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><p>在CentOS7中，可以直接使用yum安装ocserv</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install epel-release -y</div><div class="line">yum install -y ocserv</div></pre></td></tr></table></figure>
+<h4 id="自签名证书生成"><a href="#自签名证书生成" class="headerlink" title="自签名证书生成"></a>自签名证书生成</h4><h5 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h5><p>ocserv服务的启动需要证书，这里介绍的是如何使用自签证书。首先创建相关文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /etc/ocserv/ssl/private          </div><div class="line">mkdir -p /etc/ocserv/ssl/ca               </div><div class="line">mkdir -p /etc/ocserv/ssl/server           </div><div class="line">mkdir -p /etc/ocserv/ssl/user             </div><div class="line">mkdir -p /etc/ocserv/ssl/crl</div></pre></td></tr></table></figure>
+<ul>
+<li><code>private</code> 保存服务器私钥</li>
+<li><code>ca</code>      保存CA证书</li>
+<li><code>server</code>  保存服务器证书</li>
+<li><code>user</code>    保存用户证书</li>
+<li><code>crl</code>     保存用户吊销证书链</li>
+</ul>
+<h5 id="创建自签CA"><a href="#创建自签CA" class="headerlink" title="创建自签CA"></a>创建自签CA</h5><p>创建自签名CA私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
+<p>创建自签CA模版，其中$1为参数，该参数为本机的域名或者IP，如果以域名登录，例如VPS域名为<code>test.com</code>，则<code>cn=&quot;test.com&quot;</code>，organization字段随意填写，可以和cn一样，然后生成CA模版。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/ca</div><div class="line">cat &lt;&lt; EOF &gt; ca.tmpl</div><div class="line">  cn = &quot;test.com&quot;</div><div class="line">  organization = &quot;test.com&quot;</div><div class="line">  serial = 1</div><div class="line">  expiration_days = 3650</div><div class="line">  ca</div><div class="line">  signing_key</div><div class="line">  cert_signing_key</div><div class="line">  crl_signing_key</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>创建CA</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/ca</div><div class="line">certtool --generate-self-signed --load-privkey ../private/ca-key.pem \</div><div class="line">--template ca.tmpl --outfile ca-cert.pem</div></pre></td></tr></table></figure>
+<h5 id="创建服务器证书"><a href="#创建服务器证书" class="headerlink" title="创建服务器证书"></a>创建服务器证书</h5><p>创建服务器私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
+<p>创建服务器模板，其中$1为参数，该参数为本机的域名或者IP，如果以域名登录，例如VPS域名为<code>test.com</code>，则<code>cn=&quot;test.com&quot;</code>，organization字段随意填写，可以和cn一样，然后生成服务器证书模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/server</div><div class="line">cat &lt;&lt; EOF &gt; server.tmpl</div><div class="line">  cn = &quot;test.com&quot;</div><div class="line">  organization  = &quot;test.com&quot;</div><div class="line">  expiration_days = 3650</div><div class="line">  signing_key</div><div class="line">  encryption_key </div><div class="line">  tls_www_server</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>生成服务器证书</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/server</div><div class="line">certtool --generate-certificate --load-privkey ../private/server-key.pem  \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template server.tmpl --outfile server-cert.pem</div></pre></td></tr></table></figure>
+<p>自签名服务器证书在此配置完成。</p>
+<h4 id="使用授权证书"><a href="#使用授权证书" class="headerlink" title="使用授权证书"></a>使用授权证书</h4><h5 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h5><p>授权证书可以从<a href="https://buy.wosign.com/" target="_blank" rel="external">沃通</a>或者<a href="https://startssl.com" target="_blank" rel="external">startssl</a>、<a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>等申请免费的ssl证书。申请证书的大概流程为：</p>
+<ul>
+<li>CSR文件为请求证书的文件，会产生一对公私钥，公钥（pub-key）需要上传给证书颁发结构，私钥（private-key）则要自己保留不能泄露。</li>
+<li>证书颁发结构需要要验证申请人的域名拥有权，证明域名拥有权之后，使用其私钥（signature private-key）申请人上传的pub-lkey进行签名，并把域名等证书信息追加到其中，产生一个证书，例如2_dovzinp3.icean.xxx.crt</li>
+<li>终端用户并不信任这个证书，鉴于这个证书不是权威机构颁发，所以需要证书链，来证明颁发该证书的结构是权威机构认证的。</li>
+<li>证书链为颁发2_dovzinp3.icean.me.crt证书的结构，其上级机构对其公钥进行签名，逐级进行签名，直到顶级CA。</li>
+</ul>
+<h5 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h5><p>下载证书的压缩文件包中，解压OtherServer，以startssl为例子，解压出如下图所示。</p>
+<center><img src="http://i.imgur.com/aUSEeOG.png" alt=""></center>
+
+<center style="color:purple"><strong>图1-1 授权证书</strong></center>
+
+<p>假定现在证书的路径仍和自签时候相同，服务器私钥为生成CSR文件所用的私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv xxx.key server-key.pem</div><div class="line">mv server-key.pem /etc/ocserv/ssl/private</div></pre></td></tr></table></figure>
+<p>创建服务器证书，根据证书链的顺序，首先追加服务器证书，然后追加中间证书，最后追加CA证书。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat 2_dovzinp3.icean.me.crt &gt;&gt; server-cert.pem</div><div class="line">cat 1_Intermediate.crt &gt;&gt; server-cert.pem</div><div class="line">cat root.crt &gt;&gt; server-cert.pem</div><div class="line">mv server-cert.pem /etc/ocserv/ssl/server</div></pre></td></tr></table></figure>
+<p>ocserv配置</p>
+<h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>备份原配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv</div><div class="line">mv ocserv.conf ocserv.conf.bak</div></pre></td></tr></table></figure>
+<p>创建新的配置文件，no-route列表过长，只是部分给出。下图缺省使用radius验证，这里首先介绍本地账户密码验证和证书验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;/etc/ocserv/ocserv.conf</div><div class="line"></div><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div><div class="line"></div><div class="line">max-clients = 16</div><div class="line">max-same-clients = 1</div><div class="line">tcp-port = 443</div><div class="line">udp-port = 443</div><div class="line">keepalive = 32400</div><div class="line">dpd = 90</div><div class="line">mobile-dpd = 1800</div><div class="line">try-mtu-discovery = true</div><div class="line">cisco-client-compat = true</div><div class="line">server-cert = /etc/ocserv/ssl/server/server-cert.pem                  #服务器证书存储路径</div><div class="line">server-key = /etc/ocserv/ssl/private/server-key.pem                  #服务器私钥存储路径</div><div class="line">auth-timeout = 40</div><div class="line">pid-file = /var/run/ocserv.pid</div><div class="line">socket-file = /var/run/ocserv-socket</div><div class="line">run-as-user = nobody</div><div class="line">run-as-group = daemon</div><div class="line">device = vpns</div><div class="line">ipv4-network = 192.168.80.0</div><div class="line">ipv4-netmask = 255.255.255.0</div><div class="line">dns = 8.8.8.8</div><div class="line">dns = 8.8.4.4</div><div class="line"></div><div class="line">no-route = 1.0.0.0/255.192.0.0</div><div class="line">no-route = 1.64.0.0/255.224.0.0</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<h5 id="本地账户密码验证"><a href="#本地账户密码验证" class="headerlink" title="本地账户密码验证"></a>本地账户密码验证</h5><p>此时ocserv.conf前面部分应该为如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">#auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">#acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">#stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
+<p>需要安装httpd-tools工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y httpd-tools</div></pre></td></tr></table></figure>
+<p>创建账户密码，新添加用户也需要执行下面命令，不可省略<code>-c</code>，存储帐号密码文件需路径与配置文件中一致。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ocpasswd -c /etc/ocserv/passwd username</div></pre></td></tr></table></figure>
+<h5 id="证书验证"><a href="#证书验证" class="headerlink" title="证书验证"></a>证书验证</h5><p>此时ocserv.conf前面部分应该为如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">auth = &quot;certificate                                                                      #证书验证</div><div class="line">ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">#auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">#acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">#stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
+<p>使用证书登录不需要每次输入登录密码，在客户端导入证书即可，首先生成用户私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile user-key.pem</div></pre></td></tr></table></figure>
+<p>创建用户模版</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; user.tmpl</div><div class="line">  cn = &quot;$1&quot;</div><div class="line">  unit = &quot;$1&quot;</div><div class="line">  expiration_days = 365</div><div class="line">  signing_key</div><div class="line">  tls_www_client</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>生成用户证书</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/user-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template user.tmpl --outfile user-cert.pem</div><div class="line">#将用户证书和密钥打包为p12格式，在此过程中，需要输入名称和密码，在安装证书时，需要输入该密码进行验证。</div><div class="line">certtool --to-p12 --load-privkey ../private/user-key.pem --pkcs-cipher \ </div><div class="line">3des-pkcs12 --load-certificate user-cert.pem --outfile user-cert.p12 --outder</div></pre></td></tr></table></figure>
+<p>批量创建用户证书脚本如下所示，其中需要一个user.tmpl文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#定义变量</div><div class="line">usr=icean</div><div class="line">id=ic-iPhone</div><div class="line">day=365</div><div class="line"></div><div class="line">#最后相关的文件被放置在以id为名称的文件夹中</div><div class="line">mkdir $id</div><div class="line">cp user.tmpl $id.tmpl</div><div class="line">sed -i &quot;s/example-cn/$id/g&quot; $id.tmpl</div><div class="line">sed -i &quot;s/example-unit/$usr/g&quot; $id.tmpl</div><div class="line">sed -i &quot;s/1024/$day/g&quot; $id.tmpl</div><div class="line">certtool --generate-privkey --outfile $id-key.pem</div><div class="line">certtool --generate-certificate --load-privkey $id-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem \</div><div class="line">--template $id.tmpl --outfile $id-cert.pem</div><div class="line">certtool --to-p12 --load-privkey $id-key.pem --pkcs-cipher 3des-pkcs12 \</div><div class="line">--load-certificate $id-cert.pem --outfile $id-cert.p12 --outder</div><div class="line">mv $id* $id</div></pre></td></tr></table></figure>
+<h5 id="吊销证书"><a href="#吊销证书" class="headerlink" title="吊销证书"></a>吊销证书</h5><p>创建空吊销列表密钥文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/crl</div><div class="line">touch revoked.pem</div></pre></td></tr></table></figure>
+<p>创建吊销证书模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; crl.tmpl</div><div class="line">  crl_next_update = 9999</div><div class="line">  crl_number = 1</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>使用certtool创建空的吊销列表，当revoked.pem为空时，执行如下命令生成crl.pem文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
+<p>吊销一个用户，假设吊销用户为user1，首先将其证书追加到revoked.pem，然后生成新的吊销证书链文件crl.pem</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat ../user/user1/user1-cert.pem &gt;&gt; revoked.pem</div><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-certificate revoked.pem \</div><div class="line">--template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
+<p>若想重新启用一个被吊销的用户，则需要删除revoked.pem其中对应的密钥，然后重新生成吊销证书crl.pem,若revoke.pem被清空，则生成的时候不添加<code>--load-certificate</code>参数。吊销或者重新启用被吊销的证书时需要重启ocserv服务。</p>
+<p>完整CA添加/吊销/重新启用脚本请点击<a href="http://pan.baidu.com/s/1o7Z55Om" target="_blank" rel="external">这里</a></p>
+<hr>
+<h3 id="2-其他设置"><a href="#2-其他设置" class="headerlink" title="2.其他设置"></a>2.其他设置</h3><h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>添加如下条目到iptables，并保存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 3 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p udp -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p tcp -j ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING -s  192.168.80.0/24 -o eth0 -j MASQUERADE   #转发ocserv虚拟子网</div><div class="line">iptables-save &gt;&gt; /etc/sysconfig/iptables</div></pre></td></tr></table></figure>
+<h4 id="系统转发设置"><a href="#系统转发设置" class="headerlink" title="系统转发设置"></a>系统转发设置</h4><p>开启IPv4和IPv6转发</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &apos;net.ipv4.ip_forward = 1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">echo &apos;net.ipv6.conf.all.forwarding=1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">sysctl -p /etc/sysctl.conf</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-freeradius-设置"><a href="#3-freeradius-设置" class="headerlink" title="3.freeradius 设置"></a>3.freeradius 设置</h3><h4 id="ocserv配置文件"><a href="#ocserv配置文件" class="headerlink" title="ocserv配置文件"></a>ocserv配置文件</h4><p>此时ocserv.conf前面部分应该为如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;                         acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;       #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
+<ul>
+<li>groupconfig在配置文件的auth选项中去掉，否则freeradius的验证组radgroupreply属性只能添加<strong>‘Auth-Type’,’:=’,’Local’</strong>, <strong>acct字段为向freeradius服务器发送审计日志</strong>，否则ocserv只有在建立VPN连接之初与freeradius服务器进行验证用户的有效性，<strong>stats-report-time</strong>字段定义了向freeradius服务器发送审计日志的时间间隔。</li>
+<li>groupconfig在配置文件的auth选项保留时，这时候需要在radius服务器的数据库插入IP、DNS等信息。 同时max-same-&gt;clients的应用灵敏度也提高了，之前不开启groupconfig时，max-same-clients的反应灵敏度有问题</li>
+<li>不使用udp端口，可以提高下载速度，但是上传速度下降</li>
+<li>经过验证，ocserv不能使用本地freeradius服务器进行验证,密码不匹配。</li>
+</ul>
+<h4 id="freeradius客户端安装"><a href="#freeradius客户端安装" class="headerlink" title="freeradius客户端安装"></a>freeradius客户端安装</h4><p>安装freeradius客户端以及工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install freeradius-client freeradius-utils -y</div></pre></td></tr></table></figure>
+<h4 id="freeradius客户端配置"><a href="#freeradius客户端配置" class="headerlink" title="freeradius客户端配置"></a>freeradius客户端配置</h4><p>变量设置，serverHostname为freeradius服务器hostname，serverIP为其IP地址，secret为共享的密钥。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">serverHostname=$1</div><div class="line">serverIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure></p>
+<p>向hosts文件中添加freeradius服务器地址解析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$serverIP $serverHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
+<p>向freeradius server配置文件中追加freeradius服务器hostname</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$serverHostname/$serverHostname $secret&quot; &gt;&gt; /etc/radiusclient/servers</div></pre></td></tr></table></figure>
+<p>备份配置文件，将验证服务器从localhost改为其他，如果是时本地freeradius服务器，不需要修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/radiusclient</div><div class="line">cp radiusclient.conf radiusclient.conf.bak</div><div class="line">sed -i &apos;s/localhost/$serverHostname/g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
+<p>修改字典原来路径/usr/share/radiusclient为/etc/radiusclient</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/usr\/share/etc/g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
+<p>其他修改，具体原因不了解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/radius_deadtime/#radius_deadtime/g&apos; radiusclient.conf</div><div class="line">sed -i &apos;s/bindaddr */#bindaddr */g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
+<p>下载字典，并修改字典文件，注释掉所有dictionary中带IPv6的条目，否则会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /etc/radiusclient</div><div class="line">wget http://qingdao.icean.cc:11234/dictionary.microsoft</div><div class="line">cp /usr/share/radiusclient/dictionary.merit ./</div><div class="line">cp dictionary dictionary.bak </div><div class="line"></div><div class="line">cat &lt;&lt; EOF &gt;&gt; /etc/radiusclient/dictionary</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.microsoft</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.merit </div><div class="line">EOF</div></pre></td></tr></table></figure></p>
+<h4 id="freeradius服务器配置"><a href="#freeradius服务器配置" class="headerlink" title="freeradius服务器配置"></a>freeradius服务器配置</h4><p>变量设置，clientHostname为配置ocserv服务的hostname，clientIP为其IP地址，secret为共享密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">clientHostname= $1</div><div class="line">clientIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure>
+<p>添加客户端地址解析到hosts文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$clientIP $clientHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
+<p>添加设置到clients.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;&gt; /etc/raddb/clients.conf</div><div class="line">client $clientHostname &#123;</div><div class="line">	ipaddr = $clientIP</div><div class="line">	secret= $secret</div><div class="line">	require_message_authenticator = no</div><div class="line">	nas_type = other </div><div class="line">&#125; </div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>服务器端mysql插入相应的验证条目，验证类型为本地，服务种类为Frame-User，其中Acct-Interim-Interval为统计流量的时间间隔，Max-Monthly-Traffic为每个月最大流量，这里以MB为准。<strong>在freeradius3中，不能添加更多属性，否则无法验证成功，这个问题有待探究。</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">value</span>) <span class="keyword">values</span> (<span class="string">'ocserv'</span>,<span class="string">'Auth-Type'</span>,<span class="string">':='</span>,<span class="string">'Local'</span>); </div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">VALUE</span>) <span class="keyword">VALUES</span> (<span class="string">'ocserv'</span>,<span class="string">'Acct-Interim-Interval'</span>,<span class="string">':='</span>,<span class="string">'600'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">VALUE</span>) <span class="keyword">VALUES</span> (<span class="string">'ocserv'</span>,<span class="string">'Max-Monthly-Traffic'</span>,<span class="string">':='</span>,<span class="string">'1024'</span>);</div></pre></td></tr></table></figure>
+<p>Max-Monthly-Traffic为用户自定义变量，需要在/etc/raddb/dictionary 中添加如下条目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ATTRIBUTE Max-Monthly-Traffic 3003 integer</div><div class="line">ATTRIBUTE  Monthly-Traffic-Limit  3004    integer</div></pre></td></tr></table></figure>
+<p>账户和密码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radcheck (username,<span class="keyword">attribute</span>,op,<span class="keyword">value</span>) <span class="keyword">values</span> (<span class="string">'ociPhone'</span>,<span class="string">'Cleartext-Password'</span>,<span class="string">':='</span>,<span class="string">'test'</span>);</div></pre></td></tr></table></figure>
+<p>将账号加入对应的用户组</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radusergroup (username,groupname) <span class="keyword">values</span> (<span class="string">'ociPhone'</span>,<span class="string">'ocserv'</span>);</div></pre></td></tr></table></figure>
+<p>切换到/etc/raddb/mods-enabled/目录下，建立sqlcounter的软链接，启用sqlcounter模块。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/raddb/mods-enabled/</div><div class="line">ln -s ../sqlcounter</div></pre></td></tr></table></figure>
+<p>添加新的计数器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sqlcounter monthlytrafficcounter &#123;</div><div class="line">    sql_module_instance = sql                                                                                                                </div><div class="line">    dialect = $&#123;modules.sql.dialect&#125;</div><div class="line"></div><div class="line">    counter_name = Monthly-Traffic               #计数器名字，可以任意填写</div><div class="line">    check_name = Max-Monthly-Traffic          #限制最大流量</div><div class="line">    reply_name = Monthly-Traffic-Limit          #回复给客户端</div><div class="line"></div><div class="line">    key = User-Name</div><div class="line">    reset = monthly</div><div class="line"></div><div class="line">    $INCLUDE $&#123;modconfdir&#125;/sql/counter/$&#123;dialect&#125;/$&#123;.:instance&#125;.conf</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>切换到/etc/raddb/mods-config/sql/counter/mysql目录下，添加与计数器同名的配置文件，变量如下</p>
+<ul>
+<li>${key}  与计数器中的key属性队形</li>
+<li>%b 为计数的起始时间，若reset为monthly，则为当前时间的月份第一天，其数值为标准UNIX时间</li>
+<li>%e 为计数的结束时间，若reset为monthly，则为当前时间的月份最后一天，其数值为标准UNIX时间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd /etc/raddb/mods-config/sql/counter/mysql</div><div class="line">cat &lt;&lt; EOF &gt;monthlytrafficcounter.conf</div><div class="line"> query = &quot;\</div><div class="line">	 SELECT SUM(acctinputoctets + acctoutputoctets) DIV 1048576 \     #1MB字节数，radacct按照字节统计的。</div><div class="line">          FROM radacct \</div><div class="line">         WHERE UserName=&apos;%&#123;$&#123;key&#125;&#125;&apos; \</div><div class="line">         AND UNIX_TIMESTAMP(AcctStartTime) &gt; &apos;%b&apos;&quot;</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>在/etc/raddb/sites-enabled/default中启用monthlytrafficcounter模块，在authenticate字段中，添加monthlytrafficcounter，然后重启radius服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">authenticate&#123;</div><div class="line">  	monthlytrafficcounter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-启动服务"><a href="#4-启动服务" class="headerlink" title="4. 启动服务"></a>4. 启动服务</h3><p>启动ocserv服务，在终端进行测试，使用在freeradius服务器端配置的账号和密码进行登陆。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service ocserv start</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-问题拓展"><a href="#5-问题拓展" class="headerlink" title="5. 问题拓展"></a>5. 问题拓展</h3><ul>
+<li><p>ocserv验证对应的radgroupreply无法添加更多属性。</p>
+</li>
+<li><p>ocserv验证对应的radgroupcheck中Simultaneous-Use，限制同时在线人数属性不生效，验证pptp时候也如此。</p>
+</li>
+<li><p>nas-identifier验证没解决，解决如何分辨多台nas，使其只能使用特定的账户验证，而不是可以使用数据库中所有的验证条目。</p>
+</li>
+<li><p>ocserv证书验证能否使用freeradius？</p>
+<p>​</p>
+</li>
+</ul>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
           <a class="post-link" href="/2016/09/29/CentOS Minimal X11转发/">CentOS Minimal X11转发</a>
         
       </h1>
@@ -1012,7 +1185,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/">CentOS 7.x ocserv + freeradius验证</a>
+          <a class="post-link" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">CentOS 6.x PPTP + Radius + Mysql + Daloradius</a>
         
       </h1>
 
@@ -1030,224 +1203,113 @@
         
 
         
-          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><p>在CentOS7中，可以直接使用yum安装ocserv</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install epel-release -y</div><div class="line">yum install -y ocserv</div></pre></td></tr></table></figure>
-<h4 id="自签名证书生成"><a href="#自签名证书生成" class="headerlink" title="自签名证书生成"></a>自签名证书生成</h4><h5 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h5><p>ocserv服务的启动需要证书，这里介绍的是如何使用自签证书。首先创建相关文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir -p /etc/ocserv/ssl/private          #保存服务器私钥</div><div class="line">mkdir -p /etc/ocserv/ssl/ca                 #保存CA</div><div class="line">mkdir -p /etc/ocserv/ssl/server           #保存服务器证书</div><div class="line">mkdir -p /etc/ocserv/ssl/user              #保存用户证书</div><div class="line">mkdir -p /etc/ocserv/ssl/crl                 #保存用户吊销证书链</div></pre></td></tr></table></figure>
-<h5 id="创建自签CA"><a href="#创建自签CA" class="headerlink" title="创建自签CA"></a>创建自签CA</h5><p>创建自签名CA私钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
-<p>创建自签CA模版，其中$1为参数，该参数为本机的域名或者IP，如果以域名登录，例如VPS域名为<code>test.com</code>，则<code>cn=&quot;test.com&quot;</code>，organization字段随意填写，可以和cn一样，然后生成CA模版。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; ca.tmpl</div><div class="line">  cn = &quot;$1&quot;</div><div class="line">  organization = &quot;$1&quot;</div><div class="line">  serial = 1</div><div class="line">  expiration_days = 3650</div><div class="line">  ca</div><div class="line">  signing_key</div><div class="line">  cert_signing_key</div><div class="line">  crl_signing_key</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>创建CA</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">certtool --generate-self-signed --load-privkey ../private/ca-key.pem \</div><div class="line">--template ca.tmpl --outfile ca-cert.pem</div></pre></td></tr></table></figure>
-<h5 id="创建服务器证书"><a href="#创建服务器证书" class="headerlink" title="创建服务器证书"></a>创建服务器证书</h5><p>创建服务器私钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile ca-key.pem</div></pre></td></tr></table></figure>
-<p>创建服务器模板，其中$1为参数，该参数为本机的域名或者IP，如果以域名登录，例如VPS域名为<code>test.com</code>，则<code>cn=&quot;test.com&quot;</code>，organization字段随意填写，可以和cn一样，然后生成服务器证书模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/server</div><div class="line">  cat &lt;&lt; EOF &gt; server.tmpl</div><div class="line">  cn = &quot;$1&quot;</div><div class="line">  organization  = &quot;$1&quot;</div><div class="line">  expiration_days = 3650</div><div class="line">  signing_key</div><div class="line">  encryption_key </div><div class="line">  tls_www_server</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>生成服务器证书</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/server-key.pem  \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template server.tmpl --outfile server-cert.pem</div></pre></td></tr></table></figure>
-<p>自签名服务器证书在此配置完成。</p>
-<h4 id="使用授权证书"><a href="#使用授权证书" class="headerlink" title="使用授权证书"></a>使用授权证书</h4><h5 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h5><p>授权证书可以从<a href="https://buy.wosign.com/" target="_blank" rel="external">沃通</a>或者<a href="https://startssl.com" target="_blank" rel="external">startssl</a>、<a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>等申请免费的ssl证书。申请证书的大概流程为：</p>
-<ul>
-<li>CSR文件为请求证书的文件，会产生一对公私钥，公钥（pub-key）需要上传给证书颁发结构，私钥（private-key）则要自己保留不能泄露。</li>
-<li>证书颁发结构需要要验证申请人的域名拥有权，证明域名拥有权之后，使用其私钥（signature private-key）申请人上传的pub-lkey进行签名，并把域名等证书信息追加到其中，产生一个证书，例如2_dovzinp3.icean.xxx.crt</li>
-<li>终端用户并不信任这个证书，鉴于这个证书不是权威机构颁发，所以需要证书链，来证明颁发该证书的结构是权威机构认证的。</li>
-<li>证书链为颁发2_dovzinp3.icean.me.crt证书的结构，其上级机构对其公钥进行签名，逐级进行签名，直到顶级CA。</li>
-</ul>
-<h5 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h5><p>下载证书的压缩文件包中，解压OtherServer，以startssl为例子，解压出如下图所示。</p>
-<center><img src="http://i.imgur.com/aUSEeOG.png" alt=""></center>
-
-<center style="color:purple"><strong>图1-1 授权证书</strong></center>
-
-<p>假定现在证书的路径仍和自签时候相同，服务器私钥为生成CSR文件所用的私钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv xxx.key server-key.pem</div><div class="line">mv server-key.pem /etc/ocserv/ssl/private</div></pre></td></tr></table></figure>
-<p>创建服务器证书，根据证书链的顺序，首先追加服务器证书，然后追加中间证书，最后追加CA证书。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat 2_dovzinp3.icean.me.crt &gt;&gt; server-cert.pem</div><div class="line">cat 1_Intermediate.crt &gt;&gt; server-cert.pem</div><div class="line">cat root.crt &gt;&gt; server-cert.pem</div><div class="line">mv server-cert.pem /etc/ocserv/ssl/server</div></pre></td></tr></table></figure>
-<p>ocserv配置</p>
-<h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>备份原配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv</div><div class="line">mv ocserv.conf ocserv.conf.bak</div></pre></td></tr></table></figure>
-<p>创建新的配置文件，no-route列表过长，只是部分给出。下图缺省使用radius验证，这里首先介绍本地账户密码验证和证书验证。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;/etc/ocserv/ocserv.conf</div><div class="line"></div><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div><div class="line"></div><div class="line">max-clients = 16</div><div class="line">max-same-clients = 1</div><div class="line">tcp-port = 443</div><div class="line">udp-port = 443</div><div class="line">keepalive = 32400</div><div class="line">dpd = 90</div><div class="line">mobile-dpd = 1800</div><div class="line">try-mtu-discovery = true</div><div class="line">cisco-client-compat = true</div><div class="line">server-cert = /etc/ocserv/ssl/server/server-cert.pem                  #服务器证书存储路径</div><div class="line">server-key = /etc/ocserv/ssl/private/server-key.pem                  #服务器私钥存储路径</div><div class="line">auth-timeout = 40</div><div class="line">pid-file = /var/run/ocserv.pid</div><div class="line">socket-file = /var/run/ocserv-socket</div><div class="line">run-as-user = nobody</div><div class="line">run-as-group = daemon</div><div class="line">device = vpns</div><div class="line">ipv4-network = 192.168.80.0</div><div class="line">ipv4-netmask = 255.255.255.0</div><div class="line">dns = 8.8.8.8</div><div class="line">dns = 8.8.4.4</div><div class="line"></div><div class="line">no-route = 1.0.0.0/255.192.0.0</div><div class="line">no-route = 1.64.0.0/255.224.0.0</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<h5 id="本地账户密码验证"><a href="#本地账户密码验证" class="headerlink" title="本地账户密码验证"></a>本地账户密码验证</h5><p>此时ocserv.conf前面部分应该为如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">#auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">#acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">#stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
-<p>需要安装httpd-tools工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y httpd-tools</div></pre></td></tr></table></figure>
-<p>创建账户密码，新添加用户也需要执行下面命令，不可省略<code>-c</code>，存储帐号密码文件需路径与配置文件中一致。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ocpasswd -c /etc/ocserv/passwd username</div></pre></td></tr></table></figure>
-<h5 id="证书验证"><a href="#证书验证" class="headerlink" title="证书验证"></a>证书验证</h5><p>此时ocserv.conf前面部分应该为如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">auth = &quot;certificate                                                                      #证书验证</div><div class="line">ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">#auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]&quot;</div><div class="line">#acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf]&quot;        #审计采用radius</div><div class="line">#stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
-<p>使用证书登录不需要每次输入登录密码，在客户端导入证书即可，首先生成用户私钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile user-key.pem</div></pre></td></tr></table></figure>
-<p>创建用户模版</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; user.tmpl</div><div class="line">  cn = &quot;$1&quot;</div><div class="line">  unit = &quot;$1&quot;</div><div class="line">  expiration_days = 365</div><div class="line">  signing_key</div><div class="line">  tls_www_client</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>生成用户证书</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/user-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template user.tmpl --outfile user-cert.pem</div><div class="line">#将用户证书和密钥打包为p12格式，在此过程中，需要输入名称和密码，在安装证书时，需要输入该密码进行验证。</div><div class="line">certtool --to-p12 --load-privkey ../private/user-key.pem --pkcs-cipher \ </div><div class="line">3des-pkcs12 --load-certificate user-cert.pem --outfile user-cert.p12 --outder</div></pre></td></tr></table></figure>
-<p>批量创建用户证书脚本如下所示，其中需要一个user.tmpl文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#定义变量</div><div class="line">usr=icean</div><div class="line">id=ic-iPhone</div><div class="line">day=365</div><div class="line"></div><div class="line">#最后相关的文件被放置在以id为名称的文件夹中</div><div class="line">mkdir $id</div><div class="line">cp user.tmpl $id.tmpl</div><div class="line">sed -i &quot;s/example-cn/$id/g&quot; $id.tmpl</div><div class="line">sed -i &quot;s/example-unit/$usr/g&quot; $id.tmpl</div><div class="line">sed -i &quot;s/1024/$day/g&quot; $id.tmpl</div><div class="line">certtool --generate-privkey --outfile $id-key.pem</div><div class="line">certtool --generate-certificate --load-privkey $id-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ca-key.pem \</div><div class="line">--template $id.tmpl --outfile $id-cert.pem</div><div class="line">certtool --to-p12 --load-privkey $id-key.pem --pkcs-cipher 3des-pkcs12 \</div><div class="line">--load-certificate $id-cert.pem --outfile $id-cert.p12 --outder</div><div class="line">mv $id* $id</div></pre></td></tr></table></figure>
-<h5 id="吊销证书"><a href="#吊销证书" class="headerlink" title="吊销证书"></a>吊销证书</h5><p>创建空吊销列表密钥文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/ocserv/ssl/crl</div><div class="line">touch revoked.pem</div></pre></td></tr></table></figure>
-<p>创建吊销证书模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; crl.tmpl</div><div class="line">  crl_next_update = 9999</div><div class="line">  crl_number = 1</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>使用certtool创建空的吊销列表，当revoked.pem为空时，执行如下命令生成crl.pem文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
-<p>吊销一个用户，假设吊销用户为user1，首先将其证书追加到revoked.pem，然后生成新的吊销证书链文件crl.pem</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cat ../user/user1/user1-cert.pem &gt;&gt; revoked.pem</div><div class="line">certtool --generate-crl --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--load-ca-certificate ../ca/ca-cert.pem --load-certificate revoked.pem \</div><div class="line">--template crl.tmpl --outfile crl.pem</div></pre></td></tr></table></figure>
-<p>若想重新启用一个被吊销的用户，则需要删除revoked.pem其中对应的密钥，然后重新生成吊销证书crl.pem,若revoke.pem被清空，则生成的时候不添加<code>--load-certificate</code>参数。吊销或者重新启用被吊销的证书时需要重启ocserv服务。</p>
-<p>完整CA添加/吊销/重新启用脚本请点击<a href="http://pan.baidu.com/s/1o7Z55Om" target="_blank" rel="external">这里</a></p>
-<hr>
-<h3 id="2-其他设置"><a href="#2-其他设置" class="headerlink" title="2.其他设置"></a>2.其他设置</h3><h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>添加如下条目到iptables，并保存。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 3 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p udp -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p tcp -j ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING -s  192.168.80.0/24 -o eth0 -j MASQUERADE   #转发ocserv虚拟子网</div><div class="line">iptables-save &gt;&gt; /etc/sysconfig/iptables</div></pre></td></tr></table></figure>
-<h4 id="系统转发设置"><a href="#系统转发设置" class="headerlink" title="系统转发设置"></a>系统转发设置</h4><p>开启IPv4和IPv6转发</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &apos;net.ipv4.ip_forward = 1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">echo &apos;net.ipv6.conf.all.forwarding=1&apos; &gt;&gt; /etc/sysctl.conf</div><div class="line">sysctl -p /etc/sysctl.conf</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-freeradius-设置"><a href="#3-freeradius-设置" class="headerlink" title="3.freeradius 设置"></a>3.freeradius 设置</h3><h4 id="ocserv配置文件"><a href="#ocserv配置文件" class="headerlink" title="ocserv配置文件"></a>ocserv配置文件</h4><p>此时ocserv.conf前面部分应该为如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#auth = &quot;plain[/etc/ocserv/passwd]&quot;                                          #本地账户密码验证      </div><div class="line"></div><div class="line">#auth = &quot;certificate                                                                      #证书验证</div><div class="line">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem                                      #CA证书路径</div><div class="line">#crl = /etc/ocserv/ssl/crl/crl.pem                                                 #吊销证书链</div><div class="line"></div><div class="line">auth = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;                         acct = &quot;radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true,nas-identifier=fun1]&quot;       #审计采用radius</div><div class="line">stats-report-time = 360                                                              #发送审计报告时间间隔</div></pre></td></tr></table></figure>
-<ul>
-<li>groupconfig在配置文件的auth选项中去掉，否则freeradius的验证组radgroupreply属性只能添加<strong>‘Auth-Type’,’:=’,’Local’</strong>, <strong>acct字段为向freeradius服务器发送审计日志</strong>，否则ocserv只有在建立VPN连接之初与freeradius服务器进行验证用户的有效性，<strong>stats-report-time</strong>字段定义了向freeradius服务器发送审计日志的时间间隔。</li>
-<li>groupconfig在配置文件的auth选项保留时，这时候需要在radius服务器的数据库插入IP、DNS等信息。 同时max-same-&gt;clients的应用灵敏度也提高了，之前不开启groupconfig时，max-same-clients的反应灵敏度有问题</li>
-<li>不使用udp端口，可以提高下载速度，但是上传速度下降</li>
-<li>经过验证，ocserv不能使用本地freeradius服务器进行验证,密码不匹配。</li>
-</ul>
-<h4 id="freeradius客户端安装"><a href="#freeradius客户端安装" class="headerlink" title="freeradius客户端安装"></a>freeradius客户端安装</h4><p>安装freeradius客户端以及工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install freeradius-client freeradius-utils -y</div></pre></td></tr></table></figure>
-<h4 id="freeradius客户端配置"><a href="#freeradius客户端配置" class="headerlink" title="freeradius客户端配置"></a>freeradius客户端配置</h4><p>变量设置，serverHostname为freeradius服务器hostname，serverIP为其IP地址，secret为共享的密钥。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">serverHostname=$1</div><div class="line">serverIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure></p>
-<p>向hosts文件中添加freeradius服务器地址解析</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$serverIP $serverHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
-<p>向freeradius server配置文件中追加freeradius服务器hostname</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$serverHostname/$serverHostname $secret&quot; &gt;&gt; /etc/radiusclient/servers</div></pre></td></tr></table></figure>
-<p>备份配置文件，将验证服务器从localhost改为其他，如果是时本地freeradius服务器，不需要修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/radiusclient</div><div class="line">cp radiusclient.conf radiusclient.conf.bak</div><div class="line">sed -i &apos;s/localhost/$serverHostname/g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
-<p>修改字典原来路径/usr/share/radiusclient为/etc/radiusclient</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/usr\/share/etc/g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
-<p>其他修改，具体原因不了解</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sed -i &apos;s/radius_deadtime/#radius_deadtime/g&apos; radiusclient.conf</div><div class="line">sed -i &apos;s/bindaddr */#bindaddr */g&apos; radiusclient.conf</div></pre></td></tr></table></figure>
-<p>下载字典，并修改字典文件，注释掉所有dictionary中带IPv6的条目，否则会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd /etc/radiusclient</div><div class="line">wget http://qingdao.icean.cc:11234/dictionary.microsoft</div><div class="line">cp /usr/share/radiusclient/dictionary.merit ./</div><div class="line">cp dictionary dictionary.bak </div><div class="line"></div><div class="line">cat &lt;&lt; EOF &gt;&gt; /etc/radiusclient/dictionary</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.microsoft</div><div class="line">  INCLUDE /etc/radiusclient/dictionary.merit </div><div class="line">EOF</div></pre></td></tr></table></figure></p>
-<h4 id="freeradius服务器配置"><a href="#freeradius服务器配置" class="headerlink" title="freeradius服务器配置"></a>freeradius服务器配置</h4><p>变量设置，clientHostname为配置ocserv服务的hostname，clientIP为其IP地址，secret为共享密钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">clientHostname= $1</div><div class="line">clientIP=$2</div><div class="line">secret=$3</div></pre></td></tr></table></figure>
-<p>添加客户端地址解析到hosts文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;$clientIP $clientHostname&quot;&gt;&gt; /etc/hosts</div></pre></td></tr></table></figure>
-<p>添加设置到clients.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;&gt; /etc/raddb/clients.conf</div><div class="line">client $clientHostname &#123;</div><div class="line">	ipaddr = $clientIP</div><div class="line">	secret= $secret</div><div class="line">	require_message_authenticator = no</div><div class="line">	nas_type = other </div><div class="line">&#125; </div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>服务器端mysql插入相应的验证条目，验证类型为本地，服务种类为Frame-User，其中Acct-Interim-Interval为统计流量的时间间隔，Max-Monthly-Traffic为每个月最大流量，这里以MB为准。<strong>在freeradius3中，不能添加更多属性，否则无法验证成功，这个问题有待探究。</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">value</span>) <span class="keyword">values</span> (<span class="string">'ocserv'</span>,<span class="string">'Auth-Type'</span>,<span class="string">':='</span>,<span class="string">'Local'</span>); </div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">VALUE</span>) <span class="keyword">VALUES</span> (<span class="string">'ocserv'</span>,<span class="string">'Acct-Interim-Interval'</span>,<span class="string">':='</span>,<span class="string">'600'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radgroupreply (groupname,<span class="keyword">attribute</span>,op,<span class="keyword">VALUE</span>) <span class="keyword">VALUES</span> (<span class="string">'ocserv'</span>,<span class="string">'Max-Monthly-Traffic'</span>,<span class="string">':='</span>,<span class="string">'1024'</span>);</div></pre></td></tr></table></figure>
-<p>Max-Monthly-Traffic为用户自定义变量，需要在/etc/raddb/dictionary 中添加如下条目。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ATTRIBUTE Max-Monthly-Traffic 3003 integer</div><div class="line">ATTRIBUTE  Monthly-Traffic-Limit  3004    integer</div></pre></td></tr></table></figure>
-<p>账户和密码</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radcheck (username,<span class="keyword">attribute</span>,op,<span class="keyword">value</span>) <span class="keyword">values</span> (<span class="string">'ociPhone'</span>,<span class="string">'Cleartext-Password'</span>,<span class="string">':='</span>,<span class="string">'test'</span>);</div></pre></td></tr></table></figure>
-<p>将账号加入对应的用户组</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> radusergroup (username,groupname) <span class="keyword">values</span> (<span class="string">'ociPhone'</span>,<span class="string">'ocserv'</span>);</div></pre></td></tr></table></figure>
-<p>切换到/etc/raddb/mods-enabled/目录下，建立sqlcounter的软链接，启用sqlcounter模块。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/raddb/mods-enabled/</div><div class="line">ln -s ../sqlcounter</div></pre></td></tr></table></figure>
-<p>添加新的计数器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sqlcounter monthlytrafficcounter &#123;</div><div class="line">    sql_module_instance = sql                                                                                                                </div><div class="line">    dialect = $&#123;modules.sql.dialect&#125;</div><div class="line"></div><div class="line">    counter_name = Monthly-Traffic               #计数器名字，可以任意填写</div><div class="line">    check_name = Max-Monthly-Traffic          #限制最大流量</div><div class="line">    reply_name = Monthly-Traffic-Limit          #回复给客户端</div><div class="line"></div><div class="line">    key = User-Name</div><div class="line">    reset = monthly</div><div class="line"></div><div class="line">    $INCLUDE $&#123;modconfdir&#125;/sql/counter/$&#123;dialect&#125;/$&#123;.:instance&#125;.conf</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>切换到/etc/raddb/mods-config/sql/counter/mysql目录下，添加与计数器同名的配置文件，变量如下</p>
-<ul>
-<li>${key}  与计数器中的key属性队形</li>
-<li>%b 为计数的起始时间，若reset为monthly，则为当前时间的月份第一天，其数值为标准UNIX时间</li>
-<li>%e 为计数的结束时间，若reset为monthly，则为当前时间的月份最后一天，其数值为标准UNIX时间</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd /etc/raddb/mods-config/sql/counter/mysql</div><div class="line">cat &lt;&lt; EOF &gt;monthlytrafficcounter.conf</div><div class="line"> query = &quot;\</div><div class="line">	 SELECT SUM(acctinputoctets + acctoutputoctets) DIV 1048576 \     #1MB字节数，radacct按照字节统计的。</div><div class="line">          FROM radacct \</div><div class="line">         WHERE UserName=&apos;%&#123;$&#123;key&#125;&#125;&apos; \</div><div class="line">         AND UNIX_TIMESTAMP(AcctStartTime) &gt; &apos;%b&apos;&quot;</div><div class="line">EOF</div></pre></td></tr></table></figure>
-<p>在/etc/raddb/sites-enabled/default中启用monthlytrafficcounter模块，在authenticate字段中，添加monthlytrafficcounter，然后重启radius服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">authenticate&#123;</div><div class="line">  	monthlytrafficcounter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="4-启动服务"><a href="#4-启动服务" class="headerlink" title="4. 启动服务"></a>4. 启动服务</h3><p>启动ocserv服务，在终端进行测试，使用在freeradius服务器端配置的账号和密码进行登陆。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service ocserv start</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="5-问题拓展"><a href="#5-问题拓展" class="headerlink" title="5. 问题拓展"></a>5. 问题拓展</h3><ul>
-<li><p>ocserv验证对应的radgroupreply无法添加更多属性。</p>
-</li>
-<li><p>ocserv验证对应的radgroupcheck中Simultaneous-Use，限制同时在线人数属性不生效，验证pptp时候也如此。</p>
-</li>
-<li><p>nas-identifier验证没解决，解决如何分辨多台nas，使其只能使用特定的账户验证，而不是可以使用数据库中所有的验证条目。</p>
-</li>
-<li><p>ocserv证书验证能否使用freeradius？</p>
-<p>​</p>
-</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/">CentOS 6.x ocserv IPv6 实验</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月29日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
-<hr>
-<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
-
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 64
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
-</blockquote>
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 124
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
-<p>sysctl net.ipv6.conf.all.forwarding</p>
-<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
+          <h3 id="1-radius服务器安装"><a href="#1-radius服务器安装" class="headerlink" title="1. radius服务器安装"></a>1. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
+</code></pre><h4 id="mysql设置"><a href="#mysql设置" class="headerlink" title="mysql设置"></a>mysql设置</h4><p>启动mysql</p>
+<pre><code>service mysqld start
+</code></pre><p>设置mysql密码和安全设置<br>    /usr/bin/mysql_secure_installation</p>
+<p>创建数据库并授权</p>
+<pre><code>mysql -uroot -p
+mysql-&gt; CREATE DATABASE radius;
+mysql-&gt; GRANT ALL PRIVILEGES ON radius.* TO radius@localhost IDENTIFIED BY &quot;radpass&quot;;
+mysql-&gt; flush privileges;
+</code></pre><p>导入数据表</p>
+<pre><code>mysql&gt; use radius;
+mysql&gt; SOURCE /etc/raddb/sql/mysql/schema.sql;
+mysql&gt; exit；
+</code></pre><h4 id="修改freeadius配置文件"><a href="#修改freeadius配置文件" class="headerlink" title="修改freeadius配置文件"></a>修改freeadius配置文件</h4><p>编辑freeradius配置文件，开启sql认证</p>
+<p>文件1：/etc/raddb/sql.conf </p>
+<pre><code># Connection info:
+server = &quot;localhost&quot;
+#port = 3306
+login = &quot;radius&quot;  #mysql登录用户名
+password = &quot;radpass&quot; #上述登录用户名的密码
+# Database table configuration for everything except Oracle
+radius_db = &quot;radius&quot;
+</code></pre><p>文件2：/etc/raddb/radiusd.conf</p>
+<pre><code>$INCLUDE  sql.conf   #去掉前面的注释
+</code></pre><p>文件3： /etc/raddb/sites-available/default</p>
+<pre><code>authorize{} accounting {} session {} 去掉里面sql前面的注释
+</code></pre><p>文件4： /etc/raddb/sites-available/inner-tunnel </p>
+<pre><code>authorize {} session {} 去掉里面sql前面的注释
+</code></pre><p>文件5： /etc/raddb/clients.conf，修改本地客户端的共享key</p>
+<pre><code>secret = testing123 这个key太简单，可以为一个随机字符串。例如：
+secret = 3c23498n349c3yt290y93b4t3
+</code></pre><p>可以在这个文件中添加其他客户端。</p>
+<h4 id="iptables端口开放"><a href="#iptables端口开放" class="headerlink" title="iptables端口开放"></a>iptables端口开放</h4><p>需要在iptables上开放1812到1814之间，以及18120的udp端口</p>
+<pre><code>iptables -A INPUT -p udp --dport 1812:1814 -j ACCEPT
+iptables -A INPUT -p udp --dport 18120 -j ACCEPT
+</code></pre><h4 id="启动测试radius服务"><a href="#启动测试radius服务" class="headerlink" title="启动测试radius服务"></a>启动测试radius服务</h4><p>启动freeradius服务</p>
+<pre><code>service radiusd restart
+</code></pre><p>添加用户信息</p>
+<pre><code>mysql -uroot -p
+use radius;
+insert into radcheck (username,attribute,op,value) values (&apos;test&apos;,&apos;User-Password&apos;,&apos;:=&apos;,&apos;test&apos;);
+exit；
+radtest test test 127.0.0.1 0 3c23498n349c3yt290y93b4t3
+</code></pre><p>看到“rad_recv: Access-Accept” 则本地客户端认证成功。</p>
 <blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
+<p><span style="color:red"><strong>提示：</strong></span>若出现radtest测试出现radclient:: Failed to find IP address for servername，修改  /etc/hosts 添加：127.0.0.1 servername</p>
 </blockquote>
 <hr>
-<h3 id="3-连接测试"><a href="#3-连接测试" class="headerlink" title="3.连接测试"></a>3.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
-<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
-<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
-<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
-<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
-<hr>
-<h3 id="4-排错流程"><a href="#4-排错流程" class="headerlink" title="4.排错流程"></a>4.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
-
+<h3 id="2-pptp服务器设置"><a href="#2-pptp服务器设置" class="headerlink" title="2.pptp服务器设置"></a>2.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
+<pre><code>plugin /usr/lib64/pppd/2.4.5/radius.so
+plugin /usr/lib64/pppd/2.4.5/radattr.so
+radius-config-file /etc/radiusclient/radiusclient.conf
+</code></pre><p>去掉/etc/pptpd.conf中的logwtmp字段</p>
 <blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
-</blockquote>
-<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
-
+<p><span style="color:red"><strong>提示：</strong></span>pptp需要在iptables上开放gre协议，如果没有开放该端口，则无法进行验证，即无法登陆成功。这个问题在公网vps还没遇到，但是在同一个局域网内的pptp服务器则有这个问题。</p>
+<pre><code>iptables -A INPUT -p gre -j ACCEPT
+</code></pre></blockquote>
+<h4 id="freeradius客户端安装设置"><a href="#freeradius客户端安装设置" class="headerlink" title="freeradius客户端安装设置"></a>freeradius客户端安装设置</h4><p>安装freeadius客户端，没有安装epel源的需要yum安装epel源，freeradius-utils为测试工具，radtest为freeradius-utils命令。</p>
+<pre><code>yum install epel-release
+yum install freeradius-client freeradius-utils -y
+</code></pre><h4 id="freearadius配置"><a href="#freearadius配置" class="headerlink" title="freearadius配置"></a>freearadius配置</h4><p><strong>radius客户端</strong>修改/etc/radiusclient/servers，添加条目，若是本地radius服务器，添加如下，rootroot为共享密钥，需要和服务器配置文件/etc/raddb/clients.conf中localhost中的secret一样。</p>
+<pre><code>localhost/localhost rootroot
+</code></pre><p>若要使用远程服务器，<strong>radius客户端</strong>需要在/etc/radiusclient/servers中添加如下，centos2为服务器主机名，需要在hosts文件中添加相应解析条目。</p>
+<pre><code>centos2/centos2 rootroot
+</code></pre><p><strong>radius客户端</strong>也需要在/etc/radiusclient/radiusclient.conf中修改配置，修改</p>
+<pre><code>authserver  centos2
+acctserver  centos2
+</code></pre><p><strong>radius服务器</strong>端的/etc/raddb/clients.conf添加如下配置，架设客户端为centos1，ip地址为192.168.86.101，secret为rootroot。在服务器端的hosts中也需要添加关于centos1的地址解析条目。</p>
+<pre><code>client centos1 {
+    ipaddr = 192.168.86.101
+    secret= rootroot
+    require_message_authenticator = no
+    nastype = other 
+}  
+</code></pre><h4 id="freeadius测试"><a href="#freeadius测试" class="headerlink" title="freeadius测试"></a>freeadius测试</h4><p>客户端可以使用radtest测试远端radius服务器命令，若不成功，可以在服务器端查看/var/log/radius/radius.log来进行debug</p>
+<h4 id="字典添加设置"><a href="#字典添加设置" class="headerlink" title="字典添加设置"></a>字典添加设置</h4><p>修改/etc/radiusclient/radiusclient.conf中的<code>/usr/share/radiusclient/dictionary</code>，将其修改为<code>/etc/radiusclient/dictionary</code>。注释掉84行的<code>radius_deadtime    0</code> 和87行<code>bindaddr *</code></p>
+<p>下载微软字典</p>
+<pre><code>wget http://qingdao.icean.cc:11234/dictionary.microsoft
+</code></pre><p>修改/etc/radiusclient/dictionary字典文件，在文件末尾添加如下</p>
+<pre><code>INCLUDE /etc/radiusclient/dictionary.microsoft
+INCLUDE /etc/radiusclient/dictionary.merit 
+</code></pre><p>需要将<code>dictionary.microsoft, dictionary.merit</code>放在<code>/etc/radiusclient</code>目录下,dictionary.merit在<code>/usr/share/radiusclient/</code>目录下。</p>
 <blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
+<p><span style="color:red"><strong>修订：</strong></span>需要将dictionary中所有关于IPv6的选项全部注释掉，否则无法鉴定成功。若出现鉴定失败字样，请使用tail -f /var/log/message来动态查看信息。</p>
 </blockquote>
-<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
 <hr>
-<h3 id="5-结论与猜想"><a href="#5-结论与猜想" class="headerlink" title="5.结论与猜想"></a>5.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
-<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
-<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
-<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
-
-</li>
-</ul>
-<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
-<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
-<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
-<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
-</ul>
+<h3 id="3-Daloradius安装"><a href="#3-Daloradius安装" class="headerlink" title="3.Daloradius安装"></a>3.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
+<h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><p>下载daloradius源码</p>
+<pre><code>cd usr/share
+wget http://downloads.sourceforge.net/project/daloradius/daloradius/daloradius0.9-9/daloradius-0.9-9.tar.gz
+tar -xvzf daloradius-0.9-9.tar.gz
+mv daloradius-0.9-9 daloradius
+</code></pre><h4 id="编辑daloradius配置文件"><a href="#编辑daloradius配置文件" class="headerlink" title="编辑daloradius配置文件"></a>编辑daloradius配置文件</h4><p>修改/usr/share/daloradius/library/daloradius.conf.php</p>
+<pre><code>$configValues[&apos;CONFIG_DB_HOST&apos;] = &apos;localhost&apos;;
+$configValues[&apos;CONFIG_DB_USER&apos;] = &apos;radius&apos;;
+$configValues[&apos;CONFIG_DB_PASS&apos;] = &apos;***&apos;;  // 设为自己的密码
+$configValues[&apos;CONFIG_DB_NAME&apos;] = &apos;radius&apos;;
+</code></pre><p>修改daloRadius路径</p>
+<pre><code>$configValues[&apos;CONFIG_PATH_DALO_VARIABLE_DATA&apos;] = &apos;/usr/share/daloradius/var&apos;
+</code></pre><h4 id="mysql导入表格数据"><a href="#mysql导入表格数据" class="headerlink" title="mysql导入表格数据"></a>mysql导入表格数据</h4><p>导入daloradius数据</p>
+<pre><code>mysql -uroot -p radius &lt; /usr/share/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
+</code></pre><h4 id="添加Apache虚拟主机"><a href="#添加Apache虚拟主机" class="headerlink" title="添加Apache虚拟主机"></a>添加Apache虚拟主机</h4><p>在/etc/httpd/conf/httpd.conf中加入</p>
+<pre><code>Alias /daloradius &quot;/usr/share/daloradius/&quot;
+&lt;Directory &quot;/usr/share/daloradius&quot;&gt;
+&lt;/Directory&gt;
+</code></pre><h4 id="php-pear-DB安装"><a href="#php-pear-DB安装" class="headerlink" title="php-pear-DB安装"></a>php-pear-DB安装</h4><p>安装该软件，否则在浏览器下可以登录daloradius，但是出现http 500错误。</p>
+<h4 id="重启服务并网页访问"><a href="#重启服务并网页访问" class="headerlink" title="重启服务并网页访问"></a>重启服务并网页访问</h4><p>重启httpd，mysqld服务并在浏览器下输入<a href="http://[ip" target="_blank" rel="external">http://[ip</a> address]/daloradius，默认账户为administrator，密码为radius</p>
 
         
       
@@ -1439,7 +1501,7 @@ ipv6 route [destination network] [out port] [destination gloab address]
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">CentOS 6.x PPTP + Radius + Mysql + Daloradius</a>
+          <a class="post-link" href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/">CentOS 6.x ocserv IPv6 实验</a>
         
       </h1>
 
@@ -1457,113 +1519,58 @@ ipv6 route [destination network] [out port] [destination gloab address]
         
 
         
-          <h3 id="1-radius服务器安装"><a href="#1-radius服务器安装" class="headerlink" title="1. radius服务器安装"></a>1. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
-</code></pre><h4 id="mysql设置"><a href="#mysql设置" class="headerlink" title="mysql设置"></a>mysql设置</h4><p>启动mysql</p>
-<pre><code>service mysqld start
-</code></pre><p>设置mysql密码和安全设置<br>    /usr/bin/mysql_secure_installation</p>
-<p>创建数据库并授权</p>
-<pre><code>mysql -uroot -p
-mysql-&gt; CREATE DATABASE radius;
-mysql-&gt; GRANT ALL PRIVILEGES ON radius.* TO radius@localhost IDENTIFIED BY &quot;radpass&quot;;
-mysql-&gt; flush privileges;
-</code></pre><p>导入数据表</p>
-<pre><code>mysql&gt; use radius;
-mysql&gt; SOURCE /etc/raddb/sql/mysql/schema.sql;
-mysql&gt; exit；
-</code></pre><h4 id="修改freeadius配置文件"><a href="#修改freeadius配置文件" class="headerlink" title="修改freeadius配置文件"></a>修改freeadius配置文件</h4><p>编辑freeradius配置文件，开启sql认证</p>
-<p>文件1：/etc/raddb/sql.conf </p>
-<pre><code># Connection info:
-server = &quot;localhost&quot;
-#port = 3306
-login = &quot;radius&quot;  #mysql登录用户名
-password = &quot;radpass&quot; #上述登录用户名的密码
-# Database table configuration for everything except Oracle
-radius_db = &quot;radius&quot;
-</code></pre><p>文件2：/etc/raddb/radiusd.conf</p>
-<pre><code>$INCLUDE  sql.conf   #去掉前面的注释
-</code></pre><p>文件3： /etc/raddb/sites-available/default</p>
-<pre><code>authorize{} accounting {} session {} 去掉里面sql前面的注释
-</code></pre><p>文件4： /etc/raddb/sites-available/inner-tunnel </p>
-<pre><code>authorize {} session {} 去掉里面sql前面的注释
-</code></pre><p>文件5： /etc/raddb/clients.conf，修改本地客户端的共享key</p>
-<pre><code>secret = testing123 这个key太简单，可以为一个随机字符串。例如：
-secret = 3c23498n349c3yt290y93b4t3
-</code></pre><p>可以在这个文件中添加其他客户端。</p>
-<h4 id="iptables端口开放"><a href="#iptables端口开放" class="headerlink" title="iptables端口开放"></a>iptables端口开放</h4><p>需要在iptables上开放1812到1814之间，以及18120的udp端口</p>
-<pre><code>iptables -A INPUT -p udp --dport 1812:1814 -j ACCEPT
-iptables -A INPUT -p udp --dport 18120 -j ACCEPT
-</code></pre><h4 id="启动测试radius服务"><a href="#启动测试radius服务" class="headerlink" title="启动测试radius服务"></a>启动测试radius服务</h4><p>启动freeradius服务</p>
-<pre><code>service radiusd restart
-</code></pre><p>添加用户信息</p>
-<pre><code>mysql -uroot -p
-use radius;
-insert into radcheck (username,attribute,op,value) values (&apos;test&apos;,&apos;User-Password&apos;,&apos;:=&apos;,&apos;test&apos;);
-exit；
-radtest test test 127.0.0.1 0 3c23498n349c3yt290y93b4t3
-</code></pre><p>看到“rad_recv: Access-Accept” 则本地客户端认证成功。</p>
+          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
+<hr>
+<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
+
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 64
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
+</blockquote>
+<pre><code>ipv6-network = 2607:f358:1a:1::
+ipv6-prefix = 124
+ipv6-dns = 2001:4860:4860::8888
+ipv6-dns = 2001:4860:4860::8844
+</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
+<p>sysctl net.ipv6.conf.all.forwarding</p>
+<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
 <blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>若出现radtest测试出现radclient:: Failed to find IP address for servername，修改  /etc/hosts 添加：127.0.0.1 servername</p>
+<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
 </blockquote>
 <hr>
-<h3 id="2-pptp服务器设置"><a href="#2-pptp服务器设置" class="headerlink" title="2.pptp服务器设置"></a>2.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
-<pre><code>plugin /usr/lib64/pppd/2.4.5/radius.so
-plugin /usr/lib64/pppd/2.4.5/radattr.so
-radius-config-file /etc/radiusclient/radiusclient.conf
-</code></pre><p>去掉/etc/pptpd.conf中的logwtmp字段</p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>pptp需要在iptables上开放gre协议，如果没有开放该端口，则无法进行验证，即无法登陆成功。这个问题在公网vps还没遇到，但是在同一个局域网内的pptp服务器则有这个问题。</p>
-<pre><code>iptables -A INPUT -p gre -j ACCEPT
-</code></pre></blockquote>
-<h4 id="freeradius客户端安装设置"><a href="#freeradius客户端安装设置" class="headerlink" title="freeradius客户端安装设置"></a>freeradius客户端安装设置</h4><p>安装freeadius客户端，没有安装epel源的需要yum安装epel源，freeradius-utils为测试工具，radtest为freeradius-utils命令。</p>
-<pre><code>yum install epel-release
-yum install freeradius-client freeradius-utils -y
-</code></pre><h4 id="freearadius配置"><a href="#freearadius配置" class="headerlink" title="freearadius配置"></a>freearadius配置</h4><p><strong>radius客户端</strong>修改/etc/radiusclient/servers，添加条目，若是本地radius服务器，添加如下，rootroot为共享密钥，需要和服务器配置文件/etc/raddb/clients.conf中localhost中的secret一样。</p>
-<pre><code>localhost/localhost rootroot
-</code></pre><p>若要使用远程服务器，<strong>radius客户端</strong>需要在/etc/radiusclient/servers中添加如下，centos2为服务器主机名，需要在hosts文件中添加相应解析条目。</p>
-<pre><code>centos2/centos2 rootroot
-</code></pre><p><strong>radius客户端</strong>也需要在/etc/radiusclient/radiusclient.conf中修改配置，修改</p>
-<pre><code>authserver  centos2
-acctserver  centos2
-</code></pre><p><strong>radius服务器</strong>端的/etc/raddb/clients.conf添加如下配置，架设客户端为centos1，ip地址为192.168.86.101，secret为rootroot。在服务器端的hosts中也需要添加关于centos1的地址解析条目。</p>
-<pre><code>client centos1 {
-    ipaddr = 192.168.86.101
-    secret= rootroot
-    require_message_authenticator = no
-    nastype = other 
-}  
-</code></pre><h4 id="freeadius测试"><a href="#freeadius测试" class="headerlink" title="freeadius测试"></a>freeadius测试</h4><p>客户端可以使用radtest测试远端radius服务器命令，若不成功，可以在服务器端查看/var/log/radius/radius.log来进行debug</p>
-<h4 id="字典添加设置"><a href="#字典添加设置" class="headerlink" title="字典添加设置"></a>字典添加设置</h4><p>修改/etc/radiusclient/radiusclient.conf中的<code>/usr/share/radiusclient/dictionary</code>，将其修改为<code>/etc/radiusclient/dictionary</code>。注释掉84行的<code>radius_deadtime    0</code> 和87行<code>bindaddr *</code></p>
-<p>下载微软字典</p>
-<pre><code>wget http://qingdao.icean.cc:11234/dictionary.microsoft
-</code></pre><p>修改/etc/radiusclient/dictionary字典文件，在文件末尾添加如下</p>
-<pre><code>INCLUDE /etc/radiusclient/dictionary.microsoft
-INCLUDE /etc/radiusclient/dictionary.merit 
-</code></pre><p>需要将<code>dictionary.microsoft, dictionary.merit</code>放在<code>/etc/radiusclient</code>目录下,dictionary.merit在<code>/usr/share/radiusclient/</code>目录下。</p>
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>需要将dictionary中所有关于IPv6的选项全部注释掉，否则无法鉴定成功。若出现鉴定失败字样，请使用tail -f /var/log/message来动态查看信息。</p>
-</blockquote>
+<h3 id="3-连接测试"><a href="#3-连接测试" class="headerlink" title="3.连接测试"></a>3.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
+<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
+<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
+<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
+<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
 <hr>
-<h3 id="3-Daloradius安装"><a href="#3-Daloradius安装" class="headerlink" title="3.Daloradius安装"></a>3.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
-<h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><p>下载daloradius源码</p>
-<pre><code>cd usr/share
-wget http://downloads.sourceforge.net/project/daloradius/daloradius/daloradius0.9-9/daloradius-0.9-9.tar.gz
-tar -xvzf daloradius-0.9-9.tar.gz
-mv daloradius-0.9-9 daloradius
-</code></pre><h4 id="编辑daloradius配置文件"><a href="#编辑daloradius配置文件" class="headerlink" title="编辑daloradius配置文件"></a>编辑daloradius配置文件</h4><p>修改/usr/share/daloradius/library/daloradius.conf.php</p>
-<pre><code>$configValues[&apos;CONFIG_DB_HOST&apos;] = &apos;localhost&apos;;
-$configValues[&apos;CONFIG_DB_USER&apos;] = &apos;radius&apos;;
-$configValues[&apos;CONFIG_DB_PASS&apos;] = &apos;***&apos;;  // 设为自己的密码
-$configValues[&apos;CONFIG_DB_NAME&apos;] = &apos;radius&apos;;
-</code></pre><p>修改daloRadius路径</p>
-<pre><code>$configValues[&apos;CONFIG_PATH_DALO_VARIABLE_DATA&apos;] = &apos;/usr/share/daloradius/var&apos;
-</code></pre><h4 id="mysql导入表格数据"><a href="#mysql导入表格数据" class="headerlink" title="mysql导入表格数据"></a>mysql导入表格数据</h4><p>导入daloradius数据</p>
-<pre><code>mysql -uroot -p radius &lt; /usr/share/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
-</code></pre><h4 id="添加Apache虚拟主机"><a href="#添加Apache虚拟主机" class="headerlink" title="添加Apache虚拟主机"></a>添加Apache虚拟主机</h4><p>在/etc/httpd/conf/httpd.conf中加入</p>
-<pre><code>Alias /daloradius &quot;/usr/share/daloradius/&quot;
-&lt;Directory &quot;/usr/share/daloradius&quot;&gt;
-&lt;/Directory&gt;
-</code></pre><h4 id="php-pear-DB安装"><a href="#php-pear-DB安装" class="headerlink" title="php-pear-DB安装"></a>php-pear-DB安装</h4><p>安装该软件，否则在浏览器下可以登录daloradius，但是出现http 500错误。</p>
-<h4 id="重启服务并网页访问"><a href="#重启服务并网页访问" class="headerlink" title="重启服务并网页访问"></a>重启服务并网页访问</h4><p>重启httpd，mysqld服务并在浏览器下输入<a href="http://[ip" target="_blank" rel="external">http://[ip</a> address]/daloradius，默认账户为administrator，密码为radius</p>
+<h3 id="4-排错流程"><a href="#4-排错流程" class="headerlink" title="4.排错流程"></a>4.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
+</blockquote>
+<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
+
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
+</blockquote>
+<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
+<hr>
+<h3 id="5-结论与猜想"><a href="#5-结论与猜想" class="headerlink" title="5.结论与猜想"></a>5.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
+<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
+<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
+<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
+
+</li>
+</ul>
+<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
+<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
+<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
+<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
+</ul>
 
         
       

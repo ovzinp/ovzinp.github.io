@@ -163,64 +163,6 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/01/16/AWK学习/">AWK 学习</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2017年1月16日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-示例文件"><a href="#1-示例文件" class="headerlink" title="1. 示例文件"></a>1. 示例文件</h3><p>示例文件内容如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cat file</div><div class="line">Unix,10,A</div><div class="line">Linux,30,B</div><div class="line">Solaris,40,C</div><div class="line">Fedora,20,D</div><div class="line">Ubuntu,50,E</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><h4 id="在原第一列前处添加新的一列"><a href="#在原第一列前处添加新的一列" class="headerlink" title="在原第一列前处添加新的一列"></a>在原第一列前处添加新的一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">1,Unix,10,A</div><div class="line">2,Linux,30,B</div><div class="line">3,Solaris,40,C</div><div class="line">4,Fedora,20,D</div><div class="line">5,Ubuntu,50,E</div></pre></td></tr></table></figure>
-<p><strong>F</strong>代表分隔符，使用的分割符为 <strong>,</strong> ，将<strong>\$1</strong>替换为<strong>++i</strong> 的结果 加<strong>FS</strong>（分隔符）加原<strong>\$1</strong>，可以理解为<code>\$1=(++i) + FS + $1</code>。后面的<strong>1</strong>代表打印全部。可以通过下面方式设置<strong>i</strong>的初始值。<strong>OFS</strong>代表输出的分隔符，也为 <strong>,</strong> </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ awk -F,  -v=10 <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">$ awk -F,   <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> i=10 OFS=, file</div></pre></td></tr></table></figure>
-<p>如果不只是添加数字，还要添加个前缀，如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1="VM"++i FS $1;&#125;1'</span> OFS=, file</div></pre></td></tr></table></figure>
-<h4 id="在原最后一列后添加一列"><a href="#在原最后一列后添加一列" class="headerlink" title="在原最后一列后添加一列"></a>在原最后一列后添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i;&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1</div><div class="line">Linux,30,B,2</div><div class="line">Solaris,40,C,3</div><div class="line">Fedora,20,D,4</div><div class="line">Ubuntu,50,E,5</div></pre></td></tr></table></figure>
-<p><strong>NF</strong>代表一行的列数，<strong>NF+1</strong>列为循环产生的数字，然后打印出来</p>
-<h4 id="在原最后一列后添加两列"><a href="#在原最后一列后添加两列" class="headerlink" title="在原最后一列后添加两列"></a>在原最后一列后添加两列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i FS "X";&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1,X</div><div class="line">Linux,30,B,2,X</div><div class="line">Solaris,40,C,3,X</div><div class="line">Fedora,20,D,4,X</div><div class="line">Ubuntu,50,E,5,X</div></pre></td></tr></table></figure>
-<h4 id="在原倒数第二列前添加一列"><a href="#在原倒数第二列前添加一列" class="headerlink" title="在原倒数第二列前添加一列"></a>在原倒数第二列前添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF-1)=++i FS $(NF-1);&#125;1'</span> OFS=, file</div><div class="line">Unix,1,10,A</div><div class="line">Linux,2,30,B</div><div class="line">Solaris,3,40,C</div><div class="line">Fedora,4,20,D</div><div class="line">Ubuntu,5,50,E</div></pre></td></tr></table></figure>
-<p><strong>NF-1</strong>指倒数第二列</p>
-<h4 id="更新一列的内容"><a href="#更新一列的内容" class="headerlink" title="更新一列的内容"></a>更新一列的内容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2+=10;&#125;1'</span> OFS=, file</div><div class="line">Unix,20,A</div><div class="line">Linux,40,B</div><div class="line">Solaris,50,C</div><div class="line">Fedora,30,D</div><div class="line">Ubuntu,60,E</div></pre></td></tr></table></figure>
-<h4 id="大小写转化"><a href="#大小写转化" class="headerlink" title="大小写转化"></a>大小写转化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=toupper($1)&#125;1'</span> OFS=, file</div><div class="line">UNIX,10,A</div><div class="line">LINUX,30,B</div><div class="line">SOLARIS,40,C</div><div class="line">FEDORA,20,D</div><div class="line">UBUNTU,50,E</div></pre></td></tr></table></figure>
-<h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=substr($1,0,3)&#125;1'</span> OFS=, file</div><div class="line">Uni,10,A</div><div class="line">L<span class="keyword">in</span>,30,B</div><div class="line">Sol,40,C</div><div class="line">Fed,20,D</div><div class="line">Ubu,50,E</div></pre></td></tr></table></figure>
-<h4 id="清空某一列"><a href="#清空某一列" class="headerlink" title="清空某一列"></a>清空某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2="";&#125;1'</span> OFS=, file</div><div class="line">Unix,,A</div><div class="line">Linux,,B</div><div class="line">Solaris,,C</div><div class="line">Fedora,,D</div><div class="line">Ubuntu,,E</div></pre></td></tr></table></figure>
-<h4 id="删除某一列"><a href="#删除某一列" class="headerlink" title="删除某一列"></a>删除某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f; f=""&#125;'</span> x=2 file</div><div class="line">Unix,A</div><div class="line">Linux,B</div><div class="line">Solaris,C</div><div class="line">Fedora,D</div><div class="line">Ubuntu,E</div></pre></td></tr></table></figure>
-<p><strong>for(i=1;i&lt;=NF;i++)</strong>处理每一行的每一列， <strong>if(i!=x)</strong>判断当前列号是否要删除，如果要删除的，不执行下面的步骤。 <strong>f=f?f FS \$i:\$i</strong>，如果f没被赋值，则是<strong>$i</strong>，如果已经赋值了，则为<strong>f FS \$i</strong></p>
-<h4 id="修改分隔符"><a href="#修改分隔符" class="headerlink" title="修改分隔符"></a>修改分隔符</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2=$2":"$x; for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f;f=""&#125;'</span> x=3 file</div><div class="line">Unix,10:A</div><div class="line">Linux,30:B</div><div class="line">Solaris,40:C</div><div class="line">Fedora,20:D</div><div class="line">Ubuntu,50:E</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-拓展"><a href="#3-拓展" class="headerlink" title="3. 拓展"></a>3. 拓展</h3><ul>
-<li>head和tail如果选择多个范围</li>
-</ul>
-<hr>
-<h3 id="4-例子"><a href="#4-例子" class="headerlink" title="4. 例子"></a>4. 例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk  <span class="string">'&#123;$(NF+1)="z52-vm"++i; $(NF+1)="130.5.70."++j;print&#125;'</span> j=131 floating_ip_disassociate.sh</div></pre></td></tr></table></figure>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2017/01/16/Linux重定向/">Linux Shell 标准输入、输出和错误重定向</a>
         
       </h1>
@@ -413,6 +355,64 @@
 <li><a href="http://blog.csdn.net/cjfeii/article/details/10084343" target="_blank" rel="external">http://blog.csdn.net/cjfeii/article/details/10084343</a></li>
 <li><a href="http://blog.chinaunix.net/uid-20671208-id-3588619.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-20671208-id-3588619.html</a></li>
 </ul>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2017/01/16/AWK学习/">AWK 学习</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017年1月16日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-示例文件"><a href="#1-示例文件" class="headerlink" title="1. 示例文件"></a>1. 示例文件</h3><p>示例文件内容如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cat file</div><div class="line">Unix,10,A</div><div class="line">Linux,30,B</div><div class="line">Solaris,40,C</div><div class="line">Fedora,20,D</div><div class="line">Ubuntu,50,E</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><h4 id="在原第一列前处添加新的一列"><a href="#在原第一列前处添加新的一列" class="headerlink" title="在原第一列前处添加新的一列"></a>在原第一列前处添加新的一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">1,Unix,10,A</div><div class="line">2,Linux,30,B</div><div class="line">3,Solaris,40,C</div><div class="line">4,Fedora,20,D</div><div class="line">5,Ubuntu,50,E</div></pre></td></tr></table></figure>
+<p><strong>F</strong>代表分隔符，使用的分割符为 <strong>,</strong> ，将<strong>\$1</strong>替换为<strong>++i</strong> 的结果 加<strong>FS</strong>（分隔符）加原<strong>\$1</strong>，可以理解为<code>\$1=(++i) + FS + $1</code>。后面的<strong>1</strong>代表打印全部。可以通过下面方式设置<strong>i</strong>的初始值。<strong>OFS</strong>代表输出的分隔符，也为 <strong>,</strong> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ awk -F,  -v=10 <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> OFS=, file</div><div class="line">$ awk -F,   <span class="string">'&#123;$1=++i FS $1;&#125;1'</span> i=10 OFS=, file</div></pre></td></tr></table></figure>
+<p>如果不只是添加数字，还要添加个前缀，如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1="VM"++i FS $1;&#125;1'</span> OFS=, file</div></pre></td></tr></table></figure>
+<h4 id="在原最后一列后添加一列"><a href="#在原最后一列后添加一列" class="headerlink" title="在原最后一列后添加一列"></a>在原最后一列后添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i;&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1</div><div class="line">Linux,30,B,2</div><div class="line">Solaris,40,C,3</div><div class="line">Fedora,20,D,4</div><div class="line">Ubuntu,50,E,5</div></pre></td></tr></table></figure>
+<p><strong>NF</strong>代表一行的列数，<strong>NF+1</strong>列为循环产生的数字，然后打印出来</p>
+<h4 id="在原最后一列后添加两列"><a href="#在原最后一列后添加两列" class="headerlink" title="在原最后一列后添加两列"></a>在原最后一列后添加两列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF+1)=++i FS "X";&#125;1'</span> OFS=, file</div><div class="line">Unix,10,A,1,X</div><div class="line">Linux,30,B,2,X</div><div class="line">Solaris,40,C,3,X</div><div class="line">Fedora,20,D,4,X</div><div class="line">Ubuntu,50,E,5,X</div></pre></td></tr></table></figure>
+<h4 id="在原倒数第二列前添加一列"><a href="#在原倒数第二列前添加一列" class="headerlink" title="在原倒数第二列前添加一列"></a>在原倒数第二列前添加一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$(NF-1)=++i FS $(NF-1);&#125;1'</span> OFS=, file</div><div class="line">Unix,1,10,A</div><div class="line">Linux,2,30,B</div><div class="line">Solaris,3,40,C</div><div class="line">Fedora,4,20,D</div><div class="line">Ubuntu,5,50,E</div></pre></td></tr></table></figure>
+<p><strong>NF-1</strong>指倒数第二列</p>
+<h4 id="更新一列的内容"><a href="#更新一列的内容" class="headerlink" title="更新一列的内容"></a>更新一列的内容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2+=10;&#125;1'</span> OFS=, file</div><div class="line">Unix,20,A</div><div class="line">Linux,40,B</div><div class="line">Solaris,50,C</div><div class="line">Fedora,30,D</div><div class="line">Ubuntu,60,E</div></pre></td></tr></table></figure>
+<h4 id="大小写转化"><a href="#大小写转化" class="headerlink" title="大小写转化"></a>大小写转化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=toupper($1)&#125;1'</span> OFS=, file</div><div class="line">UNIX,10,A</div><div class="line">LINUX,30,B</div><div class="line">SOLARIS,40,C</div><div class="line">FEDORA,20,D</div><div class="line">UBUNTU,50,E</div></pre></td></tr></table></figure>
+<h4 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$1=substr($1,0,3)&#125;1'</span> OFS=, file</div><div class="line">Uni,10,A</div><div class="line">L<span class="keyword">in</span>,30,B</div><div class="line">Sol,40,C</div><div class="line">Fed,20,D</div><div class="line">Ubu,50,E</div></pre></td></tr></table></figure>
+<h4 id="清空某一列"><a href="#清空某一列" class="headerlink" title="清空某一列"></a>清空某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2="";&#125;1'</span> OFS=, file</div><div class="line">Unix,,A</div><div class="line">Linux,,B</div><div class="line">Solaris,,C</div><div class="line">Fedora,,D</div><div class="line">Ubuntu,,E</div></pre></td></tr></table></figure>
+<h4 id="删除某一列"><a href="#删除某一列" class="headerlink" title="删除某一列"></a>删除某一列</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f; f=""&#125;'</span> x=2 file</div><div class="line">Unix,A</div><div class="line">Linux,B</div><div class="line">Solaris,C</div><div class="line">Fedora,D</div><div class="line">Ubuntu,E</div></pre></td></tr></table></figure>
+<p><strong>for(i=1;i&lt;=NF;i++)</strong>处理每一行的每一列， <strong>if(i!=x)</strong>判断当前列号是否要删除，如果要删除的，不执行下面的步骤。 <strong>f=f?f FS \$i:\$i</strong>，如果f没被赋值，则是<strong>$i</strong>，如果已经赋值了，则为<strong>f FS \$i</strong></p>
+<h4 id="修改分隔符"><a href="#修改分隔符" class="headerlink" title="修改分隔符"></a>修改分隔符</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ awk -F, <span class="string">'&#123;$2=$2":"$x; for(i=1;i&lt;=NF;i++) if(i!=x) f=f?f FS $i:$i; print f;f=""&#125;'</span> x=3 file</div><div class="line">Unix,10:A</div><div class="line">Linux,30:B</div><div class="line">Solaris,40:C</div><div class="line">Fedora,20:D</div><div class="line">Ubuntu,50:E</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-拓展"><a href="#3-拓展" class="headerlink" title="3. 拓展"></a>3. 拓展</h3><ul>
+<li>head和tail如果选择多个范围</li>
+</ul>
+<hr>
+<h3 id="4-例子"><a href="#4-例子" class="headerlink" title="4. 例子"></a>4. 例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">awk  <span class="string">'&#123;$(NF+1)="z52-vm"++i; $(NF+1)="130.5.70."++j;print&#125;'</span> j=131 floating_ip_disassociate.sh</div></pre></td></tr></table></figure>
 
         
       
@@ -1073,8 +1073,8 @@
 <p>ocserv配置</p>
 <h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>备份原配置文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv</div><div class="line">mv ocserv.conf ocserv.conf.bak</div></pre></td></tr></table></figure>
-<p>创建新的配置文件，no-route列表过长，只是部分给出。下图缺省使用radius验证，这里首先介绍本地账户密码验证和证书验证。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;/etc/ocserv/ocserv.conf</div><div class="line"><span class="comment">#auth = "plain[/etc/ocserv/passwd]"</span></div><div class="line"><span class="comment">#本地账户密码验证      </span></div><div class="line"><span class="comment">#auth = "certificate</span></div><div class="line"><span class="comment">#证书验证</span></div><div class="line"><span class="comment">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem</span></div><div class="line"><span class="comment">#CA证书路径</span></div><div class="line"><span class="comment">#crl = /etc/ocserv/ssl/crl/crl.pem</span></div><div class="line"><span class="comment">#吊销证书链</span></div><div class="line"></div><div class="line">auth = <span class="string">"radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]"</span></div><div class="line">acct = <span class="string">"radius[config=/etc/radiusclient/radiusclient.conf]"</span></div><div class="line"><span class="comment">#审计采用radius</span></div><div class="line">stats-report-time = 360</div><div class="line"><span class="comment">#发送审计报告时间间隔</span></div><div class="line"></div><div class="line">max-clients = 16</div><div class="line">max-same-clients = 1</div><div class="line">tcp-port = 443</div><div class="line">udp-port = 443</div><div class="line">keepalive = 32400</div><div class="line">dpd = 90</div><div class="line">mobile-dpd = 1800</div><div class="line">try-mtu-discovery = <span class="literal">true</span></div><div class="line">cisco-client-compat = <span class="literal">true</span></div><div class="line">server-cert = /etc/ocserv/ssl/server/server-cert.pem</div><div class="line"><span class="comment">#服务器证书存储路径</span></div><div class="line">server-key = /etc/ocserv/ssl/private/server-key.pem</div><div class="line"><span class="comment">#服务器私钥存储路径</span></div><div class="line">auth-timeout = 40</div><div class="line">pid-file = /var/run/ocserv.pid</div><div class="line">socket-file = /var/run/ocserv-socket</div><div class="line">run-as-user = nobody</div><div class="line">run-as-group = daemon</div><div class="line">device = vpns</div><div class="line">ipv4-network = 192.168.80.0</div><div class="line">ipv4-netmask = 255.255.255.0</div><div class="line">ipv6-network = 2001:cc0:2020:4008:2333::</div><div class="line">ipv6-prefix = 80</div><div class="line">ipv6-dns = 2001:4860:4860::8888</div><div class="line">ipv6-dns = 2001:4860:4860::8844</div><div class="line">dns = 8.8.8.8</div><div class="line">dns = 8.8.4.4</div><div class="line"></div><div class="line">no-route = 1.0.0.0/255.192.0.0</div><div class="line">no-route = 1.64.0.0/255.224.0.0</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<p>创建新的配置文件，no-route列表过长，只是部分给出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt;/etc/ocserv/ocserv.conf</div><div class="line">    <span class="comment">#auth = "plain[/etc/ocserv/passwd]"</span></div><div class="line">    <span class="comment">#本地账户密码验证      </span></div><div class="line">    <span class="comment">#auth = "certificate</span></div><div class="line">    <span class="comment">#证书验证</span></div><div class="line">    <span class="comment">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem</span></div><div class="line">    <span class="comment">#CA证书路径</span></div><div class="line">    <span class="comment">#crl = /etc/ocserv/ssl/crl/crl.pem</span></div><div class="line">    <span class="comment">#吊销证书链</span></div><div class="line">    </div><div class="line">    <span class="comment">#auth = "radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]"</span></div><div class="line">    <span class="comment"># acct = "radius[config=/etc/radiusclient/radiusclient.conf]"</span></div><div class="line">    <span class="comment">#审计采用radius</span></div><div class="line">    <span class="comment">#stats-report-time = 360</span></div><div class="line">    <span class="comment">#发送审计报告时间间隔</span></div><div class="line">    </div><div class="line">    max-clients = 16</div><div class="line">    max-same-clients = 1</div><div class="line">    tcp-port = 443</div><div class="line">    udp-port = 443</div><div class="line">    keepalive = 32400</div><div class="line">    dpd = 90</div><div class="line">    mobile-dpd = 1800</div><div class="line">    try-mtu-discovery = <span class="literal">true</span></div><div class="line">    cisco-client-compat = <span class="literal">true</span></div><div class="line">    server-cert = /etc/ocserv/ssl/server/server-cert.pem</div><div class="line">    <span class="comment">#服务器证书存储路径</span></div><div class="line">    server-key = /etc/ocserv/ssl/private/server-key.pem</div><div class="line">    <span class="comment">#服务器私钥存储路径</span></div><div class="line">    auth-timeout = 40</div><div class="line">    pid-file = /var/run/ocserv.pid</div><div class="line">    socket-file = /var/run/ocserv-socket</div><div class="line">    run-as-user = nobody</div><div class="line">    run-as-group = daemon</div><div class="line">    device = vpns</div><div class="line">    ipv4-network = 192.168.80.0</div><div class="line">    ipv4-netmask = 255.255.255.0</div><div class="line">    ipv6-network = 2001:cc0:2020:4008:2333::</div><div class="line">    ipv6-prefix = 80</div><div class="line">    ipv6-dns = 2001:4860:4860::8888</div><div class="line">    ipv6-dns = 2001:4860:4860::8844</div><div class="line">    dns = 8.8.8.8</div><div class="line">    dns = 8.8.4.4</div><div class="line">    no-route = 1.0.0.0/255.192.0.0</div><div class="line">    no-route = 1.64.0.0/255.224.0.0</div><div class="line">EOF</div></pre></td></tr></table></figure>
 <h5 id="本地账户密码验证"><a href="#本地账户密码验证" class="headerlink" title="本地账户密码验证"></a>本地账户密码验证</h5><p>此时ocserv.conf前面部分应该为如下所示</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">auth = <span class="string">"plain[/etc/ocserv/passwd]"</span></div><div class="line"><span class="comment">#本地账户密码验证      </span></div><div class="line"><span class="comment">#auth = "certificate</span></div><div class="line"><span class="comment">#证书验证</span></div><div class="line"><span class="comment">#ca-cert /etc/ocserv/ssl/ca/ca-cert.pem </span></div><div class="line"><span class="comment">#CA证书路径</span></div><div class="line"><span class="comment">#crl = /etc/ocserv/ssl/crl/crl.pem</span></div><div class="line"><span class="comment">#吊销证书链</span></div><div class="line"></div><div class="line"><span class="comment">#auth = "radius[config=/etc/radiusclient/radiusclient.conf,groupconfig=true]"</span></div><div class="line"><span class="comment">#acct = "radius[config=/etc/radiusclient/radiusclient.conf]"</span></div><div class="line"><span class="comment">#审计采用radius</span></div><div class="line"><span class="comment">#stats-report-time = 360</span></div><div class="line"><span class="comment">#发送审计报告时间间隔</span></div></pre></td></tr></table></figure>
 <p>需要安装httpd-tools工具</p>
@@ -1086,7 +1086,7 @@
 <p>使用证书登录不需要每次输入登录密码，在客户端导入证书即可，首先生成用户私钥</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/ocserv/ssl/private</div><div class="line">certtool --generate-privkey --outfile user-key.pem</div></pre></td></tr></table></figure>
 <p>创建用户模版</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; user.tmpl</div><div class="line">  cn = <span class="string">"<span class="variable">$1</span>"</span></div><div class="line">  unit = <span class="string">"<span class="variable">$1</span>"</span></div><div class="line">  expiration_days = 365</div><div class="line">  signing_key</div><div class="line">  tls_www_client</div><div class="line">EOF</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt; EOF &gt; user.tmpl</div><div class="line">  cn = <span class="string">"test.com"</span></div><div class="line">  unit = <span class="string">"test.com"</span></div><div class="line">  expiration_days = 365</div><div class="line">  signing_key</div><div class="line">  tls_www_client</div><div class="line">EOF</div></pre></td></tr></table></figure>
 <p>生成用户证书</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">certtool --generate-certificate --load-privkey ../private/user-key.pem \</div><div class="line">--load-ca-certificate ca-cert.pem --load-ca-privkey ../private/ca-key.pem \</div><div class="line">--template user.tmpl --outfile user-cert.pem</div><div class="line"><span class="comment">#将用户证书和密钥打包为p12格式，在此过程中，需要输入名称和密码，在安装证书时，需要输入该密码进行验证。</span></div><div class="line">certtool --to-p12 --load-privkey ../private/user-key.pem --pkcs-cipher \ </div><div class="line">3des-pkcs12 --load-certificate user-cert.pem --outfile user-cert.p12 --outder</div></pre></td></tr></table></figure>
 <p>批量创建用户证书脚本如下所示，其中需要一个user.tmpl文件。</p>
@@ -1102,8 +1102,12 @@
 <p>若想重新启用一个被吊销的用户，则需要删除revoked.pem其中对应的密钥，然后重新生成吊销证书crl.pem,若revoke.pem被清空，则生成的时候不添加<code>--load-certificate</code>参数。吊销或者重新启用被吊销的证书时需要重启ocserv服务。</p>
 <p>完整CA添加/吊销/重新启用脚本请点击<a href="http://pan.baidu.com/s/1o7Z55Om" target="_blank" rel="external">这里</a></p>
 <hr>
-<h3 id="2-其他设置"><a href="#2-其他设置" class="headerlink" title="2.其他设置"></a>2.其他设置</h3><h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>添加如下条目到iptables，并保存。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 3 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p udp -j ACCEPT</div><div class="line">iptables -I FORWARD 1 -p tcp -j ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING <span class="_">-s</span>  192.168.80.0/24 -o eth0 -j MASQUERADE   <span class="comment">#转发ocserv虚拟子网</span></div><div class="line">iptables-save &gt;&gt; /etc/sysconfig/iptables</div></pre></td></tr></table></figure>
+<h3 id="2-其他设置"><a href="#2-其他设置" class="headerlink" title="2.其他设置"></a>2.其他设置</h3><h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>在CentOS下，首先禁用Firewall</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service firewalld stop</div><div class="line">chkconfig firewalld off</div></pre></td></tr></table></figure>
+<p>安装iptables并添加到开机启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">yum install -y iptables-services</div><div class="line">service iptables start</div><div class="line">chkconfig iptables on</div><div class="line">chkconfig ip6ables on</div></pre></td></tr></table></figure>
+<p>添加如下条目到iptables和ip6tables，并保存。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p tcp --dport 443 -j ACCEPT</div><div class="line">iptables -I INPUT 3 -p udp --dport 443 -j ACCEPT</div><div class="line">iptables -I FORWARD 1  -j ACCEPT</div><div class="line">ip6tables -I FORWARD 1  -j ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING <span class="_">-s</span>  192.168.80.0/24 -o eth0 -j MASQUERADE   <span class="comment">#转发ocserv虚拟子网</span></div><div class="line">iptables-save &gt; /etc/sysconfig/iptables</div><div class="line">ip6tables-save &gt; /etc/sysconfig/ip6tables</div></pre></td></tr></table></figure>
 <h4 id="系统转发设置"><a href="#系统转发设置" class="headerlink" title="系统转发设置"></a>系统转发设置</h4><p>开启IPv4和IPv6转发</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'net.ipv4.ip_forward = 1'</span> &gt;&gt; /etc/sysctl.conf</div><div class="line"><span class="built_in">echo</span> <span class="string">'net.ipv6.conf.all.forwarding=1'</span> &gt;&gt; /etc/sysctl.conf</div><div class="line">sysctl -p /etc/sysctl.conf</div></pre></td></tr></table></figure>
 <hr>
@@ -1171,145 +1175,6 @@
 <p>​</p>
 </li>
 </ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">CentOS 6.x PPTP + Radius + Mysql + Daloradius</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月29日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-radius服务器安装"><a href="#1-radius服务器安装" class="headerlink" title="1. radius服务器安装"></a>1. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
-</code></pre><h4 id="mysql设置"><a href="#mysql设置" class="headerlink" title="mysql设置"></a>mysql设置</h4><p>启动mysql</p>
-<pre><code>service mysqld start
-</code></pre><p>设置mysql密码和安全设置<br>    /usr/bin/mysql_secure_installation</p>
-<p>创建数据库并授权</p>
-<pre><code>mysql -uroot -p
-mysql-&gt; CREATE DATABASE radius;
-mysql-&gt; GRANT ALL PRIVILEGES ON radius.* TO radius@localhost IDENTIFIED BY &quot;radpass&quot;;
-mysql-&gt; flush privileges;
-</code></pre><p>导入数据表</p>
-<pre><code>mysql&gt; use radius;
-mysql&gt; SOURCE /etc/raddb/sql/mysql/schema.sql;
-mysql&gt; exit；
-</code></pre><h4 id="修改freeadius配置文件"><a href="#修改freeadius配置文件" class="headerlink" title="修改freeadius配置文件"></a>修改freeadius配置文件</h4><p>编辑freeradius配置文件，开启sql认证</p>
-<p>文件1：/etc/raddb/sql.conf </p>
-<pre><code># Connection info:
-server = &quot;localhost&quot;
-#port = 3306
-login = &quot;radius&quot;  #mysql登录用户名
-password = &quot;radpass&quot; #上述登录用户名的密码
-# Database table configuration for everything except Oracle
-radius_db = &quot;radius&quot;
-</code></pre><p>文件2：/etc/raddb/radiusd.conf</p>
-<pre><code>$INCLUDE  sql.conf   #去掉前面的注释
-</code></pre><p>文件3： /etc/raddb/sites-available/default</p>
-<pre><code>authorize{} accounting {} session {} 去掉里面sql前面的注释
-</code></pre><p>文件4： /etc/raddb/sites-available/inner-tunnel </p>
-<pre><code>authorize {} session {} 去掉里面sql前面的注释
-</code></pre><p>文件5： /etc/raddb/clients.conf，修改本地客户端的共享key</p>
-<pre><code>secret = testing123 这个key太简单，可以为一个随机字符串。例如：
-secret = 3c23498n349c3yt290y93b4t3
-</code></pre><p>可以在这个文件中添加其他客户端。</p>
-<h4 id="iptables端口开放"><a href="#iptables端口开放" class="headerlink" title="iptables端口开放"></a>iptables端口开放</h4><p>需要在iptables上开放1812到1814之间，以及18120的udp端口</p>
-<pre><code>iptables -A INPUT -p udp --dport 1812:1814 -j ACCEPT
-iptables -A INPUT -p udp --dport 18120 -j ACCEPT
-</code></pre><h4 id="启动测试radius服务"><a href="#启动测试radius服务" class="headerlink" title="启动测试radius服务"></a>启动测试radius服务</h4><p>启动freeradius服务</p>
-<pre><code>service radiusd restart
-</code></pre><p>添加用户信息</p>
-<pre><code>mysql -uroot -p
-use radius;
-insert into radcheck (username,attribute,op,value) values (&apos;test&apos;,&apos;User-Password&apos;,&apos;:=&apos;,&apos;test&apos;);
-exit；
-radtest test test 127.0.0.1 0 3c23498n349c3yt290y93b4t3
-</code></pre><p>看到“rad_recv: Access-Accept” 则本地客户端认证成功。</p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>若出现radtest测试出现radclient:: Failed to find IP address for servername，修改  /etc/hosts 添加：127.0.0.1 servername</p>
-</blockquote>
-<hr>
-<h3 id="2-pptp服务器设置"><a href="#2-pptp服务器设置" class="headerlink" title="2.pptp服务器设置"></a>2.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
-<pre><code>plugin /usr/lib64/pppd/2.4.5/radius.so
-plugin /usr/lib64/pppd/2.4.5/radattr.so
-radius-config-file /etc/radiusclient/radiusclient.conf
-</code></pre><p>去掉/etc/pptpd.conf中的logwtmp字段</p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>pptp需要在iptables上开放gre协议，如果没有开放该端口，则无法进行验证，即无法登陆成功。这个问题在公网vps还没遇到，但是在同一个局域网内的pptp服务器则有这个问题。</p>
-<pre><code>iptables -A INPUT -p gre -j ACCEPT
-</code></pre></blockquote>
-<h4 id="freeradius客户端安装设置"><a href="#freeradius客户端安装设置" class="headerlink" title="freeradius客户端安装设置"></a>freeradius客户端安装设置</h4><p>安装freeadius客户端，没有安装epel源的需要yum安装epel源，freeradius-utils为测试工具，radtest为freeradius-utils命令。</p>
-<pre><code>yum install epel-release
-yum install freeradius-client freeradius-utils -y
-</code></pre><h4 id="freearadius配置"><a href="#freearadius配置" class="headerlink" title="freearadius配置"></a>freearadius配置</h4><p><strong>radius客户端</strong>修改/etc/radiusclient/servers，添加条目，若是本地radius服务器，添加如下，rootroot为共享密钥，需要和服务器配置文件/etc/raddb/clients.conf中localhost中的secret一样。</p>
-<pre><code>localhost/localhost rootroot
-</code></pre><p>若要使用远程服务器，<strong>radius客户端</strong>需要在/etc/radiusclient/servers中添加如下，centos2为服务器主机名，需要在hosts文件中添加相应解析条目。</p>
-<pre><code>centos2/centos2 rootroot
-</code></pre><p><strong>radius客户端</strong>也需要在/etc/radiusclient/radiusclient.conf中修改配置，修改</p>
-<pre><code>authserver  centos2
-acctserver  centos2
-</code></pre><p><strong>radius服务器</strong>端的/etc/raddb/clients.conf添加如下配置，架设客户端为centos1，ip地址为192.168.86.101，secret为rootroot。在服务器端的hosts中也需要添加关于centos1的地址解析条目。</p>
-<pre><code>client centos1 {
-    ipaddr = 192.168.86.101
-    secret= rootroot
-    require_message_authenticator = no
-    nastype = other 
-}  
-</code></pre><h4 id="freeadius测试"><a href="#freeadius测试" class="headerlink" title="freeadius测试"></a>freeadius测试</h4><p>客户端可以使用radtest测试远端radius服务器命令，若不成功，可以在服务器端查看/var/log/radius/radius.log来进行debug</p>
-<h4 id="字典添加设置"><a href="#字典添加设置" class="headerlink" title="字典添加设置"></a>字典添加设置</h4><p>修改/etc/radiusclient/radiusclient.conf中的<code>/usr/share/radiusclient/dictionary</code>，将其修改为<code>/etc/radiusclient/dictionary</code>。注释掉84行的<code>radius_deadtime    0</code> 和87行<code>bindaddr *</code></p>
-<p>下载微软字典</p>
-<pre><code>wget http://qingdao.icean.cc:11234/dictionary.microsoft
-</code></pre><p>修改/etc/radiusclient/dictionary字典文件，在文件末尾添加如下</p>
-<pre><code>INCLUDE /etc/radiusclient/dictionary.microsoft
-INCLUDE /etc/radiusclient/dictionary.merit 
-</code></pre><p>需要将<code>dictionary.microsoft, dictionary.merit</code>放在<code>/etc/radiusclient</code>目录下,dictionary.merit在<code>/usr/share/radiusclient/</code>目录下。</p>
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>需要将dictionary中所有关于IPv6的选项全部注释掉，否则无法鉴定成功。若出现鉴定失败字样，请使用tail -f /var/log/message来动态查看信息。</p>
-</blockquote>
-<hr>
-<h3 id="3-Daloradius安装"><a href="#3-Daloradius安装" class="headerlink" title="3.Daloradius安装"></a>3.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
-<h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><p>下载daloradius源码</p>
-<pre><code>cd usr/share
-wget http://downloads.sourceforge.net/project/daloradius/daloradius/daloradius0.9-9/daloradius-0.9-9.tar.gz
-tar -xvzf daloradius-0.9-9.tar.gz
-mv daloradius-0.9-9 daloradius
-</code></pre><h4 id="编辑daloradius配置文件"><a href="#编辑daloradius配置文件" class="headerlink" title="编辑daloradius配置文件"></a>编辑daloradius配置文件</h4><p>修改/usr/share/daloradius/library/daloradius.conf.php</p>
-<pre><code>$configValues[&apos;CONFIG_DB_HOST&apos;] = &apos;localhost&apos;;
-$configValues[&apos;CONFIG_DB_USER&apos;] = &apos;radius&apos;;
-$configValues[&apos;CONFIG_DB_PASS&apos;] = &apos;***&apos;;  // 设为自己的密码
-$configValues[&apos;CONFIG_DB_NAME&apos;] = &apos;radius&apos;;
-</code></pre><p>修改daloRadius路径</p>
-<pre><code>$configValues[&apos;CONFIG_PATH_DALO_VARIABLE_DATA&apos;] = &apos;/usr/share/daloradius/var&apos;
-</code></pre><h4 id="mysql导入表格数据"><a href="#mysql导入表格数据" class="headerlink" title="mysql导入表格数据"></a>mysql导入表格数据</h4><p>导入daloradius数据</p>
-<pre><code>mysql -uroot -p radius &lt; /usr/share/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
-</code></pre><h4 id="添加Apache虚拟主机"><a href="#添加Apache虚拟主机" class="headerlink" title="添加Apache虚拟主机"></a>添加Apache虚拟主机</h4><p>在/etc/httpd/conf/httpd.conf中加入</p>
-<pre><code>Alias /daloradius &quot;/usr/share/daloradius/&quot;
-&lt;Directory &quot;/usr/share/daloradius&quot;&gt;
-&lt;/Directory&gt;
-</code></pre><h4 id="php-pear-DB安装"><a href="#php-pear-DB安装" class="headerlink" title="php-pear-DB安装"></a>php-pear-DB安装</h4><p>安装该软件，否则在浏览器下可以登录daloradius，但是出现http 500错误。</p>
-<h4 id="重启服务并网页访问"><a href="#重启服务并网页访问" class="headerlink" title="重启服务并网页访问"></a>重启服务并网页访问</h4><p>重启httpd，mysqld服务并在浏览器下输入<a href="http://[ip" target="_blank" rel="external">http://[ip</a> address]/daloradius，默认账户为administrator，密码为radius</p>
 
         
       
@@ -1571,6 +1436,145 @@ ipv6 route [destination network] [out port] [destination gloab address]
 <p><span style="color:purple">图2-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_centos7/2-5.PNG" alt=""></p>
 <hr>
 <h3 id="3-结论"><a href="#3-结论" class="headerlink" title="3.结论"></a>3.结论</h3><p>如果需要配置ocserv客户端支持IPv6，则需要vps供应商提供可以路由的IPv6地址池。</p>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">CentOS 6.x PPTP + Radius + Mysql + Daloradius</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年9月29日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-radius服务器安装"><a href="#1-radius服务器安装" class="headerlink" title="1. radius服务器安装"></a>1. radius服务器安装</h3><h4 id="yum安装相关软件"><a href="#yum安装相关软件" class="headerlink" title="yum安装相关软件"></a>yum安装相关软件</h4><pre><code>yum install freeradius freeradius-mysql freeradius-utils mysql-server -y
+</code></pre><h4 id="mysql设置"><a href="#mysql设置" class="headerlink" title="mysql设置"></a>mysql设置</h4><p>启动mysql</p>
+<pre><code>service mysqld start
+</code></pre><p>设置mysql密码和安全设置<br>    /usr/bin/mysql_secure_installation</p>
+<p>创建数据库并授权</p>
+<pre><code>mysql -uroot -p
+mysql-&gt; CREATE DATABASE radius;
+mysql-&gt; GRANT ALL PRIVILEGES ON radius.* TO radius@localhost IDENTIFIED BY &quot;radpass&quot;;
+mysql-&gt; flush privileges;
+</code></pre><p>导入数据表</p>
+<pre><code>mysql&gt; use radius;
+mysql&gt; SOURCE /etc/raddb/sql/mysql/schema.sql;
+mysql&gt; exit；
+</code></pre><h4 id="修改freeadius配置文件"><a href="#修改freeadius配置文件" class="headerlink" title="修改freeadius配置文件"></a>修改freeadius配置文件</h4><p>编辑freeradius配置文件，开启sql认证</p>
+<p>文件1：/etc/raddb/sql.conf </p>
+<pre><code># Connection info:
+server = &quot;localhost&quot;
+#port = 3306
+login = &quot;radius&quot;  #mysql登录用户名
+password = &quot;radpass&quot; #上述登录用户名的密码
+# Database table configuration for everything except Oracle
+radius_db = &quot;radius&quot;
+</code></pre><p>文件2：/etc/raddb/radiusd.conf</p>
+<pre><code>$INCLUDE  sql.conf   #去掉前面的注释
+</code></pre><p>文件3： /etc/raddb/sites-available/default</p>
+<pre><code>authorize{} accounting {} session {} 去掉里面sql前面的注释
+</code></pre><p>文件4： /etc/raddb/sites-available/inner-tunnel </p>
+<pre><code>authorize {} session {} 去掉里面sql前面的注释
+</code></pre><p>文件5： /etc/raddb/clients.conf，修改本地客户端的共享key</p>
+<pre><code>secret = testing123 这个key太简单，可以为一个随机字符串。例如：
+secret = 3c23498n349c3yt290y93b4t3
+</code></pre><p>可以在这个文件中添加其他客户端。</p>
+<h4 id="iptables端口开放"><a href="#iptables端口开放" class="headerlink" title="iptables端口开放"></a>iptables端口开放</h4><p>需要在iptables上开放1812到1814之间，以及18120的udp端口</p>
+<pre><code>iptables -A INPUT -p udp --dport 1812:1814 -j ACCEPT
+iptables -A INPUT -p udp --dport 18120 -j ACCEPT
+</code></pre><h4 id="启动测试radius服务"><a href="#启动测试radius服务" class="headerlink" title="启动测试radius服务"></a>启动测试radius服务</h4><p>启动freeradius服务</p>
+<pre><code>service radiusd restart
+</code></pre><p>添加用户信息</p>
+<pre><code>mysql -uroot -p
+use radius;
+insert into radcheck (username,attribute,op,value) values (&apos;test&apos;,&apos;User-Password&apos;,&apos;:=&apos;,&apos;test&apos;);
+exit；
+radtest test test 127.0.0.1 0 3c23498n349c3yt290y93b4t3
+</code></pre><p>看到“rad_recv: Access-Accept” 则本地客户端认证成功。</p>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>若出现radtest测试出现radclient:: Failed to find IP address for servername，修改  /etc/hosts 添加：127.0.0.1 servername</p>
+</blockquote>
+<hr>
+<h3 id="2-pptp服务器设置"><a href="#2-pptp服务器设置" class="headerlink" title="2.pptp服务器设置"></a>2.pptp服务器设置</h3><h4 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h4><p>修改/etc/ppp/option.pptpd,添加如下</p>
+<pre><code>plugin /usr/lib64/pppd/2.4.5/radius.so
+plugin /usr/lib64/pppd/2.4.5/radattr.so
+radius-config-file /etc/radiusclient/radiusclient.conf
+</code></pre><p>去掉/etc/pptpd.conf中的logwtmp字段</p>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span>pptp需要在iptables上开放gre协议，如果没有开放该端口，则无法进行验证，即无法登陆成功。这个问题在公网vps还没遇到，但是在同一个局域网内的pptp服务器则有这个问题。</p>
+<pre><code>iptables -A INPUT -p gre -j ACCEPT
+</code></pre></blockquote>
+<h4 id="freeradius客户端安装设置"><a href="#freeradius客户端安装设置" class="headerlink" title="freeradius客户端安装设置"></a>freeradius客户端安装设置</h4><p>安装freeadius客户端，没有安装epel源的需要yum安装epel源，freeradius-utils为测试工具，radtest为freeradius-utils命令。</p>
+<pre><code>yum install epel-release
+yum install freeradius-client freeradius-utils -y
+</code></pre><h4 id="freearadius配置"><a href="#freearadius配置" class="headerlink" title="freearadius配置"></a>freearadius配置</h4><p><strong>radius客户端</strong>修改/etc/radiusclient/servers，添加条目，若是本地radius服务器，添加如下，rootroot为共享密钥，需要和服务器配置文件/etc/raddb/clients.conf中localhost中的secret一样。</p>
+<pre><code>localhost/localhost rootroot
+</code></pre><p>若要使用远程服务器，<strong>radius客户端</strong>需要在/etc/radiusclient/servers中添加如下，centos2为服务器主机名，需要在hosts文件中添加相应解析条目。</p>
+<pre><code>centos2/centos2 rootroot
+</code></pre><p><strong>radius客户端</strong>也需要在/etc/radiusclient/radiusclient.conf中修改配置，修改</p>
+<pre><code>authserver  centos2
+acctserver  centos2
+</code></pre><p><strong>radius服务器</strong>端的/etc/raddb/clients.conf添加如下配置，架设客户端为centos1，ip地址为192.168.86.101，secret为rootroot。在服务器端的hosts中也需要添加关于centos1的地址解析条目。</p>
+<pre><code>client centos1 {
+    ipaddr = 192.168.86.101
+    secret= rootroot
+    require_message_authenticator = no
+    nastype = other 
+}  
+</code></pre><h4 id="freeadius测试"><a href="#freeadius测试" class="headerlink" title="freeadius测试"></a>freeadius测试</h4><p>客户端可以使用radtest测试远端radius服务器命令，若不成功，可以在服务器端查看/var/log/radius/radius.log来进行debug</p>
+<h4 id="字典添加设置"><a href="#字典添加设置" class="headerlink" title="字典添加设置"></a>字典添加设置</h4><p>修改/etc/radiusclient/radiusclient.conf中的<code>/usr/share/radiusclient/dictionary</code>，将其修改为<code>/etc/radiusclient/dictionary</code>。注释掉84行的<code>radius_deadtime    0</code> 和87行<code>bindaddr *</code></p>
+<p>下载微软字典</p>
+<pre><code>wget http://qingdao.icean.cc:11234/dictionary.microsoft
+</code></pre><p>修改/etc/radiusclient/dictionary字典文件，在文件末尾添加如下</p>
+<pre><code>INCLUDE /etc/radiusclient/dictionary.microsoft
+INCLUDE /etc/radiusclient/dictionary.merit 
+</code></pre><p>需要将<code>dictionary.microsoft, dictionary.merit</code>放在<code>/etc/radiusclient</code>目录下,dictionary.merit在<code>/usr/share/radiusclient/</code>目录下。</p>
+<blockquote>
+<p><span style="color:red"><strong>修订：</strong></span>需要将dictionary中所有关于IPv6的选项全部注释掉，否则无法鉴定成功。若出现鉴定失败字样，请使用tail -f /var/log/message来动态查看信息。</p>
+</blockquote>
+<hr>
+<h3 id="3-Daloradius安装"><a href="#3-Daloradius安装" class="headerlink" title="3.Daloradius安装"></a>3.Daloradius安装</h3><h4 id="LAMP环境搭建"><a href="#LAMP环境搭建" class="headerlink" title="LAMP环境搭建"></a>LAMP环境搭建</h4><p>Daloradius是基于LAMP环境的，所以首先需要搭建LAMP环境</p>
+<h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><p>下载daloradius源码</p>
+<pre><code>cd usr/share
+wget http://downloads.sourceforge.net/project/daloradius/daloradius/daloradius0.9-9/daloradius-0.9-9.tar.gz
+tar -xvzf daloradius-0.9-9.tar.gz
+mv daloradius-0.9-9 daloradius
+</code></pre><h4 id="编辑daloradius配置文件"><a href="#编辑daloradius配置文件" class="headerlink" title="编辑daloradius配置文件"></a>编辑daloradius配置文件</h4><p>修改/usr/share/daloradius/library/daloradius.conf.php</p>
+<pre><code>$configValues[&apos;CONFIG_DB_HOST&apos;] = &apos;localhost&apos;;
+$configValues[&apos;CONFIG_DB_USER&apos;] = &apos;radius&apos;;
+$configValues[&apos;CONFIG_DB_PASS&apos;] = &apos;***&apos;;  // 设为自己的密码
+$configValues[&apos;CONFIG_DB_NAME&apos;] = &apos;radius&apos;;
+</code></pre><p>修改daloRadius路径</p>
+<pre><code>$configValues[&apos;CONFIG_PATH_DALO_VARIABLE_DATA&apos;] = &apos;/usr/share/daloradius/var&apos;
+</code></pre><h4 id="mysql导入表格数据"><a href="#mysql导入表格数据" class="headerlink" title="mysql导入表格数据"></a>mysql导入表格数据</h4><p>导入daloradius数据</p>
+<pre><code>mysql -uroot -p radius &lt; /usr/share/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
+</code></pre><h4 id="添加Apache虚拟主机"><a href="#添加Apache虚拟主机" class="headerlink" title="添加Apache虚拟主机"></a>添加Apache虚拟主机</h4><p>在/etc/httpd/conf/httpd.conf中加入</p>
+<pre><code>Alias /daloradius &quot;/usr/share/daloradius/&quot;
+&lt;Directory &quot;/usr/share/daloradius&quot;&gt;
+&lt;/Directory&gt;
+</code></pre><h4 id="php-pear-DB安装"><a href="#php-pear-DB安装" class="headerlink" title="php-pear-DB安装"></a>php-pear-DB安装</h4><p>安装该软件，否则在浏览器下可以登录daloradius，但是出现http 500错误。</p>
+<h4 id="重启服务并网页访问"><a href="#重启服务并网页访问" class="headerlink" title="重启服务并网页访问"></a>重启服务并网页访问</h4><p>重启httpd，mysqld服务并在浏览器下输入<a href="http://[ip" target="_blank" rel="external">http://[ip</a> address]/daloradius，默认账户为administrator，密码为radius</p>
 
         
       

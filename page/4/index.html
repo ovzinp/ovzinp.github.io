@@ -163,6 +163,276 @@
     <header class="post-header">
       <h1 class="post-title">
         
+          <a class="post-link" href="/2016/07/17/基础DNS学习/">基础DNS学习</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月17日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h3><h4 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h4><p>查询域名命令，Windows自带该工具，Linux一般自带，有一些distribution没有，可以通过如下命令安装该工具。可以列出查询出来的IP，可以执行正解和反解查询。</p>
+<p>Ubuntu:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install dnsutils</div></pre></td></tr></table></figure>
+<p>Debian:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install dnsutils</div></pre></td></tr></table></figure>
+<p>Fedora / Centos:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install bind-utils</div></pre></td></tr></table></figure>
+<h4 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h4><p>使用方法，可以执行正解和反解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig [options] FQDN [@server]</div></pre></td></tr></table></figure>
+<p>输出说明</p>
+<ul>
+<li>QUESTION（问题）: 要查询的IP</li>
+<li>ANSWER（回答）: 应答结果</li>
+<li>AUTHORITY（验证）: 哪个DNS给出的回答。</li>
+</ul>
+<h4 id="whois"><a href="#whois" class="headerlink" title="whois"></a>whois</h4><p>查询领域设定，管理者是谁。</p>
+<h4 id="host"><a href="#host" class="headerlink" title="host"></a>host</h4><p>把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名</p>
+<hr>
+<h3 id="2-DNS记录类型"><a href="#2-DNS记录类型" class="headerlink" title="2. DNS记录类型"></a>2. DNS记录类型</h3><h4 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h4><p>正解符合规范即可设定，取得域名授权就可以设定。</p>
+<table>
+<thead>
+<tr>
+<th>domain</th>
+<th>IN</th>
+<th>RR type</th>
+<th>RR data</th>
+<th>command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主机名.</td>
+<td>IN</td>
+<td>A</td>
+<td>IPv4 的 IP 地址</td>
+<td>dig [-t a] domain</td>
+</tr>
+<tr>
+<td>主机名.</td>
+<td>IN</td>
+<td>AAAA</td>
+<td>IPv6 的 IP 地址</td>
+<td>dig -t aaaa domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>NS</td>
+<td>管理域名的服务器主机名字</td>
+<td>dig -t ns domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>SOA</td>
+<td>管理域名的七个重要参数</td>
+<td>dig -t soa domain</td>
+</tr>
+<tr>
+<td>领域名.</td>
+<td>IN</td>
+<td>MX</td>
+<td>接收邮件的服务器主机名字</td>
+<td>dig -t mx domain</td>
+</tr>
+<tr>
+<td>主机别名.</td>
+<td>IN</td>
+<td>CNAME</td>
+<td>代表主机别名的主机名字</td>
+<td>dig domain</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><span style="color:red"><strong>提示：</strong></span> domain一列后面一定要加一个.，例如www.test.com的格式为www.test.com.</p>
+</blockquote>
+<p>SOA七个重要参数</p>
+<ol>
+<li><strong>Master DNS 服务器主机名：</strong>这个领域主要是哪部 DNS 作为 master 的意思</li>
+<li><strong>管理员的 email</strong>：那么管理员的 email 为何？发生问题可以联络这个管理员。要注意的是， 由于 @ 在数据库档案中是有特别意义的，所以改为.。</li>
+<li><strong>序号 (Serial)</strong>：这个序号代表的是这个数据库档案的新旧，序号越大代表越新。 当 slave 要判断是否主动下载新的数据库时，就以序号是否比 slave 上的还要新来判断，若是则下载，若不是则不下载。 所以当你修订了数据库内容时，记得要将这个数值放大才行！ 为了方便用户记忆，通常序号都会使用日期格式『YYYYMMDDNU』来记忆，例如昆山科大的 2010080369 序号代表 2010/08/03当天的第 69 次更新的感觉。不过，序号不可大于 2 的 32 次方，亦即必须小于 4294967296 才行。</li>
+<li><strong>更新频率 (Refresh)</strong>：那么啥时 slave 会去向 master 要求数据更新的判断？ 就是这个数值定义的。那每次 slave 去更新时， 如果发现序号没有比较大，那就不会下载数据库档案。</li>
+<li><strong>失败重新尝试时间 (Retry)</strong>：如果因为某些因素，导致 slave 无法对master 达成联机， 那么在多久的时间内，slave 会尝试重新联机到 master。</li>
+<li><strong>失效时间 (Expire)</strong>：如果一直失败尝试时间，持续联机到达这个设定值时限， 那么 slave 将不再继续尝试联机，并且尝试删除这份下载的 zone file 信息。</li>
+<li><strong>快取时间 (Minumum TTL)</strong>：如果这个数据库 zone file 中，每笔 RR 记录都没有写到 TTL 快取时间的话，那么就以这个 SOA 的设定值为主。</li>
+</ol>
+<h4 id="反解"><a href="#反解" class="headerlink" title="反解"></a>反解</h4><p>除非取得的是整个 class C 以上等级的 IP 网段，ISP 才有可能给 IP 反解授权。否则，若有反解的需求，就得要向直属上层 ISP 申请。</p>
+<table>
+<thead>
+<tr>
+<th>domain</th>
+<th>IN</th>
+<th>Type</th>
+<th>IP Address</th>
+<th>command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[ip反写].in-addr.arpa.</td>
+<td>IN</td>
+<td>PTR</td>
+<td>IP</td>
+<td>dig IP</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="3-DNS服务搭建"><a href="#3-DNS服务搭建" class="headerlink" title="3. DNS服务搭建"></a>3. DNS服务搭建</h3><p>安装bind套件，CentOS命令如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y bind*</div></pre></td></tr></table></figure>
+<h4 id="转发DNS"><a href="#转发DNS" class="headerlink" title="转发DNS"></a>转发DNS</h4><p>只需要.这个zonefile的简单DNS服务器，只有快速搜索功能，没有本地主机IP正反解配置文件。需要指定一个上层DNS服务器。只需要编辑/etc/named.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vim /etc/named.conf</div><div class="line">  // 在预设的情况下，这个档案会去读取 /etc/named.rfc1912.zones 这个领域定义档</div><div class="line">  // 所以请记得要修改成底下的样式</div><div class="line">  options &#123;</div><div class="line">          listen-on port 53 &#123; any; &#125;;                                             //可不设定，代表全部接受</div><div class="line">          directory &quot;/var/named&quot;;                                              //数据库默认放置的目录所在</div><div class="line">          dump-file &quot;/var/named/data/cache_dump.db&quot;;         //一些统计信息</div><div class="line">          statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">          memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">          allow-query &#123; any; &#125;;                                                    //可不设定，代表全部接受</div><div class="line">          recursion yes;                                                              //将自己视为客户端的一种查询模式</div><div class="line">          forward only;                                                               //可暂时不设定</div><div class="line">          forwarders &#123;                                                                //是重点！</div><div class="line">          168.95.1.1;                                                                  //先用中华电信的 DNS 当上层</div><div class="line">          139.175.10.20;                                                            //再用 seednet 当上层</div><div class="line">          &#125;;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
+<p>启动服务，注意开启iptables的tcp和udp的53端口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named start</div></pre></td></tr></table></figure>
+<h4 id="权威DNS-amp-递归DNS"><a href="#权威DNS-amp-递归DNS" class="headerlink" title="权威DNS &amp; 递归DNS"></a>权威DNS &amp; 递归DNS</h4><ul>
+<li><p>规划IP地址和域名对应关系</p>
+</li>
+<li><p>主配置文件 /etc/named.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim  /etc/named.conf</div><div class="line">options &#123;</div><div class="line">	directory &quot;/var/named&quot;;</div><div class="line">	dump-file &quot;/var/named/data/cache_dump.db&quot;;</div><div class="line">	statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">	memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">	allow-query &#123; any; &#125;;</div><div class="line">	recursion yes;</div><div class="line">	allow-transfer &#123; none; &#125;;      // 不许别人进行 zone 转移</div><div class="line">&#125;;</div><div class="line">zone &quot;.&quot; IN &#123;</div><div class="line">	type hint;</div><div class="line">	file &quot;named.ca&quot;;</div><div class="line">&#125;;</div><div class="line">zone &quot;ucas.edu.cn&quot; IN &#123;                // 这个 zone 的名称</div><div class="line">	type master;                         // 是什么类型</div><div class="line">	file &quot;named.ucas.edu.cn&quot;;    // 档案放在哪里</div><div class="line">&#125;;</div><div class="line">zone &quot;100.168.192.in-addr.arpa&quot; IN &#123;</div><div class="line">	type master;</div><div class="line">	file &quot;named.192.168.100&quot;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>zone内相关参数说明</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>设定值</th>
+<th style="text-align:left">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td style="text-align:left">该 zone 的类型，主要的类型有针对 . 的 hint，以及自己手动修改数据库档案的 master，与可自动更新数据库的 slave。</td>
+</tr>
+<tr>
+<td>file</td>
+<td style="text-align:left">zonefile 的对应的名称</td>
+</tr>
+<tr>
+<td>反解zone</td>
+<td style="text-align:left">in-addr.arpa</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>顶级.(root)数据库档案设定</p>
+<p>由INTERNIC 所管理维护的，全世界共有 13 部管理 . 的 DNS 服务器，在<code>/var/named/named.ca</code>中</p>
+</li>
+<li><p>正解数据库文件设置</p>
+<p>​     少应该要有 $TTL, SOA, NS (与这部 NS 主机名的 A)，仍以上面<code>/etc/named.conf</code>为例，在/var/named/配置文件named.ucas.edu.cn内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.                       #DNS服务器名称</div><div class="line">gsns.ucas.edu.cn. IN A 30.30.30.30           #DNS服务器IP地址</div><div class="line"></div><div class="line">@ IN MX 10 gsns.ucas.edu.cn.                  #域名邮件服务器</div><div class="line">										</div><div class="line">www.ucas.edu.cn. IN A 30.30.30.30           #相关正解</div><div class="line">linux.ucas.edu.cn. IN CNAME www.ucas.edu.cn.</div></pre></td></tr></table></figure>
+<blockquote>
+<p><span style="color:red">提示：</span> 域名后面有一个点，不要落下，例如<strong>www.ucas.edu.cn.</strong></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>反解数据库文件设置</p>
+<p>需要 $TTL, SOA, NS，正解里面有 A，反解里面则仅有 PTR 。另外，由于反解的 zone 名称是zz.yy.xx.in-addr.arpa.的模样，因此只要在反解里面要用到主机名时，192.168.100.0/24 这个网域的 DNS 反解则成为如/var/named/named.192.168.100所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.</div><div class="line">30 IN PTR gsns.ucas.edu.cn.</div><div class="line">254 IN PTR gate.ucas.edu.cn.</div><div class="line">30 IN PTR www.ucas.edu.cn.</div><div class="line">30 IN PTR linux.ucas.edu.cn.</div></pre></td></tr></table></figure>
+</li>
+<li><p>DNS启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named restart</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="授权子域"><a href="#授权子域" class="headerlink" title="授权子域"></a>授权子域</h4><ul>
+<li>需要在上层DNS服务器的zonefile内指定增加NS并指向下层DNS的主机名和IP（A）即可，zonefile的序号也需要增加。</li>
+<li>下层DNS服务器必须上层DNS所提供的可用子域名，并被上层DNS管理员所获知。</li>
+</ul>
+<p>假设上层DNS管理edu.cn这个域名。其对应的zonefile为<code>/var/named/named.edu.cn</code>，内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA dns.edu.cn. admin.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS dns.edu.cn.</div><div class="line">dns.edu.cn. IN A 210.76.211.1</div><div class="line">@ IN MX 10 dns.edu.cn.</div><div class="line"></div><div class="line">ucas.edu.cn IN NS gsns.ucas.edu.cn      #子DNS服务器名称</div><div class="line">gsns.ucas.edu.cn IN A 30.30.30.30         #子DNS服务器IP地址</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-相关操作"><a href="#4-相关操作" class="headerlink" title="4. 相关操作"></a>4. 相关操作</h3><h4 id="日志功能"><a href="#日志功能" class="headerlink" title="日志功能"></a>日志功能</h4><p>检查 /var/log/messages 的内容讯息 (极重要！)，</p>
+<h4 id="数据库更新"><a href="#数据库更新" class="headerlink" title="数据库更新"></a>数据库更新</h4><ul>
+<li>先针对要更改的那个 zone 的数据库档案去做更新，就是加入 RR 的标志即是！</li>
+</ul>
+<ul>
+<li>更改该 zone file 的序号 (Serial) ，就是那个 SOA 的第三个参数 (第一个数字)，因为这个数字会影响到 master/slave 的判定更新与否！</li>
+</ul>
+<ul>
+<li>重新启动 named ，或者是让 named 重新读取配置文件即可。</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>有待补充</p>
+<hr>
+<h3 id="5-实验测试"><a href="#5-实验测试" class="headerlink" title="5. 实验测试"></a>5. 实验测试</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-1.jpg" alt="5-1"></center><center style="color:purple"><strong>图5-1 实验拓扑</strong></center>
+
+<h4 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h4><table>
+<thead>
+<tr>
+<th>设备名</th>
+<th>端口</th>
+<th>IP地址</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dns.edu.cn</td>
+<td>e2</td>
+<td>210.76.211.1/24</td>
+<td>管理edu.cn域名</td>
+</tr>
+<tr>
+<td>gsns.ucas.edu.cn</td>
+<td>e2</td>
+<td>30.30.30.30/24</td>
+<td>管理ucas.edu.cn域名，dns.edu.cn授权</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>f1/1</td>
+<td>211.76.211.254/24</td>
+<td></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>f1/0</td>
+<td>30.30.30.254/24</td>
+<td></td>
+</tr>
+<tr>
+<td>Winxp2</td>
+<td>e1</td>
+<td>30.30.30.2/24</td>
+<td>测试客户机</td>
+</tr>
+</tbody>
+</table>
+<h4 id="DNS测试"><a href="#DNS测试" class="headerlink" title="DNS测试"></a>DNS测试</h4><p>Winxp2的DNS地址为gsns.ucas.edu.cn时，可以进行nslookup测试，如图5-2所示</p>
+<center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-2.jpg" alt="5-2"></center><center style="color:purple"><strong>图5-2 nslookup</strong></center>
+
+
+
+<p>在<strong>Winxp2</strong>上使用如下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig www.ucas.edu.cn @210.76.211.1</div></pre></td></tr></table></figure>
+<p>在dns.edu.cn没有关闭递归查询的情况下，首先向gsns.ucas.edu.cn查询www.ucas.edu.cn，然后继续向根进行递归查询,因为实验环境是模拟环境,所以还无法确认,可以模拟使用虚拟机模拟根DNS服务器进行测试.</p>
+<p>在dns.edu.cn关闭递归查询的情况下，查询www.ucas.edu.cn, 然后返回结果给<strong>Winxp2</strong>为管理其域名的DNS服务器。</p>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
           <a class="post-link" href="/2016/07/05/OSPF 真实入侵测试/">OSPF 真实入侵测试</a>
         
       </h1>
@@ -692,60 +962,6 @@ ID          Interface   State Pri   Dead
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年6月24日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-两个文件的交集、并集"><a href="#1-两个文件的交集、并集" class="headerlink" title="1. 两个文件的交集、并集"></a>1. 两个文件的交集、并集</h3><p>前提条件：取出两个文件的并集(重复的行只保留一份)</p>
-<p>{0}. 取出两个文件的并集(重复的行只保留一份)<br>{0}. 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>{0}. 删除交集，留下其他的行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 | sort | uniq &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -d &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -u &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-两个文件合并"><a href="#2-两个文件合并" class="headerlink" title="2. 两个文件合并"></a>2. 两个文件合并</h3><p>一个文件在上，一个文件在下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<p>一个文件在左，一个文件在右</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">paste file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-去掉重复的行"><a href="#3-去掉重复的行" class="headerlink" title="3. 去掉重复的行"></a>3. 去掉重复的行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq</div></pre></td></tr></table></figure>
-<p>注意：重复的多行记为一行，也就是说这些重复的行还在，只是全部省略为一行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq -u</div></pre></td></tr></table></figure>
-<p>上面的命令可以把重复的行全部去掉，也就是文件中的非重复行。具体细节可以查看，cat，sort，uniq等命令的详细介绍</p>
-<hr>
-<h3 id="4-文件分割成多个小文件"><a href="#4-文件分割成多个小文件" class="headerlink" title="4. 文件分割成多个小文件"></a>4. 文件分割成多个小文件</h3><h4 id="split分割"><a href="#split分割" class="headerlink" title="split分割"></a>split分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语法：split [-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</div><div class="line">gunzip log.txt.gz                                                                            #一定要先解压，否则分割的文件是不能cat/zcat显示；</div><div class="line">wc -l log.txt                                                                                   #计算一个文件的总行数；</div><div class="line">  </div><div class="line">split -l 120000 log.txt newlog                                                       #通过指定行数，将日志分割成两个文件；</div><div class="line">du -sh *50M     log.txt</div><div class="line"></div><div class="line"> file *                                                                                              #分割后的文件与原文件属性一样</div><div class="line">gzip newlogaa newlogab                                                              #将分割后的文件进行压缩，以便传输</div></pre></td></tr></table></figure>
-<h4 id="dd分割"><a href="#dd分割" class="headerlink" title="dd分割"></a>dd分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gunzip log.txt.gz                                                                             #一定要先解压，否则分割的文件是不能cat/zcat显示</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogaa                       #按大小分第一个文件</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogab skip=1500     #将大小之后的生成另一个文件#file *</div></pre></td></tr></table></figure>
-<p>分割没问题，但会出现同一行分到不同文件的情况。</p>
-<h4 id="head-tail-分割"><a href="#head-tail-分割" class="headerlink" title="head+tail 分割"></a>head+tail 分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gzip log.txt.gz                                                                                 #如不解压缩，下面请用zcat。</div><div class="line">wc -l log.txt                                                                                     #统计一个行数</div><div class="line">head -n `echo $((208363/2+1))` log.txt &gt; newloga.txt                   #前x行重定向输出到一个文件中；</div><div class="line">tail –n `echo $((208363-208362/2-1))` log.txt &gt;newlogb.txt          #后x行重定向输出到一个文件中；</div><div class="line">gzip newloga.txt newlogb.txt                                                         #将两个文件进行压缩</div></pre></td></tr></table></figure>
-<h4 id="awk分割"><a href="#awk分割" class="headerlink" title="awk分割"></a>awk分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> gzip log.txt.gz</div><div class="line"> awk  &apos;&#123;if (NR&lt;120000) print $0&#125;&apos; log.txt &gt;newloga.txt</div><div class="line"> awk  &apos;&#123;if (NR&gt;=120000) print $0&#125;&apos; log.txt &gt;newlogb.txt</div><div class="line">#以上两个命令，都要遍历整个文件，所以考虑到效率，应使用合并成：</div><div class="line">awk  &apos;&#123;if (NR&lt;120000) print $0 &gt;&quot;newloga.txt&quot;; if (NR&gt;=120000) print $0&gt;&quot;newlogb.txt&quot;&#125;&apos; log.txt</div></pre></td></tr></table></figure>
-<p>以上四种方法，除了dd之外的三种方式都可以很好的整行分割日志文件。进行分割时，应考虑在读一次文件的同时完成，如不然，按下面的方式分割：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Cat log.txt | head –12000 &gt;newloga.txt</div><div class="line">Cat log.txt | tail –23000 &gt;newlogb.txt</div></pre></td></tr></table></figure>
-<p>如用此方法分割文件的后一部分，那么执行第二行命令文件时，前x行是白白读一遍的，执行的效率将很差，如文件过大，还可能出现内存不够的情况。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/">CentOS 6.x vsftp 启用 SSL或TLS</a>
         
       </h1>
@@ -806,6 +1022,60 @@ ID          Interface   State Pri   Dead
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 1 -p tcp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p udp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p tcp --dport 2333:2343 -j ACCEPT</div><div class="line">service iptables save</div><div class="line">service iptabkes restart</div></pre></td></tr></table></figure>
 <p>重新启动vsftpd服务</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd restart</div></pre></td></tr></table></figure>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年6月24日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-两个文件的交集、并集"><a href="#1-两个文件的交集、并集" class="headerlink" title="1. 两个文件的交集、并集"></a>1. 两个文件的交集、并集</h3><p>前提条件：取出两个文件的并集(重复的行只保留一份)</p>
+<p>{0}. 取出两个文件的并集(重复的行只保留一份)<br>{0}. 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>{0}. 删除交集，留下其他的行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 | sort | uniq &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -d &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -u &gt; file3</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-两个文件合并"><a href="#2-两个文件合并" class="headerlink" title="2. 两个文件合并"></a>2. 两个文件合并</h3><p>一个文件在上，一个文件在下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 &gt; file3</div></pre></td></tr></table></figure>
+<p>一个文件在左，一个文件在右</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">paste file1 file2 &gt; file3</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-去掉重复的行"><a href="#3-去掉重复的行" class="headerlink" title="3. 去掉重复的行"></a>3. 去掉重复的行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq</div></pre></td></tr></table></figure>
+<p>注意：重复的多行记为一行，也就是说这些重复的行还在，只是全部省略为一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq -u</div></pre></td></tr></table></figure>
+<p>上面的命令可以把重复的行全部去掉，也就是文件中的非重复行。具体细节可以查看，cat，sort，uniq等命令的详细介绍</p>
+<hr>
+<h3 id="4-文件分割成多个小文件"><a href="#4-文件分割成多个小文件" class="headerlink" title="4. 文件分割成多个小文件"></a>4. 文件分割成多个小文件</h3><h4 id="split分割"><a href="#split分割" class="headerlink" title="split分割"></a>split分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语法：split [-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</div><div class="line">gunzip log.txt.gz                                                                            #一定要先解压，否则分割的文件是不能cat/zcat显示；</div><div class="line">wc -l log.txt                                                                                   #计算一个文件的总行数；</div><div class="line">  </div><div class="line">split -l 120000 log.txt newlog                                                       #通过指定行数，将日志分割成两个文件；</div><div class="line">du -sh *50M     log.txt</div><div class="line"></div><div class="line"> file *                                                                                              #分割后的文件与原文件属性一样</div><div class="line">gzip newlogaa newlogab                                                              #将分割后的文件进行压缩，以便传输</div></pre></td></tr></table></figure>
+<h4 id="dd分割"><a href="#dd分割" class="headerlink" title="dd分割"></a>dd分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gunzip log.txt.gz                                                                             #一定要先解压，否则分割的文件是不能cat/zcat显示</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogaa                       #按大小分第一个文件</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogab skip=1500     #将大小之后的生成另一个文件#file *</div></pre></td></tr></table></figure>
+<p>分割没问题，但会出现同一行分到不同文件的情况。</p>
+<h4 id="head-tail-分割"><a href="#head-tail-分割" class="headerlink" title="head+tail 分割"></a>head+tail 分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gzip log.txt.gz                                                                                 #如不解压缩，下面请用zcat。</div><div class="line">wc -l log.txt                                                                                     #统计一个行数</div><div class="line">head -n `echo $((208363/2+1))` log.txt &gt; newloga.txt                   #前x行重定向输出到一个文件中；</div><div class="line">tail –n `echo $((208363-208362/2-1))` log.txt &gt;newlogb.txt          #后x行重定向输出到一个文件中；</div><div class="line">gzip newloga.txt newlogb.txt                                                         #将两个文件进行压缩</div></pre></td></tr></table></figure>
+<h4 id="awk分割"><a href="#awk分割" class="headerlink" title="awk分割"></a>awk分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> gzip log.txt.gz</div><div class="line"> awk  &apos;&#123;if (NR&lt;120000) print $0&#125;&apos; log.txt &gt;newloga.txt</div><div class="line"> awk  &apos;&#123;if (NR&gt;=120000) print $0&#125;&apos; log.txt &gt;newlogb.txt</div><div class="line">#以上两个命令，都要遍历整个文件，所以考虑到效率，应使用合并成：</div><div class="line">awk  &apos;&#123;if (NR&lt;120000) print $0 &gt;&quot;newloga.txt&quot;; if (NR&gt;=120000) print $0&gt;&quot;newlogb.txt&quot;&#125;&apos; log.txt</div></pre></td></tr></table></figure>
+<p>以上四种方法，除了dd之外的三种方式都可以很好的整行分割日志文件。进行分割时，应考虑在读一次文件的同时完成，如不然，按下面的方式分割：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Cat log.txt | head –12000 &gt;newloga.txt</div><div class="line">Cat log.txt | tail –23000 &gt;newlogb.txt</div></pre></td></tr></table></figure>
+<p>如用此方法分割文件的后一部分，那么执行第二行命令文件时，前x行是白白读一遍的，执行的效率将很差，如文件过大，还可能出现内存不够的情况。</p>
+
         
       
     </div>
@@ -1272,141 +1542,6 @@ ip -f inet6 addr
 <h3 id="3-删除隧道"><a href="#3-删除隧道" class="headerlink" title="3.删除隧道"></a>3.删除隧道</h3><p>首先在VPS命令上上删除隧道适配器，命令为</p>
 <pre><code>ip tunnel del he-ipv6
 </code></pre><p>删除隧道之后，在tunnelbroker上删除对应隧道，然后可以绑定新的隧道。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/05/18/CentOS 6.x whmcs/">CentOS 6.x whmcs</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年5月18日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-LAMP安装"><a href="#1-LAMP安装" class="headerlink" title="1.LAMP安装"></a>1.LAMP安装</h3><h4 id="php安装"><a href="#php安装" class="headerlink" title="php安装"></a>php安装</h4><pre><code>yum install php php-mysql -y
-yum install php-mysql php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-pear -y
-</code></pre><h4 id="http-mysql-服务安装"><a href="#http-mysql-服务安装" class="headerlink" title="http mysql 服务安装"></a>http mysql 服务安装</h4><p>安装http mysql</p>
-<pre><code>yum install httpd -y
-yum install mysql-server mysql mysql-devel -y
-</code></pre><p>启动http mysql服务，并加入开机启动</p>
-<pre><code>service httpd start
-service mysqld start
-chkconfig httpd on
-chkconfig mysqld on
-</code></pre><h4 id="mysql配置"><a href="#mysql配置" class="headerlink" title="mysql配置"></a>mysql配置</h4><p>启动服务后，命令行下执行</p>
-<pre><code>/usr/bin/mysql_secure_installation
-</code></pre><p>出现如下几个选项，首次安装第一项直接回车即可，然后设置root密码，root远程登陆可以禁止</p>
-<pre><code>Enter current password for root (enter for none):
-Remove anonymous users? [Y/n] y
-Disallow root login remotely? [Y/n] n
-Remove test database and access to it? [Y/n] y
-Reload privilege tables now? [Y/n] y
-</code></pre><h4 id="phpmyadmin安装"><a href="#phpmyadmin安装" class="headerlink" title="phpmyadmin安装"></a>phpmyadmin安装</h4><p>yum安装phpmyadmin</p>
-<pre><code>yum install epel-release -y
-yum install phpmyadmin -y
-</code></pre><p>创建可以访问的软连接</p>
-<pre><code>ln -s /usr/share/phpMyAdmin /var/www/html/phpMyAdmin
-</code></pre><p>允许可以网页访问phpmyadmin，要不然会出现403错误</p>
-<pre><code>cat &lt;&lt;EOF&gt;&gt;/etc/httpd/conf/httpd.conf
-&lt;Directory &quot;/usr/share/phpMyAdmin/&quot;&gt;
-    AllowOverride None
-    Order allow,deny  
-    Allow from all  
-&lt;/Directory&gt;
-EOF
-</code></pre><blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>不同版本的phpmyadmin可能名称不同，有些版本的文件夹名字为phpmyadmin</p>
-</blockquote>
-<p>添加可以访问的IP地址，修改/etc/httpd/conf.d/phpMyAdmin.conf设置，其中192.168.86.104为可以通过IP地址访问phpmyadmin，不添加下面的选项，则无法通过非本地进行访问，配置完成后重启http和mysql服务。</p>
-<pre><code>&lt;Directory /usr/share/phpMyAdmin/&gt;
-   AddDefaultCharset UTF-8
-
-   &lt;IfModule mod_authz_core.c&gt;
- # Apache 2.4
- &lt;RequireAny&gt;
-   Require ip 127.0.0.1
-   Require ip ::1
-   Require ip 192.168.86.104
- &lt;/RequireAny&gt;
-   &lt;/IfModule&gt;
-   &lt;IfModule !mod_authz_core.c&gt;
- # Apache 2.2
- Order Deny,Allow
- Deny from All
- Allow from 127.0.0.1
- Allow from ::1
-   &lt;/IfModule&gt;
-&lt;/Directory&gt;
-</code></pre><p>如果是centos7，则删除上面的，添加如下，并重启httpd服务</p>
-<pre><code>&lt;Directory /usr/share/phpMyAdmin/&gt;
-    Options none
-    AllowOverride Limit
-    Require all granted
-&lt;/Directory&gt;
-</code></pre><blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>低版本的phpmyadmin可能不需要修改此文件</p>
-</blockquote>
-<h4 id="mysql添加whmcs用户"><a href="#mysql添加whmcs用户" class="headerlink" title="mysql添加whmcs用户"></a>mysql添加whmcs用户</h4><p>使用root用户登录mysql,选择mysql数据库</p>
-<pre><code>mysql -u root -p
-use mysql
-create user &apos;whmcs&apos;@&apos;localhost&apos; identified by &apos;whmcs&apos;
-flush privileges
-</code></pre><p>为用户创建数据库</p>
-<pre><code>create database whmcs;
-</code></pre><p>为用户赋予操作数据库testdb的所有权限</p>
-<pre><code>grant all privileges on whmcs.* to &apos;whmcs&apos;@&apos;localhost&apos; identified  by &apos;whmcs&apos;;
-flush privileges;
-</code></pre><p>用新用户登录</p>
-<pre><code>mysql -u whmcs -p
-</code></pre><hr>
-<h3 id="2-whmcs安装配置"><a href="#2-whmcs安装配置" class="headerlink" title="2.whmcs安装配置"></a>2.whmcs安装配置</h3><h4 id="ioncube安装"><a href="#ioncube安装" class="headerlink" title="ioncube安装"></a>ioncube安装</h4><ul>
-<li>whmcs的安装需要ioncube，首先需要安装ioncube，从官网下载linux的安装包，然后解压在/var/www/html目录下。</li>
-<li>将解压文件重命名为ioncube</li>
-<li>在浏览器下输入<a href="http://www.google.com" target="_blank" rel="external">http://[IP地址]/ioncube/loader-wizard.php</a>，启动ioncube安装向导。</li>
-<li>将ioncube_loader_lin_5.3.so拷贝到 /usr/lib64/php/modules目录下。</li>
-<li>将这个文件 <a href="">00-ioncube.ini</a>下载到/etc/php.d文件夹下。</li>
-<li>重启http服务器</li>
-<li>在浏览器上访问测试ioncube是否安装成功，若安装成功则进行下一步。</li>
-</ul>
-<h4 id="whmcs安装"><a href="#whmcs安装" class="headerlink" title="whmcs安装"></a>whmcs安装</h4><p>将whmcs解压到/var/www/html目录下。下载地址请点击<a href="http://pan.baidu.com/s/1bzu4kY" target="_blank" rel="external">这里</a>，将目录下的configuration.php.new重命名为或拷贝configuration.php</p>
-<pre><code>cp configuration.php.new configuration.php
-</code></pre><p>修改一些文件的权限为777</p>
-<pre><code>chmod -R 777  attachments downloads templates_c  configuration.php
-</code></pre><p>这时候使用浏览器访问<a href="http://192.168.86.104/whmcs/install/install.php" target="_blank" rel="external">http://192.168.86.104/whmcs/install/install.php</a>,按照提示，一步步进行安装设置，license填写任意数字，数据库一定按照之前创建的数据库填写，hosts，user，password。然后开始开始初始化。</p>
-<h4 id="whmcs安装完成"><a href="#whmcs安装完成" class="headerlink" title="whmcs安装完成"></a>whmcs安装完成</h4><ul>
-<li>删除install文件夹</li>
-<li>修改configuration.php的权限为755</li>
-<li>编辑configuration.php定义最高权限文件夹的路径，这样这三个文件夹对于网页访问者就不可见了。最后一项的myadminname，是指你将文件夹admin重命名成的新文件名！</li>
-</ul>
-<pre><code class="markdown">
-$templates_compiledir = "/root/whmcs/templates_c/";
-$attachments_dir = "/root/whmcs/attachments/";
-$downloads_dir = "/root/whmcs/downloads/";
-$customadminpath = "icean";
-</code></pre>
-
-<h4 id="whmcs破解"><a href="#whmcs破解" class="headerlink" title="whmcs破解"></a>whmcs破解</h4><p>使用破解文件中的class.license，替换掉include/class/class-license.php中的文件，破解文件下载请点击<a href="http://pan.baidu.com/s/1bo4ckeb" target="_blank" rel="external">这里</a>。</p>
 
         
       

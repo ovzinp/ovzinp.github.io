@@ -692,6 +692,60 @@ ID          Interface   State Pri   Dead
     <header class="post-header">
       <h1 class="post-title">
         
+          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年6月24日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          <h3 id="1-两个文件的交集、并集"><a href="#1-两个文件的交集、并集" class="headerlink" title="1. 两个文件的交集、并集"></a>1. 两个文件的交集、并集</h3><p>前提条件：取出两个文件的并集(重复的行只保留一份)</p>
+<p>{0}. 取出两个文件的并集(重复的行只保留一份)<br>{0}. 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>{0}. 删除交集，留下其他的行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 | sort | uniq &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -d &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -u &gt; file3</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-两个文件合并"><a href="#2-两个文件合并" class="headerlink" title="2. 两个文件合并"></a>2. 两个文件合并</h3><p>一个文件在上，一个文件在下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 &gt; file3</div></pre></td></tr></table></figure>
+<p>一个文件在左，一个文件在右</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">paste file1 file2 &gt; file3</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-去掉重复的行"><a href="#3-去掉重复的行" class="headerlink" title="3. 去掉重复的行"></a>3. 去掉重复的行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq</div></pre></td></tr></table></figure>
+<p>注意：重复的多行记为一行，也就是说这些重复的行还在，只是全部省略为一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq -u</div></pre></td></tr></table></figure>
+<p>上面的命令可以把重复的行全部去掉，也就是文件中的非重复行。具体细节可以查看，cat，sort，uniq等命令的详细介绍</p>
+<hr>
+<h3 id="4-文件分割成多个小文件"><a href="#4-文件分割成多个小文件" class="headerlink" title="4. 文件分割成多个小文件"></a>4. 文件分割成多个小文件</h3><h4 id="split分割"><a href="#split分割" class="headerlink" title="split分割"></a>split分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语法：split [-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</div><div class="line">gunzip log.txt.gz                                                                            #一定要先解压，否则分割的文件是不能cat/zcat显示；</div><div class="line">wc -l log.txt                                                                                   #计算一个文件的总行数；</div><div class="line">  </div><div class="line">split -l 120000 log.txt newlog                                                       #通过指定行数，将日志分割成两个文件；</div><div class="line">du -sh *50M     log.txt</div><div class="line"></div><div class="line"> file *                                                                                              #分割后的文件与原文件属性一样</div><div class="line">gzip newlogaa newlogab                                                              #将分割后的文件进行压缩，以便传输</div></pre></td></tr></table></figure>
+<h4 id="dd分割"><a href="#dd分割" class="headerlink" title="dd分割"></a>dd分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gunzip log.txt.gz                                                                             #一定要先解压，否则分割的文件是不能cat/zcat显示</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogaa                       #按大小分第一个文件</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogab skip=1500     #将大小之后的生成另一个文件#file *</div></pre></td></tr></table></figure>
+<p>分割没问题，但会出现同一行分到不同文件的情况。</p>
+<h4 id="head-tail-分割"><a href="#head-tail-分割" class="headerlink" title="head+tail 分割"></a>head+tail 分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gzip log.txt.gz                                                                                 #如不解压缩，下面请用zcat。</div><div class="line">wc -l log.txt                                                                                     #统计一个行数</div><div class="line">head -n `echo $((208363/2+1))` log.txt &gt; newloga.txt                   #前x行重定向输出到一个文件中；</div><div class="line">tail –n `echo $((208363-208362/2-1))` log.txt &gt;newlogb.txt          #后x行重定向输出到一个文件中；</div><div class="line">gzip newloga.txt newlogb.txt                                                         #将两个文件进行压缩</div></pre></td></tr></table></figure>
+<h4 id="awk分割"><a href="#awk分割" class="headerlink" title="awk分割"></a>awk分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> gzip log.txt.gz</div><div class="line"> awk  &apos;&#123;if (NR&lt;120000) print $0&#125;&apos; log.txt &gt;newloga.txt</div><div class="line"> awk  &apos;&#123;if (NR&gt;=120000) print $0&#125;&apos; log.txt &gt;newlogb.txt</div><div class="line">#以上两个命令，都要遍历整个文件，所以考虑到效率，应使用合并成：</div><div class="line">awk  &apos;&#123;if (NR&lt;120000) print $0 &gt;&quot;newloga.txt&quot;; if (NR&gt;=120000) print $0&gt;&quot;newlogb.txt&quot;&#125;&apos; log.txt</div></pre></td></tr></table></figure>
+<p>以上四种方法，除了dd之外的三种方式都可以很好的整行分割日志文件。进行分割时，应考虑在读一次文件的同时完成，如不然，按下面的方式分割：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Cat log.txt | head –12000 &gt;newloga.txt</div><div class="line">Cat log.txt | tail –23000 &gt;newlogb.txt</div></pre></td></tr></table></figure>
+<p>如用此方法分割文件的后一部分，那么执行第二行命令文件时，前x行是白白读一遍的，执行的效率将很差，如文件过大，还可能出现内存不够的情况。</p>
+
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
           <a class="post-link" href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/">CentOS 6.x vsftp 启用 SSL或TLS</a>
         
       </h1>
@@ -752,60 +806,6 @@ ID          Interface   State Pri   Dead
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 1 -p tcp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p udp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p tcp --dport 2333:2343 -j ACCEPT</div><div class="line">service iptables save</div><div class="line">service iptabkes restart</div></pre></td></tr></table></figure>
 <p>重新启动vsftpd服务</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd restart</div></pre></td></tr></table></figure>
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年6月24日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-两个文件的交集、并集"><a href="#1-两个文件的交集、并集" class="headerlink" title="1. 两个文件的交集、并集"></a>1. 两个文件的交集、并集</h3><p>前提条件：取出两个文件的并集(重复的行只保留一份)</p>
-<p>{0}. 取出两个文件的并集(重复的行只保留一份)<br>{0}. 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>{0}. 删除交集，留下其他的行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 | sort | uniq &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -d &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -u &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-两个文件合并"><a href="#2-两个文件合并" class="headerlink" title="2. 两个文件合并"></a>2. 两个文件合并</h3><p>一个文件在上，一个文件在下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<p>一个文件在左，一个文件在右</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">paste file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-去掉重复的行"><a href="#3-去掉重复的行" class="headerlink" title="3. 去掉重复的行"></a>3. 去掉重复的行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq</div></pre></td></tr></table></figure>
-<p>注意：重复的多行记为一行，也就是说这些重复的行还在，只是全部省略为一行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq -u</div></pre></td></tr></table></figure>
-<p>上面的命令可以把重复的行全部去掉，也就是文件中的非重复行。具体细节可以查看，cat，sort，uniq等命令的详细介绍</p>
-<hr>
-<h3 id="4-文件分割成多个小文件"><a href="#4-文件分割成多个小文件" class="headerlink" title="4. 文件分割成多个小文件"></a>4. 文件分割成多个小文件</h3><h4 id="split分割"><a href="#split分割" class="headerlink" title="split分割"></a>split分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语法：split [-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</div><div class="line">gunzip log.txt.gz                                                                            #一定要先解压，否则分割的文件是不能cat/zcat显示；</div><div class="line">wc -l log.txt                                                                                   #计算一个文件的总行数；</div><div class="line">  </div><div class="line">split -l 120000 log.txt newlog                                                       #通过指定行数，将日志分割成两个文件；</div><div class="line">du -sh *50M     log.txt</div><div class="line"></div><div class="line"> file *                                                                                              #分割后的文件与原文件属性一样</div><div class="line">gzip newlogaa newlogab                                                              #将分割后的文件进行压缩，以便传输</div></pre></td></tr></table></figure>
-<h4 id="dd分割"><a href="#dd分割" class="headerlink" title="dd分割"></a>dd分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gunzip log.txt.gz                                                                             #一定要先解压，否则分割的文件是不能cat/zcat显示</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogaa                       #按大小分第一个文件</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogab skip=1500     #将大小之后的生成另一个文件#file *</div></pre></td></tr></table></figure>
-<p>分割没问题，但会出现同一行分到不同文件的情况。</p>
-<h4 id="head-tail-分割"><a href="#head-tail-分割" class="headerlink" title="head+tail 分割"></a>head+tail 分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gzip log.txt.gz                                                                                 #如不解压缩，下面请用zcat。</div><div class="line">wc -l log.txt                                                                                     #统计一个行数</div><div class="line">head -n `echo $((208363/2+1))` log.txt &gt; newloga.txt                   #前x行重定向输出到一个文件中；</div><div class="line">tail –n `echo $((208363-208362/2-1))` log.txt &gt;newlogb.txt          #后x行重定向输出到一个文件中；</div><div class="line">gzip newloga.txt newlogb.txt                                                         #将两个文件进行压缩</div></pre></td></tr></table></figure>
-<h4 id="awk分割"><a href="#awk分割" class="headerlink" title="awk分割"></a>awk分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> gzip log.txt.gz</div><div class="line"> awk  &apos;&#123;if (NR&lt;120000) print $0&#125;&apos; log.txt &gt;newloga.txt</div><div class="line"> awk  &apos;&#123;if (NR&gt;=120000) print $0&#125;&apos; log.txt &gt;newlogb.txt</div><div class="line">#以上两个命令，都要遍历整个文件，所以考虑到效率，应使用合并成：</div><div class="line">awk  &apos;&#123;if (NR&lt;120000) print $0 &gt;&quot;newloga.txt&quot;; if (NR&gt;=120000) print $0&gt;&quot;newlogb.txt&quot;&#125;&apos; log.txt</div></pre></td></tr></table></figure>
-<p>以上四种方法，除了dd之外的三种方式都可以很好的整行分割日志文件。进行分割时，应考虑在读一次文件的同时完成，如不然，按下面的方式分割：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Cat log.txt | head –12000 &gt;newloga.txt</div><div class="line">Cat log.txt | tail –23000 &gt;newlogb.txt</div></pre></td></tr></table></figure>
-<p>如用此方法分割文件的后一部分，那么执行第二行命令文件时，前x行是白白读一遍的，执行的效率将很差，如文件过大，还可能出现内存不够的情况。</p>
-
         
       
     </div>

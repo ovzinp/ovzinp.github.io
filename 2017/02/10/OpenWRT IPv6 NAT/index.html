@@ -35,7 +35,7 @@
 
 <meta name="description" content="1. IPv6 NAT虽然IPv6在设计之初，没有考虑NAT，在主流的网络设备上也没有IPv6的NAT配置，但 Linux 内核从 3.7 版本开始实现了 IPv6 的 NAT
 
-2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装响应的软件包
+2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装相应的软件包
 12opkg updateopkg install ip6tables kmod-ipv6 kmod-ipt-nat6 km">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenWRT IPv6 NAT">
@@ -43,14 +43,14 @@
 <meta property="og:site_name" content="Kompass">
 <meta property="og:description" content="1. IPv6 NAT虽然IPv6在设计之初，没有考虑NAT，在主流的网络设备上也没有IPv6的NAT配置，但 Linux 内核从 3.7 版本开始实现了 IPv6 的 NAT
 
-2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装响应的软件包
+2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装相应的软件包
 12opkg updateopkg install ip6tables kmod-ipv6 kmod-ipt-nat6 km">
-<meta property="og:updated_time" content="2017-02-10T13:37:19.258Z">
+<meta property="og:updated_time" content="2017-02-11T01:18:58.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenWRT IPv6 NAT">
 <meta name="twitter:description" content="1. IPv6 NAT虽然IPv6在设计之初，没有考虑NAT，在主流的网络设备上也没有IPv6的NAT配置，但 Linux 内核从 3.7 版本开始实现了 IPv6 的 NAT
 
-2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装响应的软件包
+2. OpenWRT配置2.1 软件包安装现在假设OpenWRT为初始化状态，安装相应的软件包
 12opkg updateopkg install ip6tables kmod-ipv6 kmod-ipt-nat6 km">
 
 
@@ -202,7 +202,7 @@
       
         <h3 id="1-IPv6-NAT"><a href="#1-IPv6-NAT" class="headerlink" title="1. IPv6 NAT"></a>1. IPv6 NAT</h3><p>虽然IPv6在设计之初，没有考虑NAT，在主流的网络设备上也没有IPv6的NAT配置，但 Linux 内核从 3.7 版本开始实现了 IPv6 的 NAT</p>
 <hr>
-<h3 id="2-OpenWRT配置"><a href="#2-OpenWRT配置" class="headerlink" title="2. OpenWRT配置"></a>2. OpenWRT配置</h3><h4 id="2-1-软件包安装"><a href="#2-1-软件包安装" class="headerlink" title="2.1 软件包安装"></a>2.1 软件包安装</h4><p><span style="color:red"><strong>现在假设OpenWRT为初始化状态</strong></span>，安装响应的软件包</p>
+<h3 id="2-OpenWRT配置"><a href="#2-OpenWRT配置" class="headerlink" title="2. OpenWRT配置"></a>2. OpenWRT配置</h3><h4 id="2-1-软件包安装"><a href="#2-1-软件包安装" class="headerlink" title="2.1 软件包安装"></a>2.1 软件包安装</h4><p><span style="color:red">现在假设OpenWRT为初始化状态</span>，安装相应的软件包</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">opkg update</div><div class="line">opkg install ip6tables kmod-ipv6 kmod-ipt-nat6 kmod-ip6tables kmod-ip6tables-extra luci-proto-ipv6 iputils-traceroute6</div></pre></td></tr></table></figure>
 <ul>
 <li><code>kmod-ipv6</code>并非必须</li>

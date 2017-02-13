@@ -773,7 +773,7 @@ h6 {
     position: relative;
     color: rgba(52, 73, 94, 0.8);
     background-color: #f8f8f8;
-    border-left: #cacaca; }
+    border-left: 3px solid #cacaca; }
     .post .post-content blockquote p {
       margin: 0; }
   .post .post-content img {
@@ -829,7 +829,7 @@ h6 {
         padding: 2px 7px;
         font-size: 13px;
         font-weight: bold;
-        color: #777;
+        color: rgba(119, 119, 119, 0.74);
         background: #f0f0f0;
         content: 'Code'; }
     .post .post-content .highlight.html > ::after {

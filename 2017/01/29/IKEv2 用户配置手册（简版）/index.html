@@ -40,7 +40,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/01/29/IKEv2 用户配置手册（简版）/index.html">
 <meta property="og:site_name" content="Kompass">
 <meta property="og:description" content="IKEv2用户手册简单版">
-<meta property="og:updated_time" content="2017-02-13T04:26:24.982Z">
+<meta property="og:updated_time" content="2017-02-13T11:26:43.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IKEv2 用户配置手册（简单版）">
 <meta name="twitter:description" content="IKEv2用户手册简单版">
@@ -249,7 +249,7 @@
 <li>输入iOS密码</li>
 </ul>
 <h4 id="VPN设置"><a href="#VPN设置" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
-<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置</strong></li>
+<li>配置路径: <strong>设置 -&gt; VPN -&gt; 添加配置</strong></li>
 <li>类型: IKEv2</li>
 <li>描述: 任意</li>
 <li>用户鉴定: 用户名</li>
@@ -263,12 +263,12 @@
 <h3 id="MAC-OS-X"><a href="#MAC-OS-X" class="headerlink" title="MAC OS X"></a>MAC OS X</h3><h4 id="系统版本要求-1"><a href="#系统版本要求-1" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">OS X 10.11 (“El Capitan”)</span>或者更高版本</p>
 <h4 id="证书导入-1"><a href="#证书导入-1" class="headerlink" title="证书导入"></a>证书导入</h4><ul>
 <li>下载CA证书到本地，下载地址为: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem</a></li>
-<li>配置位置: <strong>钥匙串访问 -&gt; 钥匙串 -&gt; 系统</strong></li>
+<li>配置路径: <strong>钥匙串访问 -&gt; 钥匙串 -&gt; 系统</strong></li>
 <li>选择要添加的证书文件</li>
 <li>导入证书</li>
 </ul>
 <h4 id="VPN设置-1"><a href="#VPN设置-1" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
-<li>配置位置: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
+<li>配置路径: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
 <li>接口: VPN</li>
 <li>VPN类型: IKEv2</li>
 <li>服务名称: 任意</li>
@@ -282,12 +282,12 @@
 <h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><h4 id="系统版本要求-2"><a href="#系统版本要求-2" class="headerlink" title="系统版本要求"></a>系统版本要求</h4><p><span style="color:red">Android 4</span>或者更高版本，需要安装<a href="http://pan.baidu.com/s/1gfkEXKB" target="_blank" rel="external">Strongswan客户端</a>，下载地址为：<a href="http://pan.baidu.com/s/1gfkEXKB" target="_blank" rel="external">http://pan.baidu.com/s/1gfkEXKB</a></p>
 <h4 id="证书导入-2"><a href="#证书导入-2" class="headerlink" title="证书导入"></a>证书导入</h4><ul>
 <li>下载CA证书到本机，下载地址为: <a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem</a></li>
-<li>配置位置: <strong>CA certificates -&gt; Import certificates</strong></li>
+<li>配置路径: <strong>CA certificates -&gt; Import certificates</strong></li>
 <li>选择证书文件</li>
 <li>确认导入证书</li>
 </ul>
 <h4 id="VPN设置-2"><a href="#VPN设置-2" class="headerlink" title="VPN设置"></a>VPN设置</h4><ul>
-<li>配置位置: <strong>ADD VPN PROFILE</strong></li>
+<li>配置路径: <strong>ADD VPN PROFILE</strong></li>
 <li>服务器<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
 <li>VPN类型: IKEv2 EAP</li>
 <li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
@@ -301,11 +301,11 @@
 <li><strong>开始</strong>菜单搜索<strong>mmc（Microsoft 管理控制台）</strong></li>
 <li><strong>文件</strong> -&gt; <strong>添加/删除管理单元</strong>添加<strong>证书</strong>单元</li>
 <li>证书单元的弹出窗口中选<strong>计算机账户</strong>，之后选<strong>本地计算机</strong>，确定</li>
-<li>在左边的<strong>控制台根节点</strong>下选择<strong>证书</strong> -&gt; <strong>受信任的根证书颁发机构</strong> -&gt; <strong>证书</strong>，右键 -&gt; <strong>所有任务</strong> -&gt; <strong>导入</strong>打开证书导入窗口。</li>
+<li>在左边的<strong>控制台根节点</strong>下选择<strong>证书</strong> -&gt; <strong>受信任的根证书颁发机构</strong> -&gt; <strong>证书</strong>，右键 -&gt; <strong>所有任务</strong> -&gt; <strong>导入</strong>，打开证书导入窗口。</li>
 <li>选择证书文件导入即可</li>
 </ul>
 <h4 id="VPN设置-3"><a href="#VPN设置-3" class="headerlink" title="VPN设置"></a>VPN设置</h4><h5 id="Win10-Win8"><a href="#Win10-Win8" class="headerlink" title="Win10/Win8"></a>Win10/Win8</h5><ul>
-<li>配置位置: <strong>设置 -&gt; 网络和Internet -&gt; VPN -&gt; 添加VPN</strong></li>
+<li>配置路径: <strong>设置 -&gt; 网络和Internet -&gt; VPN -&gt; 添加VPN</strong></li>
 <li>VPN提供商: Windows（内置）</li>
 <li>连接名称: 任意</li>
 <li>服务器名称或地址<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
@@ -314,8 +314,27 @@
 <li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
 <li>密码<span style="color:red"><strong>*</strong></span>: 登录VPN密码</li>
 </ul>
+<p>保存上述配置后，进行如下设置</p>
+<ul>
+<li>配置路径: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 更改适配器设置</strong>，</li>
+</ul>
+<ul>
+<li>在新建的 VPN 连接上右键<strong>属性</strong></li>
+<li>切换到<strong>安全</strong>选项卡，参数调整为如下，然后<strong>确定</strong>进行保存<ul>
+<li>VPN 类型: IKEv2</li>
+<li>数据加密选: 需要加密</li>
+<li>身份验证：EAP-MSCHAP v2</li>
+</ul>
+</li>
+<li>切换到<strong>网络</strong>选项卡<ul>
+<li>双击<strong>Internet协议版本 4 (TCP/IPv4)</strong></li>
+<li>选择<strong>高级</strong></li>
+<li>确认勾选了<strong>在远程网络上使用默认网关</strong>，然后选择<strong>确定</strong>进行保存。</li>
+</ul>
+</li>
+</ul>
 <h5 id="Win7"><a href="#Win7" class="headerlink" title="Win7"></a>Win7</h5><ul>
-<li>配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 连接新的网络或连接 -&gt; 连接到工作区 -&gt; 创建新连接 -&gt; 使用我的Internet连接(VPN)</strong></li>
+<li>配置路径: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 连接新的网络或连接 -&gt; 连接到工作区 -&gt; 创建新连接 -&gt; 使用我的Internet连接(VPN)</strong></li>
 <li>Internet 地址<span style="color:red"><strong>*</strong></span>: VPN服务器URL或者IP地址</li>
 <li>目标名称: 任意</li>
 <li>用户名<span style="color:red"><strong>*</strong></span>: 登录VPN用户名</li>
@@ -323,12 +342,18 @@
 </ul>
 <p>设置完毕后，先不连接</p>
 <ul>
-<li>配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 更改适配器设置</strong></li>
+<li>配置路径: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 更改适配器设置</strong></li>
 <li>在新建的 VPN 连接上右键<strong>属性</strong></li>
-<li>切换到<strong>安全</strong>选项卡<ul>
+<li>切换到<strong>安全</strong>选项卡，<ul>
 <li>VPN 类型: IKEv2</li>
 <li>数据加密选: 需要加密</li>
 <li>身份验证: EAP-MSCHAP v2</li>
+</ul>
+</li>
+<li>切换到<strong>网络</strong>选项卡<ul>
+<li>双击<strong>Internet协议版本 4 (TCP/IPv4)</strong></li>
+<li>选择<strong>高级</strong></li>
+<li>确认勾选了<strong>在远程网络上使用默认网关</strong>，然后选择<strong>确定</strong>进行保存。</li>
 </ul>
 </li>
 </ul>

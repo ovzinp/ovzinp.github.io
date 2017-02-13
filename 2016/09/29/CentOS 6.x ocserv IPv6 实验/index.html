@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="UTF-8"/>
+    
+<meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -58,15 +59,33 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
 
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    search: {
+      enable: ,
+      path: "/search.xml",
+    },
+    navbar: {
+      enable: 
+    },
+    fancybox: {
+      enable: 
+    },
+    toc: {
+      enable: 
+    },
+  };
+</script>
 
 
 
   
 
 
-<!-- <link href="/plugins/prettify/prettify.css" rel="stylesheet"> -->
 
     <title> CentOS 6.x ocserv IPv6 实验 · Kompass </title>
   </head>
@@ -74,8 +93,7 @@
   <body>
     <div class="container">
       <header id="header" class="header"><div class="logo-wrapper">
-  <a href="/." class="logo"><img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" height="58" width="58">  Kompass</a>
-  
+   <a href="/." class="logo"><img src="http://qingdao.icean.cc:11234/Imgbed/logo.png" height="58" width="58">  Kompass</a>
 </div>
 
 <nav class="site-nav">
@@ -127,14 +145,6 @@
           </a>
         </li>
       
-      
-        <li class="menu-search">
-          <form>
-            <i class="iconfont icon-search" id="open-search"></i>
-            <input type="text" class="search-input" id="search-input" />
-            <i class="iconfont icon-close" id="close-search"></i>
-          </form>
-        </li>
       
     </ul>
   
@@ -214,13 +224,14 @@
     </header>
 
     
-      <div class="post-toc" id="post-toc">
-        <h2 class="post-toc-title">文章目录</h2>
-        <div class="post-toc-content">
-          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ocserv安装"><span class="toc-text">1.ocserv安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-配置"><span class="toc-text">2.配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改ocserv-conf"><span class="toc-text">修改ocserv.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启ipv6转发"><span class="toc-text">开启ipv6转发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ip6tables修改"><span class="toc-text">ip6tables修改</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-连接测试"><span class="toc-text">3.连接测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iPhone连接"><span class="toc-text">iPhone连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PC测试"><span class="toc-text">PC测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-排错流程"><span class="toc-text">4.排错流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#网关地址寻找"><span class="toc-text">网关地址寻找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tracert排错"><span class="toc-text">tracert排错</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-结论与猜想"><span class="toc-text">5.结论与猜想</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#猜想"><span class="toc-text">猜想</span></a></li></ol></li></ol>
-        </div>
-      </div>
     
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ocserv安装"><span class="toc-text">1.ocserv安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-配置"><span class="toc-text">2.配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改ocserv-conf"><span class="toc-text">修改ocserv.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启ipv6转发"><span class="toc-text">开启ipv6转发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ip6tables修改"><span class="toc-text">ip6tables修改</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-连接测试"><span class="toc-text">3.连接测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iPhone连接"><span class="toc-text">iPhone连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PC测试"><span class="toc-text">PC测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-排错流程"><span class="toc-text">4.排错流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#网关地址寻找"><span class="toc-text">网关地址寻找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tracert排错"><span class="toc-text">tracert排错</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-结论与猜想"><span class="toc-text">5.结论与猜想</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#猜想"><span class="toc-text">猜想</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
 
     <div class="post-content">
       
@@ -281,6 +292,34 @@ ipv6-dns = 2001:4860:4860::8844
     </div>
 
     
+      
+      
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden />
+    <label class="reward-button" for="reward">赞赏支持</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="/image/reward/wechat.jpg" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="/image/reward/alipay.jpg" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
       <footer class="post-footer">
         <div class="post-tags">
           
@@ -292,6 +331,7 @@ ipv6-dns = 2001:4860:4860::8844
           
         </div>
 
+        
         
   <nav class="post-nav">
     
@@ -329,6 +369,7 @@ ipv6-dns = 2001:4860:4860::8844
       </main>
 
       <footer id="footer" class="footer">
+
   <div class="social-links">
     
       
@@ -385,7 +426,7 @@ ipv6-dns = 2001:4860:4860::8844
     2017
 
     <span class="heart">
-      <! --<i class="iconfont icon-heart"></i>
+      <i class="iconfont icon-heart"></i>
     </span>
     <span class="author">Icean L</span>
   </span>
@@ -414,9 +455,8 @@ ipv6-dns = 2001:4860:4860::8844
   </script>
 
 
-    
-  
 
+    
 
 
 
@@ -426,20 +466,9 @@ ipv6-dns = 2001:4860:4860::8844
   
 
   
-    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
-  
 
     <script type="text/javascript" src="/js/src/even.js?v=2.1.x"></script>
 <script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.x"></script>
 
-    <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="/plugins/prettify/prettify.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      $(window).load(function(){
-      $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
-      prettyPrint();
-    }) 
-    </script> -->
   </body>
-
 </html>

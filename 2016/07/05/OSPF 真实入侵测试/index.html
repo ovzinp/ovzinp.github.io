@@ -33,41 +33,17 @@
 <link rel="canonical" href="http://yoursite.com/2016/07/05/OSPF 真实入侵测试/"/>
 
 
-<meta name="description" content="1. 准备工作抓包探测
-使用Wireshark抓取到未链路验证的OSPF或者OSPFv3的hello数据包。
-
-VirtualBox一台VirtualBox虚拟机需要接入到拓扑，虚拟机系统为CentOS6，有三块网卡，
-
-eth0为用于桥接到主机网卡，该网卡为抓取到OSPF或者OSPFv3的hello数据包的网卡
-eth1为host-only模式，用于本地宿主机通过xshell登录。
-
-逻辑拓扑逻">
+<meta name="description" content="OSPF 真实入侵测试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSPF 真实入侵测试">
 <meta property="og:url" content="http://yoursite.com/2016/07/05/OSPF 真实入侵测试/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 准备工作抓包探测
-使用Wireshark抓取到未链路验证的OSPF或者OSPFv3的hello数据包。
-
-VirtualBox一台VirtualBox虚拟机需要接入到拓扑，虚拟机系统为CentOS6，有三块网卡，
-
-eth0为用于桥接到主机网卡，该网卡为抓取到OSPF或者OSPFv3的hello数据包的网卡
-eth1为host-only模式，用于本地宿主机通过xshell登录。
-
-逻辑拓扑逻">
+<meta property="og:description" content="OSPF 真实入侵测试">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/OSPF_真实入侵测试/1-1.jpg">
-<meta property="og:updated_time" content="2017-01-29T07:34:29.077Z">
+<meta property="og:updated_time" content="2017-02-13T04:45:54.765Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSPF 真实入侵测试">
-<meta name="twitter:description" content="1. 准备工作抓包探测
-使用Wireshark抓取到未链路验证的OSPF或者OSPFv3的hello数据包。
-
-VirtualBox一台VirtualBox虚拟机需要接入到拓扑，虚拟机系统为CentOS6，有三块网卡，
-
-eth0为用于桥接到主机网卡，该网卡为抓取到OSPF或者OSPFv3的hello数据包的网卡
-eth1为host-only模式，用于本地宿主机通过xshell登录。
-
-逻辑拓扑逻">
+<meta name="twitter:description" content="OSPF 真实入侵测试">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/OSPF_真实入侵测试/1-1.jpg">
 
 
@@ -109,10 +85,19 @@ eth1为host-only模式，用于本地宿主机通过xshell登录。
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -135,6 +120,14 @@ eth1为host-only模式，用于本地宿主机通过xshell登录。
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -161,10 +154,17 @@ eth1为host-only模式，用于本地宿主机通过xshell登录。
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

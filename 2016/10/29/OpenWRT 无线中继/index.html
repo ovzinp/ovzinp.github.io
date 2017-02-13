@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="OpenWRT 无线中继"/>
+  <meta name="description" content="主路由器Netgear位置远，影响网络体验；设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信；构思通过中继路由器对主路由器的SSID进行中继"/>
 
 
 
@@ -33,40 +33,19 @@
 <link rel="canonical" href="http://yoursite.com/2016/10/29/OpenWRT 无线中继/"/>
 
 
-<meta name="description" content="1. 前言起因
-主路由器Netgear位置远，影响网络体验
-设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信。
-构思通过中继路由器对主路由器的SSID进行中继
-
-WDSWDS连接，再购买一个Netgear路由器，使得主从路由器通过WDS连接，实现无缝漫游。查阅了NetGear的官方资料之后，再综合其他资料，如下理由放弃该方案：
-
-WDS是非标准协议，不同厂商很可能不兼容，而且">
+<meta name="description" content="主路由器Netgear位置远，影响网络体验；设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信；构思通过中继路由器对主路由器的SSID进行中继">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenWRT 无线中继">
 <meta property="og:url" content="http://yoursite.com/2016/10/29/OpenWRT 无线中继/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 前言起因
-主路由器Netgear位置远，影响网络体验
-设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信。
-构思通过中继路由器对主路由器的SSID进行中继
-
-WDSWDS连接，再购买一个Netgear路由器，使得主从路由器通过WDS连接，实现无缝漫游。查阅了NetGear的官方资料之后，再综合其他资料，如下理由放弃该方案：
-
-WDS是非标准协议，不同厂商很可能不兼容，而且">
+<meta property="og:description" content="主路由器Netgear位置远，影响网络体验；设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信；构思通过中继路由器对主路由器的SSID进行中继">
 <meta property="og:image" content="http://i.imgur.com/OA0NKDF.png">
 <meta property="og:image" content="http://i.imgur.com/IoXvhfk.png">
 <meta property="og:image" content="http://i.imgur.com/uKnMcxw.png">
-<meta property="og:updated_time" content="2017-01-29T07:25:20.106Z">
+<meta property="og:updated_time" content="2017-02-13T04:44:19.805Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenWRT 无线中继">
-<meta name="twitter:description" content="1. 前言起因
-主路由器Netgear位置远，影响网络体验
-设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信。
-构思通过中继路由器对主路由器的SSID进行中继
-
-WDSWDS连接，再购买一个Netgear路由器，使得主从路由器通过WDS连接，实现无缝漫游。查阅了NetGear的官方资料之后，再综合其他资料，如下理由放弃该方案：
-
-WDS是非标准协议，不同厂商很可能不兼容，而且">
+<meta name="twitter:description" content="主路由器Netgear位置远，影响网络体验；设想过在单独置办一个路由器，但是希望两个路由器的局域网之间可以进行通信；构思通过中继路由器对主路由器的SSID进行中继">
 <meta name="twitter:image" content="http://i.imgur.com/OA0NKDF.png">
 
 
@@ -108,10 +87,19 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -134,6 +122,14 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -160,10 +156,17 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -359,8 +362,8 @@ WDS是非标准协议，不同厂商很可能不兼容，而且">
       </a>
     
     
-      <a class="next" href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/">
-        <span class="next-text nav-default">CentOS 7.x ocserv + freeradius验证 + SSL</span>
+      <a class="next" href="/2016/09/29/CentOS Minimal X11转发/">
+        <span class="next-text nav-default">CentOS Minimal X11转发</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>

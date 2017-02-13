@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验"/>
+  <meta name="description" content="需求分析：IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问；使用Freeradius进行验证；客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关"/>
 
 
 
@@ -33,83 +33,17 @@
 <link rel="canonical" href="http://yoursite.com/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/"/>
 
 
-<meta name="description" content="1. 需求分析
-IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问
-使用Freeradius进行验证
-客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关
-
-
-2. 实验环境2.1 实验拓扑图2-1 实验拓扑
-
-2.2 设备信息各个设备的操作系统、IP地址以及网卡信息如下所示
-
-
-
-设备
-系统
-网卡
-IP
-备注
-
-
-
-
-IKEv2 Server
-Ce">
+<meta name="description" content="需求分析：IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问；使用Freeradius进行验证；客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验">
 <meta property="og:url" content="http://yoursite.com/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 需求分析
-IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问
-使用Freeradius进行验证
-客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关
-
-
-2. 实验环境2.1 实验拓扑图2-1 实验拓扑
-
-2.2 设备信息各个设备的操作系统、IP地址以及网卡信息如下所示
-
-
-
-设备
-系统
-网卡
-IP
-备注
-
-
-
-
-IKEv2 Server
-Ce">
+<meta property="og:description" content="需求分析：IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问；使用Freeradius进行验证；客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/ikev2 + freeradius + nat/topo+.png">
-<meta property="og:updated_time" content="2017-02-10T04:56:37.285Z">
+<meta property="og:updated_time" content="2017-02-13T04:49:30.093Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验">
-<meta name="twitter:description" content="1. 需求分析
-IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问
-使用Freeradius进行验证
-客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关
-
-
-2. 实验环境2.1 实验拓扑图2-1 实验拓扑
-
-2.2 设备信息各个设备的操作系统、IP地址以及网卡信息如下所示
-
-
-
-设备
-系统
-网卡
-IP
-备注
-
-
-
-
-IKEv2 Server
-Ce">
+<meta name="twitter:description" content="需求分析：IKEv2服务器地址为私有IP，通过静态NAT映射，外网可以访问；使用Freeradius进行验证；客户端接入VPN之后，只有指定的流量可以通过VPN网关，其他流量仍通过客户端原来的网关">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/ikev2 + freeradius + nat/topo+.png">
 
 
@@ -151,10 +85,19 @@ Ce">
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -177,6 +120,14 @@ Ce">
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -203,10 +154,17 @@ Ce">
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -504,15 +462,15 @@ Ce">
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/01/29/IPsec VPN用户配置手册（图文版）/">
+      <a class="prev" href="/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">IPsec 用户配置手册（图文版）</span>
+        <span class="prev-text nav-default">CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
-      <a class="next" href="/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/">
-        <span class="next-text nav-default">CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证</span>
+      <a class="next" href="/2017/01/18/CentOS 6.x Freeradius 3.0.12编译安装/">
+        <span class="next-text nav-default">CentOS 6.x Freeradius 3.0.12编译安装</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>

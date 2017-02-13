@@ -33,32 +33,12 @@
 <link rel="canonical" href="http://yoursite.com/2016/09/29/Centos 6.x Hadoop 安装/"/>
 
 
-<meta name="description" content="1.简介Hadoop可分为分布式安装以及伪分布式安装，以分布式安装的方式安装Hadoop，可以更好地体验Hadoop的分布式工作的原理。然而，安装设备可能是一个问题，找不到那么多的Linux主机来安装Hadoop，以及要维护这些Linux主机之间的通信，这都是一系列问题。以下为我设计的Hadoop安装方案。
-
-所需软件
-VirtualBox
-Xshell
-XFTP
-
-
-
-
-2.逻辑拓扑Hadoop">
+<meta name="description" content="Centos 6.x Hadoop 安装">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Centos 6.x Hadoop 安装">
 <meta property="og:url" content="http://yoursite.com/2016/09/29/Centos 6.x Hadoop 安装/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1.简介Hadoop可分为分布式安装以及伪分布式安装，以分布式安装的方式安装Hadoop，可以更好地体验Hadoop的分布式工作的原理。然而，安装设备可能是一个问题，找不到那么多的Linux主机来安装Hadoop，以及要维护这些Linux主机之间的通信，这都是一系列问题。以下为我设计的Hadoop安装方案。
-
-所需软件
-VirtualBox
-Xshell
-XFTP
-
-
-
-
-2.逻辑拓扑Hadoop">
+<meta property="og:description" content="Centos 6.x Hadoop 安装">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-tpg.png">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/loopback.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/vm-net1.jpg">
@@ -70,20 +50,10 @@ XFTP
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-7.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-9.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-10.jpg">
-<meta property="og:updated_time" content="2017-01-29T07:34:39.653Z">
+<meta property="og:updated_time" content="2017-02-13T04:46:56.446Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos 6.x Hadoop 安装">
-<meta name="twitter:description" content="1.简介Hadoop可分为分布式安装以及伪分布式安装，以分布式安装的方式安装Hadoop，可以更好地体验Hadoop的分布式工作的原理。然而，安装设备可能是一个问题，找不到那么多的Linux主机来安装Hadoop，以及要维护这些Linux主机之间的通信，这都是一系列问题。以下为我设计的Hadoop安装方案。
-
-所需软件
-VirtualBox
-Xshell
-XFTP
-
-
-
-
-2.逻辑拓扑Hadoop">
+<meta name="twitter:description" content="Centos 6.x Hadoop 安装">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/Hadoop/hadoop-tpg.png">
 
 
@@ -125,10 +95,19 @@ XFTP
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -151,6 +130,14 @@ XFTP
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -177,10 +164,17 @@ XFTP
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -441,15 +435,15 @@ XFTP
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/">
+      <a class="prev" href="/2016/09/29/CentOS Minimal X11转发/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">CentOS 7.x ocserv + freeradius验证 + SSL</span>
+        <span class="prev-text nav-default">CentOS Minimal X11转发</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
-      <a class="next" href="/2016/09/29/CentOS Minimal X11转发/">
-        <span class="next-text nav-default">CentOS Minimal X11转发</span>
+      <a class="next" href="/2016/09/29/CentOS 7.x ocserv + freeradius验证 + ssl/">
+        <span class="next-text nav-default">CentOS 7.x ocserv + freeradius验证 + SSL</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>

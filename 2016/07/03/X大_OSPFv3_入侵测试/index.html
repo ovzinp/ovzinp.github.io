@@ -33,14 +33,12 @@
 <link rel="canonical" href="http://yoursite.com/2016/07/03/X大_OSPFv3_入侵测试/"/>
 
 
-<meta name="description" content="1.准备工作抓取OSPFv3 hello数据包计算机连接校园网，IPv4使用的是NAT模式，IPv6使用的是穿透模式。用WireShark抓去网卡的数据包，使用过滤器ospf，发现抓取到了OSPFv3的hello数据包，说明网络网络人员没有配置passive端口，在不必要的链路上禁止路由器发送hello数据包，点击其中的一个数据包，其结果如图1-1所示，竟然发现hello数据包为纯明文的。
-图1-">
+<meta name="description" content="X大 OSPFv3 入侵测试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="X大 OSPFv3 入侵测试">
 <meta property="og:url" content="http://yoursite.com/2016/07/03/X大_OSPFv3_入侵测试/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1.准备工作抓取OSPFv3 hello数据包计算机连接校园网，IPv4使用的是NAT模式，IPv6使用的是穿透模式。用WireShark抓去网卡的数据包，使用过滤器ospf，发现抓取到了OSPFv3的hello数据包，说明网络网络人员没有配置passive端口，在不必要的链路上禁止路由器发送hello数据包，点击其中的一个数据包，其结果如图1-1所示，竟然发现hello数据包为纯明文的。
-图1-">
+<meta property="og:description" content="X大 OSPFv3 入侵测试">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/1-1.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-1.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-2.jpg">
@@ -48,11 +46,10 @@
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-2.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-3.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-4.jpg">
-<meta property="og:updated_time" content="2017-01-29T07:34:31.885Z">
+<meta property="og:updated_time" content="2017-02-13T04:46:28.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="X大 OSPFv3 入侵测试">
-<meta name="twitter:description" content="1.准备工作抓取OSPFv3 hello数据包计算机连接校园网，IPv4使用的是NAT模式，IPv6使用的是穿透模式。用WireShark抓去网卡的数据包，使用过滤器ospf，发现抓取到了OSPFv3的hello数据包，说明网络网络人员没有配置passive端口，在不必要的链路上禁止路由器发送hello数据包，点击其中的一个数据包，其结果如图1-1所示，竟然发现hello数据包为纯明文的。
-图1-">
+<meta name="twitter:description" content="X大 OSPFv3 入侵测试">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/1-1.jpg">
 
 
@@ -94,10 +91,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -120,6 +126,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -146,10 +160,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

@@ -33,25 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2017/01/16/AWK学习/"/>
 
 
-<meta name="description" content="1. 示例文件示例文件内容如下
-123456$ cat fileUnix,10,ALinux,30,BSolaris,40,CFedora,20,DUbuntu,50,E
-
-2. 操作在原第一列前处添加新的一列123456$ awk -F, &apos;&amp;#123;$1=++i FS $1;&amp;#125;1&apos; OFS=, file1,Unix,10,A2,Linux,30,B3,Solaris,40,C4,F">
+<meta name="description" content="AWK 学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AWK 学习">
 <meta property="og:url" content="http://yoursite.com/2017/01/16/AWK学习/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 示例文件示例文件内容如下
-123456$ cat fileUnix,10,ALinux,30,BSolaris,40,CFedora,20,DUbuntu,50,E
-
-2. 操作在原第一列前处添加新的一列123456$ awk -F, &apos;&amp;#123;$1=++i FS $1;&amp;#125;1&apos; OFS=, file1,Unix,10,A2,Linux,30,B3,Solaris,40,C4,F">
-<meta property="og:updated_time" content="2017-01-29T07:25:19.787Z">
+<meta property="og:description" content="AWK 学习">
+<meta property="og:updated_time" content="2017-02-13T04:40:20.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AWK 学习">
-<meta name="twitter:description" content="1. 示例文件示例文件内容如下
-123456$ cat fileUnix,10,ALinux,30,BSolaris,40,CFedora,20,DUbuntu,50,E
-
-2. 操作在原第一列前处添加新的一列123456$ awk -F, &apos;&amp;#123;$1=++i FS $1;&amp;#125;1&apos; OFS=, file1,Unix,10,A2,Linux,30,B3,Solaris,40,C4,F">
+<meta name="twitter:description" content="AWK 学习">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -92,10 +83,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -118,6 +118,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -144,10 +152,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

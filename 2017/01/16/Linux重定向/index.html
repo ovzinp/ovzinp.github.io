@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="Linux Shell 标准输入、输出和错误重定向"/>
+  <meta name="description" content="文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。"/>
 
 
 
@@ -33,97 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2017/01/16/Linux重定向/"/>
 
 
-<meta name="description" content="1. 文件描述符文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。
-
-
-
-文件描述符
-文件
-缺省
-
-
-
-
-0(文件)
-标准输入
-键盘
-
-
-1(文件)
-标准输出
-屏幕
-
-
-2(文件)
-标准错误
-屏幕
-
-
-
-系统有12个文件描述符，可以">
+<meta name="description" content="文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux Shell 标准输入、输出和错误重定向">
 <meta property="og:url" content="http://yoursite.com/2017/01/16/Linux重定向/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 文件描述符文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。
-
-
-
-文件描述符
-文件
-缺省
-
-
-
-
-0(文件)
-标准输入
-键盘
-
-
-1(文件)
-标准输出
-屏幕
-
-
-2(文件)
-标准错误
-屏幕
-
-
-
-系统有12个文件描述符，可以">
-<meta property="og:updated_time" content="2017-01-30T12:16:36.216Z">
+<meta property="og:description" content="文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。">
+<meta property="og:updated_time" content="2017-02-13T04:48:19.861Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux Shell 标准输入、输出和错误重定向">
-<meta name="twitter:description" content="1. 文件描述符文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。
-
-
-
-文件描述符
-文件
-缺省
-
-
-
-
-0(文件)
-标准输入
-键盘
-
-
-1(文件)
-标准输出
-屏幕
-
-
-2(文件)
-标准错误
-屏幕
-
-
-
-系统有12个文件描述符，可以">
+<meta name="twitter:description" content="文件描述符是与文件相关联的一些整数，他们保持与已打开文件的关联。众所周知的文件描述符是标准输入stdin、标准输出stdout、标准错误stderr，我们可以重定位这些文件描述符关联文件的内容到另外一个文件文件描述符。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -164,10 +83,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -190,6 +118,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -216,10 +152,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

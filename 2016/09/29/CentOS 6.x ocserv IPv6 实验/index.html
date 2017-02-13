@@ -33,16 +33,12 @@
 <link rel="canonical" href="http://yoursite.com/2016/09/29/CentOS 6.x ocserv IPv6 实验/"/>
 
 
-<meta name="description" content="1.ocserv安装需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。
-
-2.配置修改ocserv.conf添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自">
+<meta name="description" content="CentOS 6.x ocserv IPv6 实验">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 6.x ocserv IPv6 实验">
 <meta property="og:url" content="http://yoursite.com/2016/09/29/CentOS 6.x ocserv IPv6 实验/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1.ocserv安装需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。
-
-2.配置修改ocserv.conf添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自">
+<meta property="og:description" content="CentOS 6.x ocserv IPv6 实验">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg">
@@ -51,12 +47,10 @@
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png">
-<meta property="og:updated_time" content="2017-02-09T08:49:40.529Z">
+<meta property="og:updated_time" content="2017-02-13T04:47:29.861Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x ocserv IPv6 实验">
-<meta name="twitter:description" content="1.ocserv安装需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。
-
-2.配置修改ocserv.conf添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自">
+<meta name="twitter:description" content="CentOS 6.x ocserv IPv6 实验">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg">
 
 
@@ -98,10 +92,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -124,6 +127,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -150,10 +161,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -277,9 +295,9 @@ ipv6-dns = 2001:4860:4860::8844
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2016/09/29/CentOS 7 ocserv IPv6支持实验分析/">
+      <a class="prev" href="/2016/09/29/CentOS 6.x PPTP + Radius + Mysql + Daloradius/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">CentOS 7 ocserv IPv6 支持实验分析</span>
+        <span class="prev-text nav-default">CentOS 6.x PPTP + Radius + Mysql + Daloradius</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     

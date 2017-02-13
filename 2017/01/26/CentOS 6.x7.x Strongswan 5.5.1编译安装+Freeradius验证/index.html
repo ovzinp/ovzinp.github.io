@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证"/>
+  <meta name="description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证"/>
 
 
 
@@ -33,28 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/"/>
 
 
-<meta name="description" content="1. 编译安装Strongswan环境准备需要安装如下依赖1yum -y install pam-devel
-可能还需要安装如下依赖
-1yum install -y openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.1源码到并解压
-12wget https://download.strongswan.org/s">
+<meta name="description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证">
 <meta property="og:url" content="http://yoursite.com/2017/01/26/CentOS 6.x7.x Strongswan 5.5.1编译安装+Freeradius验证/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖1yum -y install pam-devel
-可能还需要安装如下依赖
-1yum install -y openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.1源码到并解压
-12wget https://download.strongswan.org/s">
-<meta property="og:updated_time" content="2017-02-10T04:51:20.588Z">
+<meta property="og:description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
+<meta property="og:updated_time" content="2017-02-13T04:29:24.078Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证">
-<meta name="twitter:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖1yum -y install pam-devel
-可能还需要安装如下依赖
-1yum install -y openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.1源码到并解压
-12wget https://download.strongswan.org/s">
+<meta name="twitter:description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -95,10 +83,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -121,6 +118,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -147,10 +152,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -420,15 +432,15 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/">
+      <a class="prev" href="/2017/01/29/IKEv2 用户配置手册（简版）/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验</span>
+        <span class="prev-text nav-default">IKEv2 用户配置手册（简单版）</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
-      <a class="next" href="/2017/01/18/CentOS 6.x Freeradius 3.0.12编译安装/">
-        <span class="next-text nav-default">CentOS 6.x Freeradius 3.0.12编译安装</span>
+      <a class="next" href="/2017/01/26/IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验/">
+        <span class="next-text nav-default">IKEv2服务器静态NAT + Freeradius验证 + 流量分离实验</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>

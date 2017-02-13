@@ -33,34 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2016/09/09/CentOS 批量添加SFTP用户/"/>
 
 
-<meta name="description" content="1.开启 SFTP服务需求
-用户只能通过sftp访问，不能登录SSH
-用户要被锁定在特定的目录下，没有读写其它目录的权限
-
-ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sftp internal-sftp
-该行(上面这行)注释掉，并添加新配置1Match group sftp
-匹配sftp组，如为单个用户可用：M">
+<meta name="description" content="CentOS 批量添加 sftp 用户">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 批量添加 sftp 用户">
 <meta property="og:url" content="http://yoursite.com/2016/09/09/CentOS 批量添加SFTP用户/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1.开启 SFTP服务需求
-用户只能通过sftp访问，不能登录SSH
-用户要被锁定在特定的目录下，没有读写其它目录的权限
-
-ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sftp internal-sftp
-该行(上面这行)注释掉，并添加新配置1Match group sftp
-匹配sftp组，如为单个用户可用：M">
-<meta property="og:updated_time" content="2017-01-29T07:25:19.986Z">
+<meta property="og:description" content="CentOS 批量添加 sftp 用户">
+<meta property="og:updated_time" content="2017-02-13T04:41:15.829Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 批量添加 sftp 用户">
-<meta name="twitter:description" content="1.开启 SFTP服务需求
-用户只能通过sftp访问，不能登录SSH
-用户要被锁定在特定的目录下，没有读写其它目录的权限
-
-ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sftp internal-sftp
-该行(上面这行)注释掉，并添加新配置1Match group sftp
-匹配sftp组，如为单个用户可用：M">
+<meta name="twitter:description" content="CentOS 批量添加 sftp 用户">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -101,10 +83,19 @@ ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sft
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -127,6 +118,14 @@ ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sft
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -153,10 +152,17 @@ ssh配置文件修改12#Subsystem sftp /usr/lib/openssh/sftp-serverSubsystem sft
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

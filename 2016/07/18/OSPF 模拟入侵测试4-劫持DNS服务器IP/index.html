@@ -33,26 +33,17 @@
 <link rel="canonical" href="http://yoursite.com/2016/07/18/OSPF 模拟入侵测试4-劫持DNS服务器IP/"/>
 
 
-<meta name="description" content="1. 实验环境实验拓扑使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，CentOS_Fun为入侵主机，模拟路由器，PC3模拟一个DNS服务器，IP地址为210.76.211.7/24。CentOS7_Fun同时运行HTTP服务，DNS服务。此时假设条件如下：
-
-CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
-假设CentOS7_Fun的IP地址">
+<meta name="description" content="OSPF 模拟入侵测试4-劫持DNS服务器IP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSPF 模拟入侵测试4-劫持DNS服务器IP">
 <meta property="og:url" content="http://yoursite.com/2016/07/18/OSPF 模拟入侵测试4-劫持DNS服务器IP/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 实验环境实验拓扑使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，CentOS_Fun为入侵主机，模拟路由器，PC3模拟一个DNS服务器，IP地址为210.76.211.7/24。CentOS7_Fun同时运行HTTP服务，DNS服务。此时假设条件如下：
-
-CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
-假设CentOS7_Fun的IP地址">
+<meta property="og:description" content="OSPF 模拟入侵测试4-劫持DNS服务器IP">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试4_DNS服务器伪装/1-1.jpg">
-<meta property="og:updated_time" content="2017-01-29T07:34:28.185Z">
+<meta property="og:updated_time" content="2017-02-13T04:46:35.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSPF 模拟入侵测试4-劫持DNS服务器IP">
-<meta name="twitter:description" content="1. 实验环境实验拓扑使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，CentOS_Fun为入侵主机，模拟路由器，PC3模拟一个DNS服务器，IP地址为210.76.211.7/24。CentOS7_Fun同时运行HTTP服务，DNS服务。此时假设条件如下：
-
-CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
-假设CentOS7_Fun的IP地址">
+<meta name="twitter:description" content="OSPF 模拟入侵测试4-劫持DNS服务器IP">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试4_DNS服务器伪装/1-1.jpg">
 
 
@@ -94,10 +85,19 @@ CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -120,6 +120,14 @@ CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -146,10 +154,17 @@ CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -330,15 +345,15 @@ CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2016/07/18/OSPF 模拟入侵测试3-劫持网页服务器IP/">
+      <a class="prev" href="/2016/07/18/OSPF 模拟入侵测试2-劫持指定主机IP/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">OSPF 模拟入侵测试3-劫持网页服务器IP</span>
+        <span class="prev-text nav-default">OSPF 模拟入侵测试2-劫持指定主机IP</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
-      <a class="next" href="/2016/07/17/基础DNS学习/">
-        <span class="next-text nav-default">基础DNS学习</span>
+      <a class="next" href="/2016/07/18/OSPF 模拟入侵测试1-路由表获取&路由注入/">
+        <span class="next-text nav-default">OSPF 模拟入侵测试1-路由表获取&路由注入</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>

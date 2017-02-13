@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2"/>
+  <meta name="description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证"/>
 
 
 
@@ -33,22 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2016/08/31/CentOS 6.x7.x Strongswan 5.5.0编译安装+Freeradius验证_v2/"/>
 
 
-<meta name="description" content="1. 编译安装Strongswan环境准备需要安装如下依赖以及软件1yum -y install pam-devel openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.0源码到主机并解压
-编译安装切换到Strongswan源码解压的目录，执行配置与编译安装1234567./configure  --enable">
+<meta name="description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2">
 <meta property="og:url" content="http://yoursite.com/2016/08/31/CentOS 6.x7.x Strongswan 5.5.0编译安装+Freeradius验证_v2/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖以及软件1yum -y install pam-devel openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.0源码到主机并解压
-编译安装切换到Strongswan源码解压的目录，执行配置与编译安装1234567./configure  --enable">
-<meta property="og:updated_time" content="2017-02-10T04:51:07.371Z">
+<meta property="og:description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
+<meta property="og:updated_time" content="2017-02-13T04:29:53.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2">
-<meta name="twitter:description" content="1. 编译安装Strongswan环境准备需要安装如下依赖以及软件1yum -y install pam-devel openssl-devel make gcc curl wget
-下载源码从Strongswan官网下载最新Strongswan 5.5.0源码到主机并解压
-编译安装切换到Strongswan源码解压的目录，执行配置与编译安装1234567./configure  --enable">
+<meta name="twitter:description" content="在CentOS 6或者CentOS 7上编译安装Strongswan 5.5.0，并配置Freeradius进行验证">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -89,10 +83,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -115,6 +118,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -141,10 +152,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

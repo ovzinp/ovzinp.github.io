@@ -11,7 +11,7 @@
 
 
 
-  <meta name="description" content="CentOS 6.x ocserv 安装"/>
+  <meta name="description" content="OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Linux平台。"/>
 
 
 
@@ -33,17 +33,17 @@
 <link rel="canonical" href="http://yoursite.com/2017/01/18/CentOS 6.x ocserv安装/"/>
 
 
-<meta name="description" content="1. ocserv1.1 介绍OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Li">
+<meta name="description" content="OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Linux平台。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 6.x ocserv 安装">
 <meta property="og:url" content="http://yoursite.com/2017/01/18/CentOS 6.x ocserv安装/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. ocserv1.1 介绍OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Li">
+<meta property="og:description" content="OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Linux平台。">
 <meta property="og:image" content="http://i.imgur.com/aUSEeOG.png">
-<meta property="og:updated_time" content="2017-02-09T08:49:32.745Z">
+<meta property="og:updated_time" content="2017-02-13T04:48:17.214Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x ocserv 安装">
-<meta name="twitter:description" content="1. ocserv1.1 介绍OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Li">
+<meta name="twitter:description" content="OpenConnect server (ocserv)以一款SSL VPN服务。它的目的是构建安全、小巧、快速以及容易配置的VPN服务器。它实现了OpenConnect SSL VPN协议，并且也兼容AnyConnect SSL VPN协议客户端。OpenConnect协议提供了基于TCP/UDP的双重VPN隧道，使用标准的IETF加密协议。该服务主要面向GNU/Linux平台。">
 <meta name="twitter:image" content="http://i.imgur.com/aUSEeOG.png">
 
 
@@ -85,10 +85,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -111,6 +120,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -137,10 +154,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

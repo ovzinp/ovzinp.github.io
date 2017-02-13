@@ -33,61 +33,22 @@
 <link rel="canonical" href="http://yoursite.com/2015/12/23/Wireshark TCP抓包总结/"/>
 
 
-<meta name="description" content="1.TCP连接状态标记字段
-SYN表示建立连接
-FIN表示关闭连接
-ACK表示响应
-PSH表示有DATA数据传输
-RST表示连接重置
-
-
-提示：
-
-ACK是可能与SYN，FIN等同时使用的，比如SYN和ACK可能同时为1，它表示的就是建立连接之后的响应。
-如果只是单个的一个SYN，它表示的只是建立连接。
-TCP的几次握手就是通过这样的ACK表现出来的。
-但SYN与FIN是不会同时为1的，因为前者表">
+<meta name="description" content="Wireshark TCP抓包总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Wireshark TCP抓包总结">
 <meta property="og:url" content="http://yoursite.com/2015/12/23/Wireshark TCP抓包总结/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1.TCP连接状态标记字段
-SYN表示建立连接
-FIN表示关闭连接
-ACK表示响应
-PSH表示有DATA数据传输
-RST表示连接重置
-
-
-提示：
-
-ACK是可能与SYN，FIN等同时使用的，比如SYN和ACK可能同时为1，它表示的就是建立连接之后的响应。
-如果只是单个的一个SYN，它表示的只是建立连接。
-TCP的几次握手就是通过这样的ACK表现出来的。
-但SYN与FIN是不会同时为1的，因为前者表">
+<meta property="og:description" content="Wireshark TCP抓包总结">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-1.png">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-2.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-2.2.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-3.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-4.jpg">
 <meta property="og:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-5.jpg">
-<meta property="og:updated_time" content="2017-01-29T07:25:20.208Z">
+<meta property="og:updated_time" content="2017-02-13T04:43:13.533Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Wireshark TCP抓包总结">
-<meta name="twitter:description" content="1.TCP连接状态标记字段
-SYN表示建立连接
-FIN表示关闭连接
-ACK表示响应
-PSH表示有DATA数据传输
-RST表示连接重置
-
-
-提示：
-
-ACK是可能与SYN，FIN等同时使用的，比如SYN和ACK可能同时为1，它表示的就是建立连接之后的响应。
-如果只是单个的一个SYN，它表示的只是建立连接。
-TCP的几次握手就是通过这样的ACK表现出来的。
-但SYN与FIN是不会同时为1的，因为前者表">
+<meta name="twitter:description" content="Wireshark TCP抓包总结">
 <meta name="twitter:image" content="http://qingdao.icean.cc:11234/Imgbed/wireshark/3-1.png">
 
 
@@ -129,10 +90,19 @@ TCP的几次握手就是通过这样的ACK表现出来的。
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -155,6 +125,14 @@ TCP的几次握手就是通过这样的ACK表现出来的。
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -181,10 +159,17 @@ TCP的几次握手就是通过这样的ACK表现出来的。
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

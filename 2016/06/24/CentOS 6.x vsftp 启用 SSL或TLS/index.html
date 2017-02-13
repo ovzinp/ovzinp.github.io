@@ -33,34 +33,16 @@
 <link rel="canonical" href="http://yoursite.com/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/"/>
 
 
-<meta name="description" content="1. 创建用户以及用户组在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录
-12useradd -s /sbin/nologin vxftppasswd vxftp
-建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令
-1mkdir -p /home/vxftp/imgbed
-创建一个单独的FTP用户组
-1groupadd vsftp
-把之前建立的图床文件夹">
+<meta name="description" content="CentOS 6.x vsftp 启用 SSL或TLS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 6.x vsftp 启用 SSL或TLS">
 <meta property="og:url" content="http://yoursite.com/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/index.html">
 <meta property="og:site_name" content="Kompass">
-<meta property="og:description" content="1. 创建用户以及用户组在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录
-12useradd -s /sbin/nologin vxftppasswd vxftp
-建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令
-1mkdir -p /home/vxftp/imgbed
-创建一个单独的FTP用户组
-1groupadd vsftp
-把之前建立的图床文件夹">
-<meta property="og:updated_time" content="2017-01-29T07:34:42.285Z">
+<meta property="og:description" content="CentOS 6.x vsftp 启用 SSL或TLS">
+<meta property="og:updated_time" content="2017-02-13T04:47:05.032Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 6.x vsftp 启用 SSL或TLS">
-<meta name="twitter:description" content="1. 创建用户以及用户组在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录
-12useradd -s /sbin/nologin vxftppasswd vxftp
-建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令
-1mkdir -p /home/vxftp/imgbed
-创建一个单独的FTP用户组
-1groupadd vsftp
-把之前建立的图床文件夹">
+<meta name="twitter:description" content="CentOS 6.x vsftp 启用 SSL或TLS">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.x" />
@@ -101,10 +83,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -127,6 +118,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -153,10 +152,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     

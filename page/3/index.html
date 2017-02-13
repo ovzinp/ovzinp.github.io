@@ -75,10 +75,19 @@
         </li>
       
         <li class="menu-item">
-          <a class="menu-item-link" href="/archives/">
+          <a class="menu-item-link" href="/archives">
             
             
               归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
             
           </a>
         </li>
@@ -101,6 +110,14 @@
           </a>
         </li>
       
+      
+        <li class="menu-search">
+          <form>
+            <i class="iconfont icon-search" id="open-search"></i>
+            <input type="text" class="search-input" id="search-input" />
+            <i class="iconfont icon-close" id="close-search"></i>
+          </form>
+        </li>
       
     </ul>
   
@@ -127,10 +144,17 @@
         
       </a>
     
-      <a class="mobile-menu-item" href="/archives/">
+      <a class="mobile-menu-item" href="/archives">
         
         
           归档
+        
+      </a>
+    
+      <a class="mobile-menu-item" href="/categories">
+        
+        
+          分类
         
       </a>
     
@@ -163,418 +187,6 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2016/09/29/CentOS 6.x ocserv IPv6 实验/">CentOS 6.x ocserv IPv6 实验</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月29日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-ocserv安装"><a href="#1-ocserv安装" class="headerlink" title="1.ocserv安装"></a>1.ocserv安装</h3><p>需要提前安装好ocserv，运行ocserv服务后，Anyconnect客户端可以成功登录服务器。</p>
-<hr>
-<h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><h4 id="修改ocserv-conf"><a href="#修改ocserv-conf" class="headerlink" title="修改ocserv.conf"></a>修改ocserv.conf</h4><strike style="color:red">添加如下字段，其中ipv6-network字段从vps供应商处获取，或者通过查看自己网卡获取的ipv6地址来找出ipv6的网络地址，记住一定要在网络地址后加::，例如x:x:x:x::，否者无法连接服务。prefix也是从供应商处获知，dns自己可以填写谷歌的公共ipv6 DNS服务器或者其他。</strike>
-
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 64
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>填写vps供应商提供的可以路由的IPv6地址池，如果vps供应商没提供可以全局路由的IPv6地址池，则无法配置支持IPv6的ocserv。距离例子如下所示，DNS服务器可以填写谷歌的公共IPv6 DNS。</p>
-</blockquote>
-<pre><code>ipv6-network = 2607:f358:1a:1::
-ipv6-prefix = 124
-ipv6-dns = 2001:4860:4860::8888
-ipv6-dns = 2001:4860:4860::8844
-</code></pre><h4 id="开启ipv6转发"><a href="#开启ipv6转发" class="headerlink" title="开启ipv6转发"></a>开启ipv6转发</h4><p>root用户下执行如下命令，开启ipv6转发功能</p>
-<p>sysctl net.ipv6.conf.all.forwarding</p>
-<h4 id="ip6tables修改"><a href="#ip6tables修改" class="headerlink" title="ip6tables修改"></a>ip6tables修改</h4><p>ip6tables中不存在nat表，所以只删除filter表FORWARD链中可能阻碍的条目即可，在我的vps中缺省有拒绝转发所有请求的条目，删除之。</p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>ocserv.conf的修改一定要严格遵守格式，否则Anyconnect客户端无法连接服务器，之前在最后少写个冒号，导致了这个问题。DNS服务器推荐填写google的公共DNS。</p>
-</blockquote>
-<hr>
-<h3 id="3-连接测试"><a href="#3-连接测试" class="headerlink" title="3.连接测试"></a>3.连接测试</h3><h4 id="iPhone连接"><a href="#iPhone连接" class="headerlink" title="iPhone连接"></a>iPhone连接</h4><p>iPhone连接成功，成功地获取了IPv4地址和IPv6地址，如图3-1所示。可以进行IPv4访问，但是仍然无法访问IPv6网站。。</p>
-<p><span style="color:purple">图3-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-1.jpg" alt=""></p>
-<h4 id="PC测试"><a href="#PC测试" class="headerlink" title="PC测试"></a>PC测试</h4><p>PC连接成功，成功地获取IPv4和IPv6地址，如图3-2所示，但是IPv6却无网络连接，如图3-3所示。</p>
-<p><span style="color:purple">图3-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-2.jpg" alt=""></p>
-<p><span style="color:purple">图3-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/3-3.jpg" alt=""></p>
-<hr>
-<h3 id="4-排错流程"><a href="#4-排错流程" class="headerlink" title="4.排错流程"></a>4.排错流程</h3><h4 id="网关地址寻找"><a href="#网关地址寻找" class="headerlink" title="网关地址寻找"></a>网关地址寻找</h4><strike style="color:red">在vps上通过traceroute6命令来找到vps所在局域网的网关地址，如图4-1所示，第一跳为网关地址。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>vps的网关确实为图4-1所圈出的，但是在Anyconnect客户端连接时vps服务器会生成vpns0的网卡，该网卡的地址如下所示。对于接入到vps服务器的Anyconnect客户端而言，其获取的网关地址是vps服务器的虚拟网卡，而不是vps服务器局域网的网关，之前理解为填写vps服务器所在局域网的IPv6地址段，客户端获取的IPv6地址是接入的到vps所在的局域网，其实则不然，因为填写了vps所在局域网的地址池前缀，所以接入到vps服务器的客户端其发送的数据包，都被发送到vpns0这块虚拟网卡之上，但是该网卡IPv6地址与vps的IPv6网关地址冲突，因为数据包无法被转发，所以无法接入vps的Anyconnect的IPv6网络无法连接到因特网。<br><br>    vpns0 Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00<br>          inet addr:192.168.30.1  P-t-P:192.168.30.172  Mask:255.255.255.255<br>          inet6 addr: 2607:f358:1a:1::1/128 Scope:Global<br>          UP POINTOPOINT RUNNING  MTU:1341  Metric:1<br>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0<br>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0<br>          collisions:0 txqueuelen:500<br>          RX bytes:0 (0.0 b)  TX bytes:76 (76.0 b)<br><br><span style="color:purple">图4-1</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-1.png" alt=""><br><br><strike style="color:red">在PC端ping网关和手机的IPv6地址，ping成功，如图4-2，图4-3所示。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>虽然Anyconnect客户端无法通过IPv6接入网络，但是局域网还是可以进行通信。<br><br><span style="color:purple">图4-2</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-2.png" alt=""><br><br><span style="color:purple">图4-3</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-3.png" alt=""><br><br>说明局域网之间是可以通信的。<br><br>#### tcpdump抓包 ####<br>使用tcpdump进行抓包，抓包的过程中，手机向一个IPv6站点发送http请求。抓包命令如下。<br><br>    tcpdump ip6 -w ipv6.cap<br><br><strike style="color:red">抓包结果如图4-4所示，http请求发出去若干个但是，但是没有收到回应。</strike><br>&gt;<span style="color:red"><strong>修订：</strong></span>数据包都发送到了vpns0网卡，可以被tcpdump抓到。<br><br><span style="color:purple">图4-4</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-4.png" alt=""><br><br><strike style="color:red">由此暂时可以认为http请求数据包已经发出，但是却没有收到任何回应，ocserv的配置没有问题。</strike>
-
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>http请求没有发出去，因为vpns0和vps的IPv6默认网关冲突，此时vps都</p>
-</blockquote>
-<h4 id="tracert排错"><a href="#tracert排错" class="headerlink" title="tracert排错"></a>tracert排错</h4><strike style="color:red">在PC使用Anyconnect连接到服务器之后，命令行下使用tracert，查看结果，如图4-5所示，tracert只能到网关无法到下一跳，由此可以认为在网关路由器处http请求没有被转发。</strike>
-
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>tracert只能到vpns0，无法tracert到下一跳。</p>
-</blockquote>
-<p><span style="color:purple">图4-5</span><br><img src="http://qingdao.icean.cc:11234/Imgbed/openconnect_IPv6/4-5.png" alt=""></p>
-<hr>
-<h3 id="5-结论与猜想"><a href="#5-结论与猜想" class="headerlink" title="5.结论与猜想"></a>5.结论与猜想</h3><h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><ul>
-<li><strike style="color:red">vps服务商可能禁用了非注册IPv6地址的转发。</strike></li>
-<li><strike style="color:red">ocserv配置可能还存在问题，具体问题不得而知。</strike></li>
-<li><strike style="color:red">设备获取的IPv6地址不是eui-64地址，配置方式不得而知。</strike>
-
-</li>
-</ul>
-<p>如果在ocserv.conf中填写的ipv6地址池范围，不被上游路由器转发，则vpn方式接入的设备仍无法上网，如果填写和vps所在的网段相同，也无法上网，因为vps会在有设备接入的时候，虚拟化出一张网卡，该网卡的IPv6地址和局域网网关的IP地址一样，所以其数据包也不会被转发。</p>
-<h4 id="猜想"><a href="#猜想" class="headerlink" title="猜想"></a>猜想</h4><ul>
-<li>换一家vps供应商试试，例如linode或者搬瓦工。</li>
-<li>在自己局域网的双栈linux主机上尝试配置ocserv服务，并进行验证。</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/09/09/CentOS 批量添加SFTP用户/">CentOS 批量添加 sftp 用户</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月9日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-开启-SFTP服务"><a href="#1-开启-SFTP服务" class="headerlink" title="1.开启 SFTP服务"></a>1.开启 SFTP服务</h3><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><ul>
-<li>用户只能通过sftp访问，不能登录SSH</li>
-<li>用户要被锁定在特定的目录下，没有读写其它目录的权限</li>
-</ul>
-<h4 id="ssh配置文件修改"><a href="#ssh配置文件修改" class="headerlink" title="ssh配置文件修改"></a>ssh配置文件修改</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#Subsystem sftp /usr/lib/openssh/sftp-server</div><div class="line">Subsystem sftp internal-sftp</div></pre></td></tr></table></figure>
-<p>该行(上面这行)注释掉，并添加新配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Match group sftp</div></pre></td></tr></table></figure></p>
-<p>匹配sftp组，如为单个用户可用：Match user 用户名;  设置此用户登陆时的shell设为/bin/false,这样它就不能用ssh只能用sftp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ChrootDirectory /home/</div></pre></td></tr></table></figure></p>
-<p>指定用户被锁定到的那个目录，为了能够chroot成功，该目录必须属主是root，并且其他用户或组不能写</p>
-<hr>
-<h3 id="2-添加sftp用户"><a href="#2-添加sftp用户" class="headerlink" title="2.添加sftp用户"></a>2.添加sftp用户</h3><h4 id="创建sftp用户组"><a href="#创建sftp用户组" class="headerlink" title="创建sftp用户组"></a>创建sftp用户组</h4><p>创建sftp用户组，并查看group ID<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">groupadd sftp</div><div class="line">cat /etc/group | grep sftp | awk -F &apos;:&apos; &apos;&#123;print $3&#125;&apos;</div></pre></td></tr></table></figure></p>
-<h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><p>添加用户,并分配给sftp用户组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -d /home/test -m -s /bin/false -g sftp test</div></pre></td></tr></table></figure></p>
-<h4 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h4><p>修改添加用户的密码</p>
-<hr>
-<h3 id="3-批量添加sftp用户"><a href="#3-批量添加sftp用户" class="headerlink" title="3.批量添加sftp用户"></a>3.批量添加sftp用户</h3><h4 id="查看sftp组id"><a href="#查看sftp组id" class="headerlink" title="查看sftp组id"></a>查看sftp组id</h4><p>查看sftp的组id，假设组id是502<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cat /etc/group | grep sftp | awk -F &apos;:&apos; &apos;&#123;print $3&#125;&apos;</div><div class="line">502</div></pre></td></tr></table></figure></p>
-<h4 id="添加用户-1"><a href="#添加用户-1" class="headerlink" title="添加用户"></a>添加用户</h4><p>根据<code>/etc/passwd</code>中的格式，批量添加用户，其中<strong>503</strong>为<strong>用户id</strong>，<strong>502</strong>为<strong>组id</strong>，将如下内容保存到一个文件<strong>userlis</strong>t中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">asbd:x:503:502::/home/asbd:/bin/false</div><div class="line">baowentao:x:504:502::/home/baowentao:/bin/false</div><div class="line">fuzhangbin:x:505:502::/home/fuzhangbin:/bin/false</div><div class="line">hourui:x:506:502::/home/hourui:/bin/false</div><div class="line">ncis:x:507:502::/home/ncis:/bin/false</div><div class="line">network:x:508:502::/home/network:/bin/false</div><div class="line">network-system:x:509:502::/home/network-system:/bin/false</div><div class="line">storage:x:510:502::/home/storage:/bin/false</div><div class="line">yueyinliang:x:511:502::/home/yueyinliang:/bin/false</div></pre></td></tr></table></figure></p>
-<p>执行 newusers命令，添加用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">newusers userlist</div></pre></td></tr></table></figure></p>
-<h4 id="修改用户密码"><a href="#修改用户密码" class="headerlink" title="修改用户密码"></a>修改用户密码</h4><p>创建用户密码文件，内容如下，保存到名为<strong>passwd</strong>文件中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">asbd:123456</div><div class="line">baowentao:123456</div><div class="line">fuzhangbin:123456</div><div class="line">hourui:123456</div><div class="line">ncis:123456</div><div class="line">network:123456</div><div class="line">network-system:123456</div><div class="line">storage:123456</div><div class="line">yueyinliang:123456</div></pre></td></tr></table></figure></p>
-<p>执行命令<code>/usr/sbin/pwunconv</code>，将/etc/shadow产生的shadow密码解码，然后回写到/etc/passwd中， 并将<code>/etc/shadow的shadow</code>密码栏删掉。这是为了方便下一步的密码转换工作，即先取消shadow password功能，关闭影子文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pwunconv</div></pre></td></tr></table></figure></p>
-<p>用<code>chpasswd</code>批量修改密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chpasswd &lt; passwd</div></pre></td></tr></table></figure></p>
-<p>恢复影子文件，保证安全<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pwconv</div></pre></td></tr></table></figure></p>
-<h4 id="4-脚本"><a href="#4-脚本" class="headerlink" title="4.脚本"></a>4.脚本</h4><p>添加用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">newusers userlist</div><div class="line">pwunconv</div><div class="line">chpasswd &lt; passwd</div><div class="line">pwconv</div></pre></td></tr></table></figure></p>
-<p>更新密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pwunconv</div><div class="line">chpasswd &lt; passwd</div><div class="line">pwconv</div></pre></td></tr></table></figure></p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/09/02/CentOS 7 Minimal设置/">CentOS 7 minimal设置</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年9月2日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h4 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h4><p>停用firewalld服务 安装iptables</p>
-<pre><code>service firewalld stop
-chkconfig firewalld off
-
-yum install iptables-services
-service iptables start
-chkconfig iptables on
-service ip6tables start
-chkconfig ip6tables on
-</code></pre><p>保存iptables</p>
-<pre><code>iptables-save &gt;&gt; /etc/sysconfig/iptables
-</code></pre><h4 id="sysctl-conf"><a href="#sysctl-conf" class="headerlink" title="sysctl.conf"></a>sysctl.conf</h4><p>ipv4开启转发</p>
-<pre><code>echo &apos;net.ipv4.ip_forward = 1&apos; &gt;&gt; /etc/sysctl.conf
-echo &apos;net.ipv6.conf.all.forwarding=1&apos; &gt;&gt; /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
-</code></pre><p>验证是否开启转发<br>​<br>    cat /proc/sys/net/ipv4/ip_forward</p>
-<h4 id="nmtui"><a href="#nmtui" class="headerlink" title="nmtui"></a>nmtui</h4><p>界面修改网络配置信息</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/08/31/CentOS 6.x7.x Strongswan 5.5.0编译安装+Freeradius验证_v2/">CentOS 6.x/7.x Strongswan 5.5.0编译安装 + Freeradius验证 v2</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年8月31日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
-        
-
-        
-          <h3 id="1-编译安装Strongswan"><a href="#1-编译安装Strongswan" class="headerlink" title="1. 编译安装Strongswan"></a>1. 编译安装Strongswan</h3><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>需要安装如下依赖以及软件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install pam-devel openssl-devel make gcc curl wget</div></pre></td></tr></table></figure></p>
-<h4 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h4><p>从<a href="https://www.strongswan.org/" target="_blank" rel="external">Strongswan</a>官网下载最新Strongswan 5.5.0源码到主机并解压</p>
-<h4 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h4><p>切换到Strongswan源码解压的目录，执行配置与编译安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">./configure  --enable-eap-identity --enable-eap-md5 \</div><div class="line">--enable-eap-mschapv2 --enable-eap-tls --enable-eap-ttls --enable-eap-peap  \</div><div class="line">--enable-eap-tnc --enable-eap-dynamic --enable-eap-radius  --enable-xauth-eap  \</div><div class="line">--enable-xauth-pam  --enable-dhcp  --enable-openssl  --enable-addrblock --enable-unity  \</div><div class="line">--enable-certexpire --enable-radattr --enable-swanctl --enable-openssl --disable-gmp \</div><div class="line">--enable-kernel-libipsec  <span class="comment">#如果主机为OpenVZ则需要添加这个</span></div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
-<p>根据主机性能，完成上述编译安装需要的时间不同。安装完成后，可执行文件的路径为/usr/local/sbin, 配置文件路径为/usr/local/etc，配置文件主要如下</p>
-<ul>
-<li>ipsec.conf              </li>
-<li>ipsec.secrets</li>
-<li>ipsec.d</li>
-<li>strongswan.conf</li>
-<li>strongswan.d</li>
-<li>swanctl</li>
-</ul>
-<hr>
-<h3 id="2-证书配置"><a href="#2-证书配置" class="headerlink" title="2. 证书配置"></a>2. 证书配置</h3><h4 id="Let’s-Encrypt免费服务器证书"><a href="#Let’s-Encrypt免费服务器证书" class="headerlink" title="Let’s Encrypt免费服务器证书"></a>Let’s Encrypt免费服务器证书</h4><p>Let’s Encrypt是免费、自动化、开放的证书签发服务。它由 ISRG（Internet Security Research Group，互联网安全研究小组）提供服务，而 ISRG 是来自于美国加利福尼亚州的一个公益组织。Let’s Encrypt 得到了 Mozilla、Cisco、Akamai、Electronic Frontier Foundation 和 Chrome 等众多公司和机构的支持。申请 Let’s Encrypt 证书免费，每次只有 90 天的有效期，但可以通过脚本定期更新。</p>
-<h5 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h5><p>下载Let’s Encrypt并执行生成证书。在执行过程中，会下载一些依赖，同时在提示输入域名的时候，要和VPS的域名一致。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/letsencrypt/letsencrypt</div><div class="line"><span class="built_in">cd</span> letsencrypt</div><div class="line">./letsencrypt-auto certonly --standalone</div></pre></td></tr></table></figure></p>
-<h5 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h5><p>生成的证书和证书私钥位于 <code>/etc/letsencrypt/live/your.domain/</code> 目录下，如下所示，所有文件均是软链接，其原始文件后的数字为证书生成的次数，首次生成为1，每续期一次，数字加一，下面的为续期了两次的证书。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">lrwxrwxrwx 1 root root 36 Dec  3 09:30 cert.pem -&gt; ../../archive/[域名]/cert3.pem</div><div class="line">lrwxrwxrwx 1 root root 37 Dec  3 09:30 chain.pem -&gt; ../../archive/[域名]/chain3.pem</div><div class="line">lrwxrwxrwx 1 root root 41 Dec  3 09:30 fullchain.pem -&gt; ../../archive/[域名]/fullchain3.pem</div><div class="line">lrwxrwxrwx 1 root root 39 Dec  3 09:30 privkey.pem -&gt; ../../archive/[域名]/privkey3.pem</div></pre></td></tr></table></figure>
-<p>建立软链到 strongSwan 配置目录下，这样是为了方便证书续期也不用修改配置文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln <span class="_">-s</span> /etc/letsencrypt/live/your.domain/fullchain.pem /etc/ipsec.d/certs/server.cert.pem</div><div class="line">ln <span class="_">-s</span> /etc/letsencrypt/live/your.domain/privkey.pem /etc/ipsec.d/private/server.key.pem</div></pre></td></tr></table></figure>
-<h5 id="证书自动续期"><a href="#证书自动续期" class="headerlink" title="证书自动续期"></a>证书自动续期</h5><p>letsencrypt证书需要每三个月进行续期一次证书，续期命令如下，每隔两个月的4号进行一次证书续期</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">crontab <span class="_">-e</span></div><div class="line"> * * 4 */2 * /root/letsencrypt/letsencrypt-auto  --renew-by-default  certonly --standalone <span class="_">-d</span> [域名] --email [邮箱]  --agree-tos</div></pre></td></tr></table></figure>
-<h4 id="自签名CA颁发服务器证书"><a href="#自签名CA颁发服务器证书" class="headerlink" title="自签名CA颁发服务器证书"></a>自签名CA颁发服务器证书</h4><h5 id="CA证书"><a href="#CA证书" class="headerlink" title="CA证书"></a>CA证书</h5><p>生成一个CA私钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ipsec pki --gen --outform pem &gt; ca.key.pem</div></pre></td></tr></table></figure>
-<p>基于私钥生成一个CA证书。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ipsec pki --self --in ca.key.pem --dn <span class="string">"C=CN, O=Strongswan, CN=Strongswan CA"</span> --ca --lifetime 3650 --outform pem &gt; ca.cert.pem</div></pre></td></tr></table></figure></p>
-<ul>
-<li>–self 表示自签证书</li>
-<li>–in 是输入的私钥</li>
-<li>–dn 是判别名</li>
-<li>C 表示国家名，同样还有 ST 州/省名，L 地区名，STREET（全大写） 街道名</li>
-<li>O 组织名称</li>
-<li>CN 友好显示的通用名</li>
-<li>–ca 表示生成 CA 根证书</li>
-<li>–lifetime 为有效期, 单位是天</li>
-</ul>
-<h5 id="服务器证书"><a href="#服务器证书" class="headerlink" title="服务器证书"></a>服务器证书</h5><p>生成服务器证书的私钥<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ipsec pki --gen --outform pem &gt; server.key.pem</div></pre></td></tr></table></figure></p>
-<p>用自签的 CA 证书签发一个服务器证书<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ipsec pki --pub --in server.key.pem --outform pem &gt; server.pub.pem</div><div class="line">ipsec pki --issue --lifetime 1200 --cacert ca.cert.pem --cakey ca.key.pem --in server.pub.pem \</div><div class="line">--dn <span class="string">"C=CN, O=Strongswan, CN=vpn.strongswan.org"</span> --san=<span class="string">"vpn.strongswan.org"</span> --flag serverAuth \</div><div class="line">--flag ikeIntermediate --outform pem &gt; server.cert.pem</div></pre></td></tr></table></figure></p>
-<p>–issue, –cacert 和–cakey 就是表明要用刚才自签的 CA 证书来签这个服务器证书，–dn, –san，–flag 是一些客户端方面的特殊要求：</p>
-<ul>
-<li>iOS 客户端要求 CN 也就是通用名必须是服务器的 URL 或 IP 地址;</li>
-<li>Windows 7 不但要求了上面，还要求必须显式说明这个服务器证书的用途（用于与服务器进行认证），–flag serverAuth;</li>
-<li>非 iOS 的 Mac OS X 要求了“IP 安全网络密钥互换居间（IP Security IKE Intermediate）”这种增强型密钥用法（EKU），–flag ikdeIntermediate;</li>
-<li>Android 和 iOS 都要求服务器别名（serverAltName）就是服务器的 URL 或 IP 地址，–san。</li>
-</ul>
-<h5 id="客户端证书（可选）"><a href="#客户端证书（可选）" class="headerlink" title="客户端证书（可选）"></a>客户端证书（可选）</h5><p>生成客户端私钥<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ipsec pki --gen --outform pem &gt; client.key.pem</div></pre></td></tr></table></figure></p>
-<p>用自签的CA证书来签发客户端证书<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ipsec pki --pub --in client.key.pem --outform pem &gt; client.pub.pem</div><div class="line">ipsec pki --issue --lifetime 1200 --cacert ca.cert.pem --cakey ca.key.pem --in client.pub.pem \</div><div class="line">--dn <span class="string">"C=CN, O=Strongswan, CN=vpn.strongswan.org"</span> --outform pem &gt; client.cert.pem</div></pre></td></tr></table></figure></p>
-<p>打包证书为 p12，生成 p12 证书可以设置密码，请注意：OS X 无法导入密码为空的 p12 证书<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">openssl pkcs12 -export -inkey client.key.pem -in client.cert.pem -name <span class="string">"Strongswan Client Cert"</span> \</div><div class="line">-certfile ca.cert.pem -caname <span class="string">"Strongswan CA"</span> -out client.cert.p12</div></pre></td></tr></table></figure></p>
-<h5 id="安装证书-1"><a href="#安装证书-1" class="headerlink" title="安装证书"></a>安装证书</h5><p>复制证书到指定的路径<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cp ca.key.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/private/</div><div class="line">cp client.key.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/private/</div><div class="line">cp server.key.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/private/</div><div class="line">cp server.cert.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/certs/</div><div class="line">cp client.cert.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/certs/</div><div class="line">cp ca.cert.pem /usr/<span class="built_in">local</span>/etc/ipsec.d/cacerts/</div></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="3-Strongswan配置"><a href="#3-Strongswan配置" class="headerlink" title="3. Strongswan配置"></a>3. Strongswan配置</h3><h4 id="ipsec-conf配置"><a href="#ipsec-conf配置" class="headerlink" title="ipsec.conf配置"></a>ipsec.conf配置</h4><p>支持IPsec和ikev2的配置如下所示， 常用设置如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">cachecrls = yes					<span class="comment">#是否缓存证书吊销列表</span></div><div class="line">strictcrlpolicy=yes				    <span class="comment">#是否严格执行证书吊销规则</span></div><div class="line">uniqueids=no				    <span class="comment">#如果同一个用户在不同的设备上重复登录,yes 断开旧连接,创建新连接;no 保持旧</span></div><div class="line">  							   <span class="comment">#连接,并发送通知; never 同 no, 但不发送通知.</span></div><div class="line">ca %default					     <span class="comment">#配置根证书, 如果不使用证书吊销列表, 可以不用这段. 命名为 %default 所有配置</span></div><div class="line">  							   <span class="comment">#节都会继承它</span></div><div class="line">crl =						    <span class="comment">#证书吊销列表URL,可以是 LDAP, http, 或文件路径</span></div><div class="line">conn %default				     <span class="comment">#定义连接项, 命名为 %default 所有连接都会继承它</span></div><div class="line">compress = yes				     <span class="comment">#是否启用压缩, yes 表示如果支持压缩会启用.</span></div><div class="line">dpdaction = hold			       <span class="comment">#当意外断开后尝试的操作, hold, 保持并重连直到超时.</span></div><div class="line">dpddelay = 30s				      <span class="comment">#意外断开后尝试重连时长</span></div><div class="line">dpdtimeout = 60s			      <span class="comment">#意外断开后超时时长, 只对 IKEv1 起作用</span></div><div class="line">inactivity = 300s				   <span class="comment">#闲置时长,超过后断开连接.</span></div><div class="line">esp = aes256-sha256,aes256-sha1,3des-sha1!	</div><div class="line">  							   <span class="comment">#数据传输协议加密算法列表</span></div></pre></td></tr></table></figure></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">ike = aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!</div><div class="line">  							   <span class="comment">#密钥交换协议加密算法列表</span></div><div class="line">							 <span class="comment">#iOS支持的IKE加密方式为aes256-sha256-modp1024</span></div><div class="line">  							   <span class="comment">#OS X为3des-sha1-modp1024</span></div><div class="line">  							   <span class="comment">#Win7为aes256-sha1-modp1024，</span></div><div class="line">keyexchange = ike			       <span class="comment">#默认的密钥交换算法, ike 为自动, 优先使用 IKEv2</span></div><div class="line">left = %any					      <span class="comment">#服务端公网IP, 可以是魔术字 %any，表示从本地IP地址表中取.</span></div><div class="line">right = %any				      <span class="comment">#客户端IP, 同上</span></div><div class="line">leftdns = 8.8.8.8,8.8.4.4			<span class="comment">#指定服务端与客户端的dns, 多个用","分隔</span></div><div class="line">rightdns = 8.8.8.8,8.8.4.4			<span class="comment">#指定服务端与客户端的dns, 多个用","分隔</span></div><div class="line">leftikeport = &lt;port&gt;			  <span class="comment">#服务端用于ike认证时使用的端口, 默认为500,如果使用了nat 转发, 则使用4500</span></div><div class="line">leftsourceip = %config			   <span class="comment">#服务器端虚拟IP地址</span></div><div class="line">rightsourceip = 10.0.0.0/24		       <span class="comment">#客户端虚拟IP段</span></div><div class="line">leftsubnet = 0.0.0.0/0		              <span class="comment">#服务器端子网, 魔术字 0.0.0.0/0. 如果为客户端分配虚拟 IP 地址的话，那表示之</span></div><div class="line">  							    <span class="comment">#后要做 iptables 转发，那么服务器端就必须是用魔术字</span></div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">leftca = ca.cert.pem 			    <span class="comment">#服务器端根证书</span></div><div class="line">leftcert = server.cert.pem		       <span class="comment">#服务器证书, 可以是 PEM 或 DER 格式</span></div><div class="line">rightcert = &lt;path&gt;				<span class="comment">#不指定客户端证书路径</span></div><div class="line">leftsigkey = server.pub.pem		     <span class="comment">#指定服务器证书的公钥</span></div><div class="line">leftsendcert = always			   <span class="comment">#是否发送服务器证书到客户端</span></div><div class="line">rightsendcert = never			  <span class="comment">#客户端不发送证书</span></div><div class="line">leftauth = pubkey	                         <span class="comment">#服务端认证方法,使用证书</span></div><div class="line">rightauth = eap-mschapv2	         <span class="comment">#客户端认证使用 EAP 扩展认证 , 貌似 eap-mschapv2 比较通用</span></div><div class="line">leftid = vpn.strongswan.com	            <span class="comment">#服务端id, 可以任意指定, 默认为服务器证书的 subject, 还可以是魔术字 %any，</span></div><div class="line">  							  <span class="comment">#表示什么都行.</span></div><div class="line">rightid = %any				      <span class="comment">#客户端id, 任意</span></div><div class="line">eap_identity = %any		                <span class="comment">#指定客户端eap id</span></div><div class="line">rekey = no					    <span class="comment">#不自动重置密钥</span></div><div class="line">fragmentation = yes		        	<span class="comment">#开启IKE 消息分片</span></div><div class="line">auto = add					   <span class="comment">#当服务启动时, 应该如何处理这个连接项. add 添加到连接表中.</span></div></pre></td></tr></table></figure>
-<p>本文使用的配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">config setup</div><div class="line">    uniqueids = no</div><div class="line">    </div><div class="line">conn %default</div><div class="line">    compress = yes</div><div class="line">    keyingtries = 1</div><div class="line">    keyexchange = ike</div></pre></td></tr></table></figure></p>
-<p>IKE基础配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">conn IKE-BASE</div><div class="line">    <span class="comment">#leftca = ca.cert.pem                      #使用Let's Encript免费证书的时候注释这句</span></div><div class="line">    leftcert = server.cert.pem                   </div><div class="line">    left = %any</div><div class="line">    leftsubnet = 0.0.0.0/0</div><div class="line">    right = %any</div><div class="line">    rightsourceip = 192.168.90.0/24   <span class="comment">#客户端接入分配的私有IP地址空间</span></div></pre></td></tr></table></figure>
-<p>IKEv1配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">conn IPSec-IKEv1-PSK</div><div class="line">    also = IKE-BASE</div><div class="line">    keyexchange = ikev1</div><div class="line">    fragmentation = yes</div><div class="line">    leftauth = psk</div><div class="line">    rightauth = psk</div><div class="line">    rightauth2 = xauth-radius</div><div class="line">    auto = add</div><div class="line">    </div><div class="line">conn IPSec-IKEv1</div><div class="line">    also = IKE-BASE</div><div class="line">    keyexchange = ikev1</div><div class="line">    fragmentation = yes</div><div class="line">    leftauth = pubkey</div><div class="line">    rightauth = pubkey</div><div class="line">    rightcert = client.cert.pem</div><div class="line">    auto = add</div></pre></td></tr></table></figure></p>
-<p>IKEv2面向Linux、Android、Windows配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">conn IKEv2-LAW</div><div class="line">    also = IKE-BASE</div><div class="line">    keyexchange = ikev2</div><div class="line">    keyingtries = 1 </div><div class="line">    ike = aes256-sha1-modp1024</div><div class="line">    esp = aes256-sha1</div><div class="line">    leftauth = pubkey</div><div class="line">    leftsendcert = always</div><div class="line">    rightauth = eap-radius</div><div class="line">    rekey = no</div><div class="line">    eap_identity = %any</div><div class="line">    auto = add</div></pre></td></tr></table></figure></p>
-<p>IKEv2面向iOS、MAC OS X配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">conn IKEv2-Apple</div><div class="line">    also = IKE-BASE</div><div class="line">    keyexchange = ikev2</div><div class="line">    keyingtries = 1 </div><div class="line">    ike = aes256-sha256-modp1024</div><div class="line">    esp = aes256-sha256</div><div class="line">    leftid =  vpn.strongswan.com    <span class="comment">#modify</span></div><div class="line">    leftauth = pubkey</div><div class="line">    leftsendcert = always</div><div class="line">    rightauth = eap-radius</div><div class="line">    rightsendcert = never</div><div class="line">    fragmentation = yes </div><div class="line">    rekey = yes</div><div class="line">    eap_identity = %any</div><div class="line">    auto = add</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span>leftid需要和服务器URL或者IP地址一致，否则无法登录。</p>
-</blockquote>
-<h4 id="日志配置"><a href="#日志配置" class="headerlink" title="日志配置"></a>日志配置</h4><p>修改/usr/local/etc/strongswan.conf，内容如下，添加filelog选项。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">charon &#123;</div><div class="line">    load_modular = yes </div><div class="line">    filelog &#123;</div><div class="line">        /var/<span class="built_in">log</span>/charon.log &#123;</div><div class="line">            time_format = %b %e %T</div><div class="line">            ike_name = yes </div><div class="line">            append = no</div><div class="line">            default = 2 </div><div class="line">            flush_line = yes </div><div class="line">        &#125;   </div><div class="line">        stderr &#123;</div><div class="line">            ike = 2 </div><div class="line">            knl = 3 </div><div class="line">        &#125;                                                                                                                                                            </div><div class="line">    &#125;   </div><div class="line">    syslog &#123;</div><div class="line">        identifier = charon-custom</div><div class="line">        daemon &#123;</div><div class="line">        &#125;   </div><div class="line">        auth &#123;</div><div class="line">            default = -1</div><div class="line">            ike = 0 </div><div class="line">        &#125;   </div><div class="line">    &#125;                                                                                                                                                </div><div class="line">    plugins &#123;</div><div class="line">        include strongswan.d/charon/*.conf</div><div class="line">    &#125;   </div><div class="line">&#125;</div><div class="line">include strongswan.d/*.conf</div></pre></td></tr></table></figure></p>
-<h4 id="ipsec-secrets设置"><a href="#ipsec-secrets设置" class="headerlink" title="ipsec.secrets设置"></a>ipsec.secrets设置</h4><p>配置验证方式的用户名与密码，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">: RSA server.key.pem 		<span class="comment">#使用证书验证时的服务器端私钥</span></div><div class="line">: PSK <span class="string">"pskkey"</span>                           <span class="comment">#使用预设加密密钥, 越长越好</span></div><div class="line">: XAUTH <span class="string">"pskkey"</span>		     <span class="comment">#使用XAUTH预设加密密钥, 越长越好</span></div><div class="line"><span class="built_in">test</span> : EAP <span class="string">"test"</span>		          <span class="comment">#验证的账户和密码，如果配置了RADIUS ，账户密码无法进行有效验证</span></div><div class="line"><span class="built_in">test</span>2 : XAUTH <span class="string">"test2"</span></div></pre></td></tr></table></figure></p>
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>2016/9/2 17:25:54 PSK和XAUTH可以设置一样，这样可以避免已配置的麻烦，同时共享密钥中不能有符号等，否则登录不成功。</p>
-</blockquote>
-<h4 id="DNS设置"><a href="#DNS设置" class="headerlink" title="DNS设置"></a>DNS设置</h4><p>修改/usr/local/etc/strongswan.d/charon.conf，添加DNS服务器，修改其中的dns1=8.8.8.8。</p>
-<h4 id="Freeradius-服务器设置"><a href="#Freeradius-服务器设置" class="headerlink" title="Freeradius 服务器设置"></a>Freeradius 服务器设置</h4><p>修改/usr/local/etc/strongswan.d/charon/eap-radius .conf，设置accounting改为yes，并添加servers中添加Freeradius 服务器。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">accounting = yes</div><div class="line">servers &#123;</div><div class="line">  RadiusServer &#123;</div><div class="line">       secret = testing1234        <span class="comment">#与Freeradius 服务器的暗码</span></div><div class="line">       address = 1.2.3.4              <span class="comment">#Freeradius 服务器IP地址</span></div><div class="line">       auth_port = 1812             <span class="comment">#验证端口</span></div><div class="line">       acct_port = 1813              <span class="comment">#记账端口</span></div><div class="line">               &#125;</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
-<h4 id="iptables设置"><a href="#iptables设置" class="headerlink" title="iptables设置"></a>iptables设置</h4><p>转发/usr/local/etc/ipsec.conf中设置的虚拟IP地址段，其中x.x.x.x为主机的公网IP地址<br>OpenVZ如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING <span class="_">-s</span> 192.168.90.0/24 -o venet0 -j SNAT --to-source x.x.x.x</div><div class="line">iptables -I FORWARD 4 <span class="_">-s</span> 192.168.90.0/24 -j ACCEPT</div></pre></td></tr></table></figure></p>
-<p>KVM如下，eth0为公网IP所在的网卡。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING <span class="_">-s</span> 192.168.90.0/24 -o eth0 -j MASQUERADE</div></pre></td></tr></table></figure></p>
-<p>开放UDP的500和4500端口<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -A INPUT -p udp -m udp --dport 4500 -j ACCEPT</div><div class="line">iptables -A INPUT -p udp -m udp --dport 500 -j ACCEPT</div></pre></td></tr></table></figure></p>
-<p>保存iptables</p>
-<blockquote>
-<p><span style="color:red"><strong>修订：</strong></span>2016/9/2 17:25:39  删除转发表中的条目，否则无法转发数据。</p>
-</blockquote>
-<hr>
-<h3 id="4-服务启动"><a href="#4-服务启动" class="headerlink" title="4. 服务启动"></a>4. 服务启动</h3><p>启动Strongswan服务<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/ipsec start</div></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="5-IKEv2-VPN配置"><a href="#5-IKEv2-VPN配置" class="headerlink" title="5. IKEv2 VPN配置"></a>5. IKEv2 VPN配置</h3><h4 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h4><h5 id="系统版本要求"><a href="#系统版本要求" class="headerlink" title="系统版本要求"></a>系统版本要求</h5><p><span style="color:red">iOS 9</span>或者更高版本</p>
-<h5 id="证书导入"><a href="#证书导入" class="headerlink" title="证书导入"></a>证书导入</h5><ul>
-<li>通过<strong>邮件</strong>发送或者<strong>Safari浏览器</strong><a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">下载</a>CA证书到iOS设备</li>
-<li>安装证书到设备</li>
-<li>输入iOS密码</li>
-</ul>
-<h5 id="VPN设置"><a href="#VPN设置" class="headerlink" title="VPN设置"></a>VPN设置</h5><ul>
-<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置</strong></li>
-<li>类型: IKEv2</li>
-<li>描述: 任意</li>
-<li>用户鉴定: 用户名</li>
-<li>服务器: VPN服务器URL或者IP地址</li>
-<li>用户名: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-<li>远程ID: VPN远程ID</li>
-<li>本地ID: 留空</li>
-</ul>
-<h4 id="OS-X"><a href="#OS-X" class="headerlink" title="OS X"></a>OS X</h4><h5 id="系统版本要求-1"><a href="#系统版本要求-1" class="headerlink" title="系统版本要求"></a>系统版本要求</h5><p><span style="color:red">OS X 10.11 (“El Capitan”)</span>或者更高版本</p>
-<h5 id="证书导入-1"><a href="#证书导入-1" class="headerlink" title="证书导入"></a>证书导入</h5><ul>
-<li>配置位置: <strong>钥匙串访问 -&gt; 钥匙串 -&gt; 系统</strong></li>
-<li>选择要添加的证书文件</li>
-<li>导入证书</li>
-</ul>
-<h5 id="VPN设置-1"><a href="#VPN设置-1" class="headerlink" title="VPN设置"></a>VPN设置</h5><ul>
-<li>配置位置: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
-<li>接口: VPN</li>
-<li>VPN类型: IKEv2</li>
-<li>服务名称: 任意</li>
-<li>服务器: VPN服务器URL或者IP地址</li>
-<li>远程ID: VPN远程ID</li>
-<li>本地ID: 留空</li>
-<li>鉴定设置 -&gt; 用户名: Freeradius服务器配置</li>
-<li>鉴定设置 -&gt; 密码: Freeradius服务器配置</li>
-</ul>
-<h4 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h4><h5 id="系统版本要求-2"><a href="#系统版本要求-2" class="headerlink" title="系统版本要求"></a>系统版本要求</h5><p><span style="color:red">Android 4</span>或者更高版本，需要安装<a href="http://pan.baidu.com/s/1gfkEXKB" target="_blank" rel="external">Strongswan客户端</a></p>
-<h5 id="证书导入-2"><a href="#证书导入-2" class="headerlink" title="证书导入"></a>证书导入</h5><p>如果服务器使用的是<strong>自签名CA</strong>颁发的证书，需要导入的CA证书为之前创建的ca.cert.pem。若使用<strong>Let’s Encript</strong>证书，需要导入需要在客户端中导入<a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">Let’s Encrypt Authority X3</a>证书。将证书文件导入安卓系统某个目录下</p>
-<ul>
-<li>配置位置：<strong>CA certificates -&gt; Import certificates</strong></li>
-<li>从文件系统选择证书文件</li>
-<li>确认导入证书</li>
-</ul>
-<h5 id="VPN设置-2"><a href="#VPN设置-2" class="headerlink" title="VPN设置"></a>VPN设置</h5><ul>
-<li>配置位置：<strong>ADD VPN PROFILE</strong></li>
-<li>服务器: VPN服务器URL或者IP地址</li>
-<li>VPN类型: IKEv2 EAP</li>
-<li>用户名: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-</ul>
-<h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h4><h5 id="系统版本要求-3"><a href="#系统版本要求-3" class="headerlink" title="系统版本要求"></a>系统版本要求</h5><p><span style="color:red">Win 7</span>或者更高版本</p>
-<h5 id="证书导入-3"><a href="#证书导入-3" class="headerlink" title="证书导入"></a>证书导入</h5><p>windows使用IKEv2 VPN需要导入服务器证书到<strong>信任根证书颁发机构。如果服务器使用的是</strong>自签名CA<strong>颁发的证书，需要导入的CA证书为之前创建的ca.cert.pem。若使用</strong>Let’s Encript**证书，需要导入需要在客户端中导入<a href="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem" target="_blank" rel="external">Let’s Encrypt Authority X3</a>证书。</p>
-<ul>
-<li>开始菜单搜索<strong>cmd</strong>，打开后输入 <strong>mmc（Microsoft 管理控制台）</strong></li>
-<li><strong>文件</strong> -&gt; <strong>添加/删除管理单元</strong>，添加<strong>证书</strong>单元</li>
-<li>证书单元的弹出窗口中选<strong>计算机账户</strong>，之后选<strong>本地计算机</strong>，确定</li>
-<li>在左边的<strong>控制台根节点</strong>下选择<strong>证书</strong> -&gt; <strong>受信任的根证书颁发机构</strong> -&gt; <strong>证书</strong>，右键 -&gt; <strong>所有任务</strong> -&gt; <strong>导入</strong>打开证书导入窗口。</li>
-<li>选择证书文件导入即可</li>
-</ul>
-<h5 id="VPN设置-3"><a href="#VPN设置-3" class="headerlink" title="VPN设置"></a>VPN设置</h5><h6 id="Win10-Win8"><a href="#Win10-Win8" class="headerlink" title="Win10/Win8"></a>Win10/Win8</h6><ul>
-<li>配置位置: <strong>设置 -&gt; 网络和Internet -&gt; VPN -&gt; 添加VPN</strong></li>
-<li>VPN提供商: Windows（内置）</li>
-<li>连接名称: 任意</li>
-<li>服务器名称或地址: VPN服务器URL或者IP地址</li>
-<li>VPN类型: IKEv2</li>
-<li>登录信息类型: 用户名和密码</li>
-<li>用户名: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-</ul>
-<h6 id="Win7"><a href="#Win7" class="headerlink" title="Win7"></a>Win7</h6><ul>
-<li>配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 连接新的网络或连接 -&gt; 连接到工作区 -&gt; 创建新连接 -&gt; 使用我的Internet连接(VPN)</strong></li>
-<li>Internet 地址: VPN服务器URL或者IP地址</li>
-<li>目标名称: 任意</li>
-<li>用户名: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-</ul>
-<p>设置完毕后，先不连接</p>
-<ul>
-<li>配置位置: <strong>控制面板 -&gt; 网络和 Internet -&gt; 网络和共享中心 -&gt; 更改适配器设置</strong></li>
-<li>在新建的 VPN 连接上右键<strong>属性</strong></li>
-<li>切换到<strong>安全</strong>选项卡<ul>
-<li>VPN 类型: IKEv2</li>
-<li>数据加密选: 需要加密</li>
-<li>身份验证: EAP-MSCHAP v2</li>
-</ul>
-</li>
-</ul>
-<p>然后选择连接VPN，win7/8/10连接界面可能不同，但是大同小异。</p>
-<h4 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h4><p>Linux 的版本众多，认证方法与协议支持也非常丰富，详细方法请根据 Linux 版本查询连接方法。一般而言，Linux 通过 NetworkManager-strongswan。</p>
-<hr>
-<h3 id="6-IPsec-VPN配置"><a href="#6-IPsec-VPN配置" class="headerlink" title="6. IPsec VPN配置"></a>6. IPsec VPN配置</h3><h4 id="iOS-1"><a href="#iOS-1" class="headerlink" title="iOS"></a>iOS</h4><ul>
-<li>配置位置: <strong>设置 -&gt; VPN -&gt; 添加配置 -&gt; IPSec</strong></li>
-<li>描述: 任意</li>
-<li>用户鉴定: 用户名</li>
-<li>服务器: VPN服务器URL或者IP地址</li>
-<li>用户名: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-<li>密钥: ipsec.secrets 中设置的 XAUTH 预共享密码</li>
-</ul>
-<h4 id="OS-X-1"><a href="#OS-X-1" class="headerlink" title="OS X"></a>OS X</h4><ul>
-<li>配置位置: <strong>系统偏好设置 -&gt; 网络 -&gt;添加网络连接</strong></li>
-<li>接口: VPN</li>
-<li>VPN类型: IPsec/Cisco</li>
-<li>服务器地址: 服务器URL或者IP地址</li>
-<li>账户名称: Freeradius服务器配置</li>
-<li>密码: Freeradius服务器配置</li>
-<li>鉴定设置 -&gt; 共享的密钥: ipsec.secrets 中设置的 EAP 预共享密码</li>
-</ul>
-<h4 id="Android-1"><a href="#Android-1" class="headerlink" title="Android"></a>Android</h4><ul>
-<li>配置位置: <strong>设置 -&gt; 其它连接方式 -&gt; VPN -&gt; 添加 VPN</strong></li>
-<li>名称: 任意</li>
-<li>服务器地址: 服务器URL或者IP地址</li>
-<li>类型: IPSec Xauth PSK</li>
-<li>IPsec 标识符: 不更改</li>
-<li>预共享密钥: ipsec.secrets 中设置的 EAP 预共享密码</li>
-<li>连接时账户名密码: Freeradius服务器配置</li>
-</ul>
-<h4 id="Linux-1"><a href="#Linux-1" class="headerlink" title="Linux"></a>Linux</h4><p>Linux 的版本众多，认证方法与协议支持也非常丰富，详细方法请根据 Linux 版本查询连接方法。一般而言，Linux 通过 NetworkManager-strongswan。</p>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2016/08/31/CentOS 6.x Freeradius 3.0.11编译安装/">CentOS6.x Freeradius 3.0.11编译安装</a>
         
       </h1>
@@ -591,63 +203,14 @@ sysctl -p /etc/sysctl.conf
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-编译安装Freeradius"><a href="#1-编译安装Freeradius" class="headerlink" title="1.编译安装Freeradius"></a>1.编译安装Freeradius</h3><p>CentOS6.5的源只有Freeradius2，没有Freeradius3，这样只能编译安装Freeradius3</p>
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>需要安装gcc，make，mysql-devel等<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc make mysql-devel libtalloc-devel</div></pre></td></tr></table></figure></p>
-<h4 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h4><p>从<a href="http://freeradius.org/" target="_blank" rel="external">Freeradius官网</a>下载最新的源码到主机，然后解压。由于本文下载的版本为3.0.11，所以解压后的文件夹为<code>freeradius-server-3.0.11</code></p>
-<h4 id="配置安装"><a href="#配置安装" class="headerlink" title="配置安装"></a>配置安装</h4><p>切换到解压后的文件夹，进行配置，然后安装,这个过程时间可能比较长，根据主机的性能而定。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./configure --with-modules=rlm_sql_mysql</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
-<p>安装完成后，radius可执行文件的路径为/usr/local/sbin, 配置文件路径为/usr/local/etc/raddb</p>
-<hr>
-<h3 id="2-MySQL设置"><a href="#2-MySQL设置" class="headerlink" title="2. MySQL设置"></a>2. MySQL设置</h3><h4 id="创建数据库-amp-用户"><a href="#创建数据库-amp-用户" class="headerlink" title="创建数据库&amp;用户"></a>创建数据库&amp;用户</h4><p>为Freeradius3创建一个数据库，并创建一个用户将该数据库的所有权限赋予给这个用户。首先以root登录mysql，执行如下语句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE radius3;</div><div class="line">GRANT ALL PRIVILEGES ON radius3.* TO radius3@&quot;localhost&quot; IDENTIFIED BY &quot;radpass&quot;;</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
-<h4 id="navicat管理MySQL"><a href="#navicat管理MySQL" class="headerlink" title="navicat管理MySQL"></a>navicat管理MySQL</h4><p>为方便管理MySQL，可以使用navicat进行管理，则需要添加一个可以远程访问radius数据库的账户，如下添加一个radcat用户，密码为radpass，radius@’%’代表可以从任何地点访问radius数据库。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE radcat;</div><div class="line">GRANT ALL PRIVILEGES ON radius.* TO radius@&apos;%&apos; IDENTIFIED BY &quot;radpass&quot;;</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
-<p>可以控制navicat的权限粒度，例如只赋予某些表的查看权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CREATE USER radcat IDENTIFIED BY &apos;radpass&apos;;</div><div class="line">GRANT SELECT ON radius.radacct TO radcat@&apos;%&apos; IDENTIFIED BY &apos;radpass&apos;;</div></pre></td></tr></table></figure>
-<h4 id="导入Freeradius的MySQL数据库表格"><a href="#导入Freeradius的MySQL数据库表格" class="headerlink" title="导入Freeradius的MySQL数据库表格"></a>导入Freeradius的MySQL数据库表格</h4><p>以root用户，或者以radius用户登录，选择radius数据库，导入Freeradius数据表格</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use radius;</div><div class="line">SOURCE /usr/local/etc/raddb/mods-config/sql/main/mysql/schema.sql;</div><div class="line">exit；</div></pre></td></tr></table></figure>
-<h4 id="增加表格列"><a href="#增加表格列" class="headerlink" title="增加表格列"></a>增加表格列</h4><p>因为个人需求，可以增加导入表的列，例如增加radcheck中条目的创建时间，自动记录每个用户的添加时间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alter table radcheck add column create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;</div></pre></td></tr></table></figure></p>
-<h4 id="插入验证条目"><a href="#插入验证条目" class="headerlink" title="插入验证条目"></a>插入验证条目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#账户账号密码</div><div class="line">insert into radcheck (username,attribute,op,value) values (&apos;test&apos;,&apos;Cleartext-Password&apos;,&apos;:=&apos;,&apos;test&apos;);</div><div class="line"></div><div class="line">#将test用户加入到test组中</div><div class="line">insert into radusergroup (username,groupname) values (&apos;test&apos;,&apos;test&apos;);</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-Freeradius配置"><a href="#3-Freeradius配置" class="headerlink" title="3. Freeradius配置"></a>3. Freeradius配置</h3><h4 id="启用mysql模块"><a href="#启用mysql模块" class="headerlink" title="启用mysql模块"></a>启用mysql模块</h4><p>执行如下命令，启用mysql模块<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/etc/raddb/mods-enabled</div><div class="line">ln <span class="_">-s</span> ../mods-available/sql</div></pre></td></tr></table></figure></p>
-<p>编辑/etc/raddb/mods-available/sql，找到</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dialect = <span class="string">"sqlite"</span></div><div class="line">driver = <span class="string">"rlm_sql_null"</span></div><div class="line">radius_db = <span class="string">"radius"</span></div><div class="line"><span class="comment">#server = "localhost"</span></div><div class="line"><span class="comment">#port = 3306</span></div><div class="line"><span class="comment">#login = "radius"</span></div><div class="line"><span class="comment">#password = "radiuspwd"</span></div><div class="line"><span class="comment">#read_clients =yes</span></div></pre></td></tr></table></figure>
-<p>修改为如下，其中mysql账户为之被授权radius数据库的用户</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dialect = <span class="string">"mysql"</span>                   <span class="comment">#选择mysql</span></div><div class="line">driver = <span class="string">"rlm_sql_mysql"</span>       <span class="comment">#选择mysql驱动</span></div><div class="line">server = <span class="string">"localhost"</span>               <span class="comment">#服务器地址</span></div><div class="line">port = 3306                           <span class="comment">#mysql端口号</span></div><div class="line">radius_db = <span class="string">"radius"</span>             <span class="comment">#所使用的数据库</span></div><div class="line">login = <span class="string">"radius"</span>                    <span class="comment">#mysql账户</span></div><div class="line">password = <span class="string">"radpass"</span>          <span class="comment">#mysql账户密码</span></div><div class="line">read_clients =yes</div></pre></td></tr></table></figure>
-<h4 id="NAS客户端添加"><a href="#NAS客户端添加" class="headerlink" title="NAS客户端添加"></a>NAS客户端添加</h4><p>Freeradius服务器的主要作用是为NAS客户端提供验证服务器，添加NAS客户端设置如下，修改<code>/usr/local/etc/raddb/clients.conf</code>，添加如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">client ovzinp &#123;     </div><div class="line">    ipaddr = 1.2.2.2                            <span class="comment">#客户端地址</span></div><div class="line">    secret= testing1234                     <span class="comment">#与客户端之间使用的暗码</span></div><div class="line">    require_message_authenticator = no</div><div class="line">    nastype = other </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>NAS客户端的设置可能有些不同，但是大同小异，都要填写Freeradius服务器的URL或者IP地址，以及上文的暗码。</p>
-<h4 id="iptables配置"><a href="#iptables配置" class="headerlink" title="iptables配置"></a>iptables配置</h4><p>需要在iptables上开放1812、1813 UDP端口<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -I INPUT 2 -p udp --dport 1812:1813 -j ACCEPT</div></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="4-Freeradius服务器测试"><a href="#4-Freeradius服务器测试" class="headerlink" title="4. Freeradius服务器测试"></a>4. Freeradius服务器测试</h3><h4 id="Freeradius调试"><a href="#Freeradius调试" class="headerlink" title="Freeradius调试"></a>Freeradius调试</h4><p>命令行下使用radiusd -X开启debug模式，然后打开另一个终端，使用如下命令进行测试<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">radtest <span class="built_in">test</span> <span class="built_in">test</span> localhost 0 testing123</div></pre></td></tr></table></figure></p>
-<ul>
-<li>test：账户名</li>
-<li>test：密码</li>
-<li>localhost：Freeradius服务器地址，代表本地</li>
-<li>testing123：与Freeradius之间的共享密钥，在Freeradius服务器的配置目录下的raddb/clients.conf中定义，最好很长很复杂<blockquote>
-<p><span style="color:red"><strong>提示：</strong></span> radtest工具可能需要yum进行安装 yum install freeradius-utils -y</p>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h3 id="5-流量限制模块添加"><a href="#5-流量限制模块添加" class="headerlink" title="5. 流量限制模块添加"></a>5. 流量限制模块添加</h3><h4 id="启用sqlcounter模块"><a href="#启用sqlcounter模块" class="headerlink" title="启用sqlcounter模块"></a>启用sqlcounter模块</h4><p>切换到<code>/usr/local/etc/raddb/mods-enabled</code>下，启用sqlcounter模块</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/etc/raddb/mods-enabled</div><div class="line">ln <span class="_">-s</span> ../mods-available/sqlcounter</div></pre></td></tr></table></figure>
-<h4 id="添加自定义模块"><a href="#添加自定义模块" class="headerlink" title="添加自定义模块"></a>添加自定义模块</h4><p>编辑sqlcounter，添加如下每月流量限制模块<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">sqlcounter monthlytrafficcounter &#123;          <span class="comment">#counter名字</span></div><div class="line">    sql_module_instance = sql            </div><div class="line">    dialect = <span class="variable">$&#123;modules.sql.dialect&#125;</span></div><div class="line">    counter_name = Monthly-Traffic          <span class="comment">#任意名字</span></div><div class="line">    check_name = Max-Monthly-Traffic     <span class="comment">#检查字段，这个字段的临界值要在radcheck或者radcheckgroup表中设置</span></div><div class="line">    reply_name = Monthly-Traffic-Limit   </div><div class="line">    key = User-Name                                 <span class="comment">#控制粒度，一般是用户</span></div><div class="line">    reset = monthly				       <span class="comment">#时间周期，这里设置为每月</span></div><div class="line"></div><div class="line">    <span class="variable">$INCLUDE</span> <span class="variable">$&#123;modconfdir&#125;</span>/sql/counter/<span class="variable">$&#123;dialect&#125;</span>/<span class="variable">$&#123;.:instance&#125;</span>.conf       <span class="comment">#配置文件目录                                                                  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>设置SQL语句，在<code>/etc/raddb/mods-config/sql/counter/mysql</code>目录下，创建monthlytrafficcounter.conf文件，注意，这个文件名是与之前的counter名字对应的。其中</p>
-<ul>
-<li>%{${key}}为上面设置的key</li>
-<li>%b为每个周期的第一天</li>
-<li>%e为每个周期的最后一天，这里只用到了第一天</li>
-<li>Freeradius流量按照字节（byte）统计，所以统计结果除以1048576（1024*1024），正好是1MB，则在数据库里可以直接按照MB统计，而不是字节。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">query = "\</div><div class="line">    <span class="keyword">SELECT</span> <span class="keyword">SUM</span>(acctinputoctets + acctoutputoctets) <span class="keyword">DIV</span> <span class="number">1048576</span> \                                                                             </div><div class="line">    <span class="keyword">FROM</span> radacct \</div><div class="line">    <span class="keyword">WHERE</span> UserName=<span class="string">'%&#123;$&#123;key&#125;&#125;'</span> \ </div><div class="line">    <span class="keyword">AND</span> <span class="keyword">UNIX_TIMESTAMP</span>(AcctStartTime) &gt; <span class="string">'%b'</span><span class="string">"</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="授权启用自定义模块"><a href="#授权启用自定义模块" class="headerlink" title="授权启用自定义模块"></a>授权启用自定义模块</h4><p>修改<code>/usrlocal/etc/raddb/sites-available/default</code>，找到authorize字段，启用自定义模块。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">authorize &#123;</div><div class="line">	monthlytrafficcounter</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="字典修改"><a href="#字典修改" class="headerlink" title="字典修改"></a>字典修改</h4><p>修改<code>/usr/local/etc/dictionary</code>,添加如下两行，这两个变量在sqlcounter中提到过。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ATTRIBUTE Max-Monthly-Traffic 3003 <span class="built_in">integer</span></div><div class="line">ATTRIBUTE Monthly-Traffic-Limit 3004 <span class="built_in">integer</span></div></pre></td></tr></table></figure></p>
-<h4 id="SQL语句插入"><a href="#SQL语句插入" class="headerlink" title="SQL语句插入"></a>SQL语句插入</h4><p>插入如下语句，则test用户组下的所用用户流量上限是1MB。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">insert into radgroupcheck (groupname,attribute,op,value) VALUES (&apos;test&apos;,&apos;Max-Monthly-Traffic&apos;,&apos;:=&apos;,&apos;1&apos;);</div></pre></td></tr></table></figure></p>
-<p>统计数据是在每次登陆时检查,因此使用过程中超流量不会强制下线，而是在下一次登陆时被拒绝。</p>
-<p>问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Debugger not attached</div><div class="line">Refusing to start with libssl version OpenSSL 1.0.1e-fips 11 Feb 2013 0x1000105f (1.0.1e release) (in range 1.0.1 release - 1.0.1t rele)</div><div class="line">Security advisory CVE-2016-6304 (OCSP status request extension)</div><div class="line">For more information see https://www.openssl.org/news/secadv/20160922.txt</div><div class="line">Once you have verified libssl has been correctly patched, set security.allow_vulnerable_openssl = &apos;CVE-2016-6304&apos;</div><div class="line">Refusing to start with libssl version OpenSSL 1.0.1e-fips 11 Feb 2013 0x1000105f (1.0.1e release) (in range 1.0.1 dev - 1.0.1f release)</div><div class="line">Security advisory CVE-2014-0160 (Heartbleed)</div><div class="line">For more information see http://heartbleed.com</div><div class="line">[root@localhost freeradius-server-3.0.12]#</div></pre></td></tr></table></figure>
-
+          CentOS6.x Freeradius 3.0.11编译安装
+          <div class="read-more">
+            <a href="/2016/08/31/CentOS 6.x Freeradius 3.0.11编译安装/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -677,281 +240,14 @@ sysctl -p /etc/sysctl.conf
     <div class="post-content">
       
         
-
-        
-          <h2 id="CentOS-6-x搭建图床"><a href="#CentOS-6-x搭建图床" class="headerlink" title="CentOS 6.x搭建图床"></a>CentOS 6.x搭建图床</h2><h3 id="1-创建用户以及用户组"><a href="#1-创建用户以及用户组" class="headerlink" title="1. 创建用户以及用户组"></a>1. 创建用户以及用户组</h3><p>在CeotOS下建立一个单独的FTP账户，并不允许进行SSH登录</p>
-<pre><code>useradd -s /sbin/nologin vxftp
-passwd vxftp
-</code></pre><p>建立图床的文件夹，按照管理，将该目录放置在账户的home文件夹下，例如如下命令</p>
-<pre><code>mkdir -p /home/vxftp/imgbed
-</code></pre><p>创建一个单独的FTP用户组</p>
-<pre><code>groupadd vsftp
-</code></pre><p>把之前建立的图床文件夹分配给FTP用户,并更改其用户组</p>
-<pre><code>usermod -g vsftp -d /home/vxftp/imgbed -U vxftp
-</code></pre><p>更改文件夹属性</p>
-<pre><code>chown -R vxftp.vsftp /home/vxftp/imgbed
-</code></pre><hr>
-<h3 id="2-安装配置vsftp"><a href="#2-安装配置vsftp" class="headerlink" title="2.安装配置vsftp"></a>2.安装配置vsftp</h3><p>安装vsftpd<br>    yum install -y vsftpd</p>
-<p>修改vsftpd配置文件</p>
-<pre><code>vi /etc/vsftpd/vsftpd.conf
-</code></pre><p>检查一下是否正确</p>
-<pre><code>listen=YES
-local_enable=YES
-write_enable=YES
-local_umask=022
-pasv_promiscuous=YES
-</code></pre><p>禁止其他用户访问FTP,若userlist_enable=YES，则/etc/vsftpd/user_list中的用户将被禁止访问FTP，如果为NO，则只有user_list里面的用户可以访问FTP。禁用匿名，配置中修改如下</p>
-<pre><code>userlist_enable=NO
-anonymous_enable = NO
-</code></pre><p>把vxftp用户加入到user_list中</p>
-<pre><code>echo &quot;vxftp&quot; &gt;&gt; /etc/vsftpd/user_list
-</code></pre><p>把之前创建的图床目录路径加入到chroot_list中，并修改配置文件</p>
-<pre><code>echo &quot;/home/vxftp/imgbed&quot; &gt;&gt; /etc/vsftpd/chroot_list
-echo &quot;chroot_list_enable=YES&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf
-echo &quot;chroot_list_file=/etc/vsftpd/chroot_list&quot;&gt;&gt;/etc/vsftpd/vsftpd.conf
-</code></pre><p>其中，服务并将其加入到开机自启动</p>
-<pre><code>service vsftpd start
-chkconfig --level 35 vsftpd on
-</code></pre><p>在windows下打开任意一个文件夹窗口，输入如下地址</p>
-<pre><code>ftp://ftp-server:11235
-</code></pre><p>然后会弹出登录框，登录成功后，可以创建一个文件夹，并把该文件夹收藏到收藏夹，方便上传图片</p>
-<hr>
-<h3 id="3-修改FTP端口号"><a href="#3-修改FTP端口号" class="headerlink" title="3.修改FTP端口号"></a>3.修改FTP端口号</h3><p>默认FTP端口号可能有一些安全问题，可以把默认端口号改为其他端口号</p>
-<p>编辑/etc/vsftpd/vsftpd.conf文件，将预设端口号加入文件末尾，其中11235为修改后的端口号</p>
-<pre><code>cat &quot;listen_port=11235&quot; &gt;&gt; /etc/vsftpd/vsftpd.conf
-</code></pre><p>编辑/etc/services， 将其中的 ftp 21/tcp 改为 ftp 11235/tcp，ftp 21/udp 改为 ftp 11235/udp</p>
-<p>修改/etc/vsftpd/vsftpd.conf的配置文件，在文件末端添加如下，端口范围可以自己选定，这里选定的范围为2333到2343,vsftp会使用这个范围的端口号进行传输数据，如果在防火墙上不放行这个端口号范围，vsftp客户端可以登录，但是无法获取文件列表。</p>
-<pre><code>pasv_min_port=2333
-pasv_max_port=2343
-</code></pre><p>防火墙中加入条目，然后保存并重启防火墙</p>
-<pre><code>iptables -A INPUT -p tcp --dport 11235 -j ACCEPT
-iptables -A INPUT -p udp --dport 11235 -j ACCEPT
-iptables -A INPUT -p tcp --dport 2333:2343 -j ACCEPT
-service iptables save
-service iptabkes restart
-</code></pre><p>重新启动vsftpd服务</p>
-<pre><code>service vsftpd restart
-</code></pre><hr>
-<h3 id="4-安装HTTP服务器"><a href="#4-安装HTTP服务器" class="headerlink" title="4.安装HTTP服务器"></a>4.安装HTTP服务器</h3><p>安装httpd服务</p>
-<pre><code>yum install -y httpd
-</code></pre><p>启动httpd服务并加入到开机启动中</p>
-<pre><code>service httpd start
-chkconfig httpd on
-</code></pre><p>去掉缺省页面，将/etc/httpd/conf.d/welcome.conf内容全部注释掉，并重启服务</p>
-<pre><code>vi /etc/httpd/conf.d/welcome.conf 
-
-service httpd restart
-</code></pre><p>httpd默认文件夹在/var/www/html/，建立/home/vxftp/imgbed的软链接</p>
-<pre><code>ln -s /home/vxftp/imgbed
-</code></pre><p>此时在网页下还不能访问imgbed文件夹，因为权限问题，需要给vxftp的用户文件夹加上执行权限</p>
-<pre><code>chmod +x /home/vxftp
-</code></pre><p>这样在网页下就可以访问imgbed图床文件夹了</p>
-<hr>
-<h3 id="5-修改HTTP端口"><a href="#5-修改HTTP端口" class="headerlink" title="5. 修改HTTP端口"></a>5. 修改HTTP端口</h3><p>若不想用80端口，可以将端口修改为其他放，首先找到配置文件/etc/httpd/conf/httpd.conf</p>
-<pre><code>将Listen 80改为 Listen 11234
-</code></pre><p>11234为修改后的端口号，继续修改httpd.conf，找到#ServerName www.example.com:80，在下面添加一行</p>
-<pre><code>ServerName localhost:11234
-</code></pre><p>防火墙中加入条目，然后保存并重启防火墙</p>
-<pre><code>iptables -A INPUT -p tcp --dport 11234 -j ACCEPT
-service iptables save
-service iptabkes restart
-</code></pre><p>重新启动服务</p>
-<pre><code>service httpd restart
-</code></pre><hr>
-<h3 id="6-Selinux问题"><a href="#6-Selinux问题" class="headerlink" title="6. Selinux问题"></a>6. Selinux问题</h3><p>关闭selinux，否则网页上没有权限访问软链接的内容，或者查看selinux关于ftp相关的设置，命令如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getsebool -a| grep ftp</div></pre></td></tr></table></figure>
-<p>若不关闭设置如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setsebool ftpd_disable_trans 1</div><div class="line">setsebool -P ftp_home_dir 1</div><div class="line">setsebool -P httpd_read_user_content 1</div></pre></td></tr></table></figure>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/07/18/OSPF 模拟入侵测试1-路由表获取&路由注入/">OSPF 模拟入侵测试1-路由表获取&路由注入</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月18日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
+          
         
 
         
-          <h3 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><p>使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，Vigilante为入侵主机，模拟路由器，PC1和PC2辅助测试入侵效果，Gateway模拟外网。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_hacking/1-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图1-1 实验拓扑</strong></center>
-
-<h4 id="IP地址表"><a href="#IP地址表" class="headerlink" title="IP地址表"></a>IP地址表</h4><table>
-<thead>
-<tr>
-<th>设备</th>
-<th>端口</th>
-<th>IPv4地址</th>
-<th>IPv6地址</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Gateway</td>
-<td>f0/0</td>
-<td>10.10.10.253/24</td>
-<td>2001:10:10:10::253/64</td>
-</tr>
-<tr>
-<td></td>
-<td>lo0</td>
-<td>1.1.1.1/32</td>
-<td>2001:1:1:1::1/64</td>
-</tr>
-<tr>
-<td>R2</td>
-<td>f1/0</td>
-<td>10.10.10.254/24</td>
-<td>2001:10:10:10::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.1/24</td>
-<td>2001:20:20:20::1/64</td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/0</td>
-<td>30.30.30.254/24</td>
-<td>2001:30:30:30::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.2/24</td>
-<td>2001:20:20:20::2/64</td>
-</tr>
-<tr>
-<td>Vigilante</td>
-<td>e2</td>
-<td>30.30.30.30/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>PC1</td>
-<td>e0</td>
-<td>30.30.30.100/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>PC2</td>
-<td>e0</td>
-<td>30.30.30.200/24</td>
-<td>eui-64</td>
-</tr>
-</tbody>
-</table>
-<h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><p>Gateway配置如下</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">ipv6 unicast-routing</div><div class="line">ipv6 cef</div><div class="line"></div><div class="line">int f0/0</div><div class="line">ipv6 enable</div><div class="line">ip address 10.10.10.253 255.255.255.0</div><div class="line">ipv6 address 2001:10:10:10::253/64</div><div class="line">no sh</div><div class="line"></div><div class="line">int lo 0</div><div class="line">ipv6 enable</div><div class="line">ip address 1.1.1.1 255.255.255.0</div><div class="line">ipv6 address 2001:1:1:1::1/64</div><div class="line"></div><div class="line">ip route 0.0.0.0 0.0.0.0 10.10.10.254</div><div class="line">ipv6 route ::/0 fastEthernet0/0 2001:10:10:10::254</div></pre></td></tr></table></figure>
-<p>R1配置如下</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">ipv6 unicast-routing</div><div class="line">ipv6 cef</div><div class="line"></div><div class="line">int f1/0</div><div class="line">no sh</div><div class="line">ip addr 30.30.30.254 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:30:30:30::254/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">int f0/0</div><div class="line">no sh</div><div class="line">ip addr 20.20.20.2 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:20:20:20::2/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">router ospf 104</div><div class="line">router-id 1.1.1.4</div><div class="line">network 30.30.30.0 0.0.0.255 a 0</div><div class="line">network 20.20.20.0 0.0.0.255 a 0</div><div class="line"></div><div class="line">ipv6 router ospf 106</div><div class="line">router-id 1.1.1.6</div></pre></td></tr></table></figure>
-<p>R2配置如下</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">ipv6 unicast-routing</div><div class="line">ipv6 cef</div><div class="line"></div><div class="line">int f1/0</div><div class="line">no sh</div><div class="line">ip addr 10.10.10.254 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:10:10:10::254/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">int f0/0</div><div class="line">no sh</div><div class="line">ip addr 20.20.20.1 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:20:20:20::1/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">ip route 0.0.0.0 0.0.0.0 10.10.10.254</div><div class="line">ipv6 route ::/0 fastEthernet1/0 2001:10:10:10::253</div><div class="line"></div><div class="line">router ospf 104</div><div class="line">router-id 2.2.2.4</div><div class="line">network 10.10.10.0 0.0.0.255 a 0</div><div class="line">network 20.20.20.0 0.0.0.255 a 0</div><div class="line">default-information originate</div><div class="line"></div><div class="line">ipv6 router ospf 106</div><div class="line">router-id 2.2.2.6</div><div class="line">default-information originate</div></pre></td></tr></table></figure>
-<h4 id="VirtualBox虚拟机接入"><a href="#VirtualBox虚拟机接入" class="headerlink" title="VirtualBox虚拟机接入"></a>VirtualBox虚拟机接入</h4><p>一台VirtualBox虚拟机需要接入到拓扑，虚拟机系统为CentOS6，有三块网卡，</p>
-<ul>
-<li>eth0为用于连接Internet，模式为桥接模式或者NAT网络。</li>
-<li>eth1为host-only模式，用于本地宿主机通过xshell登录。</li>
-<li>eth2为UDPtunnel，连接到GNS3拓扑中。</li>
-</ul>
-<h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><ul>
-<li>ospf或者ospfv3没有开启链路或者区域验证</li>
-<li>路由器R1没有在f1/0上开启passive端口，则终端可以抓去到明文的ospf或者ospfv3的hello包。</li>
-</ul>
-<hr>
-<h3 id="2-CentOS安装quagga"><a href="#2-CentOS安装quagga" class="headerlink" title="2. CentOS安装quagga"></a>2. CentOS安装quagga</h3><h4 id="quagga安装"><a href="#quagga安装" class="headerlink" title="quagga安装"></a>quagga安装</h4><p>xshell登录CentOS7虚拟机，yum安装quagga</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install quagga -y</div></pre></td></tr></table></figure>
-<p>在CentOS7，SELinux默认会阻止quagga将配置文件写到/usr/sbin/zebra。这个SELinux策略会干扰我们接下来要介绍的安装过程，所以我们要禁用此策略。对于这一点，无论是<a href="http://xmodulo.com/how-to-disable-selinux.html" target="_blank" rel="external">关闭SELinux</a>（这里不推荐），还是如下启用“zebra<em>write</em>config”都可以。如果你使用的是CentOS6的请跳过此步骤。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setsebool -P zebra_write_config 1</div></pre></td></tr></table></figure>
-<p>如果没有做这个修改，在我们尝试在Quagga命令行中保存配置的时候看到如下错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Can&apos;t open configuration file /etc/quagga/zebra.conf.OS1Uu5.</div></pre></td></tr></table></figure>
-<p>安装完Quagga后，需要配置必要的对等IP地址，并更新OSPF设置。Quagga自带了一个命令行称为vtysh。vtysh里面用到的Quagga命令与主要的路由器厂商如思科和Juniper是相似的。</p>
-<h4 id="配置zebra"><a href="#配置zebra" class="headerlink" title="配置zebra"></a>配置zebra</h4><p>我们首先创建Zebra配置文件，并启用Zebra守护进程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/quagga-XXXXX/zebra.conf.sample /etc/quagga/zebra.conf</div><div class="line">service zebra start</div><div class="line">chkconfig zebra on</div></pre></td></tr></table></figure>
-<p>启动vtysh命令行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vtysh</div></pre></td></tr></table></figure>
-<p>为Zebra配置日志文件。输入下面的命令进入vtysh的全局配置模式<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname# configure terminal</div></pre></td></tr></table></figure></p>
-<p>指定日志文件位置，接着退出模式</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config)# log file /var/log/quagga/quagga.log</div></pre></td></tr></table></figure>
-<p>永久保存配置</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config)#do write</div></pre></td></tr></table></figure>
-<p>接下来，确定可用的接口并按需配置它们的IP地址。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hostname(config)# do show interface </div><div class="line">hostname(config)#interface eth2</div><div class="line">hostname(config)#ip address 30.30.30.252/24</div><div class="line">hostname(config)#no shutdown</div></pre></td></tr></table></figure>
-<h4 id="配置OSPF"><a href="#配置OSPF" class="headerlink" title="配置OSPF"></a>配置OSPF</h4><p>首先创建OSPF配置文件，并启动OSPF守护进</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/quagga-XXXXX/ospfd.conf.sample /etc/quagga/ospfd.conf</div><div class="line">service ospfd start</div><div class="line">chkconfig ospfd on</div></pre></td></tr></table></figure>
-<p>iptables允许OSPF协议通过，否则无法交换OSPF数据包，邻居关系无法建立！OSPF协议号是89</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -A INPUT -p 89 -j ACCEPT</div></pre></td></tr></table></figure>
-<p>输入路由配置模式</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vtysh</div><div class="line">hostname# configure terminal</div><div class="line">hostname(config)# router ospf</div></pre></td></tr></table></figure>
-<p>可选配置路由id</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# router-id 3.3.3.4</div></pre></td></tr></table></figure>
-<p>添加在OSPF中的网络</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# network  30.30.30.0/24 area 0</div></pre></td></tr></table></figure>
-<p>永久保存配置</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# do write</div></pre></td></tr></table></figure>
-<p>查看邻居关系，若结果有邻居关系且为full，说明建立了邻居关系</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Vigilante# show ip ospf  neighbor  </div><div class="line"> Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL</div><div class="line">1.1.1.4           1 Full/DR           36.907s 30.30.30.254    eth2:30.30.30.1          0     0     0</div></pre></td></tr></table></figure>
-<p>查看路由表信息，这时候可以查看整个网络中完整路由表</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Vigilante# sh ip route  </div><div class="line">Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,</div><div class="line">       I - ISIS, B - BGP, &gt; - selected route, * - FIB route</div><div class="line"></div><div class="line">K&gt;* 0.0.0.0/0 via 30.30.30.254, eth2</div><div class="line">C&gt;* 10.0.2.0/24 is directly connected, eth0</div><div class="line">O&gt;* 10.10.10.0/24 [110/12] via 30.30.30.254, eth2, 00:10:25</div><div class="line">O&gt;* 20.20.20.0/24 [110/11] via 30.30.30.254, eth2, 00:10:25</div><div class="line">O   30.30.30.0/24 [110/10] is directly connected, eth2, 00:11:11</div><div class="line">C&gt;* 30.30.30.0/24 is directly connected, eth2</div><div class="line">C&gt;* 127.0.0.0/8 is directly connected, lo</div><div class="line">K&gt;* 169.254.0.0/16 is directly connected, eth2</div><div class="line">C&gt;* 192.168.86.0/24 is directly connected, eth1</div></pre></td></tr></table></figure>
-<h4 id="配置OSPFv3"><a href="#配置OSPFv3" class="headerlink" title="配置OSPFv3"></a>配置OSPFv3</h4><p>首先创建OSPF配置文件，并启动OSPF守护进</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp /usr/share/doc/quagga-XXXXX/ospf6d.conf.sample /etc/quagga/ospf6d.conf</div><div class="line">service ospf6d start</div><div class="line">chkconfig ospf6d on</div></pre></td></tr></table></figure>
-<p>ip6tables允许OSPF协议通过，否则无法交换OSPFv3数据包，邻居关系无法建立！OSPFv3协议号是89</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip6tables -A INPUT -p 89 -j ACCEPT</div></pre></td></tr></table></figure>
-<p>输入路由配置模式</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vtysh</div><div class="line">hostname# configure terminal</div><div class="line">hostname(config)# router ospf6</div></pre></td></tr></table></figure>
-<p>可选配置路由id</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# router-id 3.3.3.6</div></pre></td></tr></table></figure>
-<p>添加在OSPFv3中的网络，area必须为x.x.x.x这种格式，否则会报错。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# interface eth2 area 0.0.0.0</div></pre></td></tr></table></figure>
-<p>永久保存配置</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname(config-router)# do write</div></pre></td></tr></table></figure>
-<p>查看邻居关系，若结果有邻居关系且为full，说明建立了邻居关系</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Vigilante# show ipv6  ospf6  neighbor  </div><div class="line">Neighbor ID     Pri    DeadTime  State/IfState         Duration I/F[State]</div><div class="line">1.1.1.6                1    00:00:37   Full/DR              00:09:23 eth2[DROther]</div></pre></td></tr></table></figure>
-<p>查看路由表</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Vigilante# show ipv6  route  </div><div class="line">Codes: K - kernel route, C - connected, S - static, R - RIPng, O - OSPFv3,</div><div class="line">       I - ISIS, B - BGP, * - FIB route.</div><div class="line"></div><div class="line">C&gt;* ::1/128 is directly connected, lo</div><div class="line">O&gt;* 2001:10:10:10::/64 [110/3] via fe80::c801:1fff:fea4:1c, eth2, 00:11:53</div><div class="line">O&gt;* 2001:20:20:20::/64 [110/2] via fe80::c801:1fff:fea4:1c, eth2, 00:11:53</div><div class="line">O   2001:30:30:30::/64 [110/1] is directly connected, eth2, 00:11:53</div><div class="line">C&gt;* 2001:30:30:30::/64 is directly connected, eth2</div><div class="line">C * fe80::/64 is directly connected, eth2</div><div class="line">C * fe80::/64 is directly connected, eth1</div><div class="line">C&gt;* fe80::/64 is directly connected, eth0</div><div class="line">C&gt;* fec0::/64 is directly connected, eth1</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="3-入侵测试"><a href="#3-入侵测试" class="headerlink" title="3. 入侵测试"></a>3. 入侵测试</h3><h4 id="IPv4注入默认路由"><a href="#IPv4注入默认路由" class="headerlink" title="IPv4注入默认路由"></a>IPv4注入默认路由</h4><p>在Vigilante上，添加错误默认路由，并同时注入到ospf中，则所有的ospf路由器都会学习到该错误默认路由。则终端无法转发数据到默认网关。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip route 0.0.0.0 0.0.0.0 eth1</div><div class="line">router ospf</div><div class="line">default-information originate always</div></pre></td></tr></table></figure>
-<p>中间路由器的OSPF默认路由变化如下图所示</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_hacking/3-2.jpg" alt="3-1"></center><center style="color:purple"><strong>图3-2 正确默认路由</strong></center>
-
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_hacking/3-3.jpg" alt="3-1"></center><center style="color:purple"><strong>图3-2 被注入错误默认路由</strong></center>
-
-<h4 id="IPv4注入主机路由"><a href="#IPv4注入主机路由" class="headerlink" title="IPv4注入主机路由"></a>IPv4注入主机路由</h4><p>添加错误主机路由器，例如屏蔽某些主机的流量，若屏蔽PC1（30.30.30.100），加入如下路由条目，然后重分布，由于最长匹配原则，所以会转发入侵路由器，如下图3-3路由表所示，30.30.30.100路由条目。根据最长匹配原则，数据包会转发到Vigilante上，然后Vigilante将该数据包转发到null0.</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip route 30.30.30.100 255.255.255.255 null0</div><div class="line">router ospf</div><div class="line">redistribute  static</div></pre></td></tr></table></figure>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_hacking/3-4.jpg" alt="3-1"></center><center style="color:purple"><strong>图3-4 R1注入后路由表</strong></center>
-
-
-<h4 id="IPv6注入路由"><a href="#IPv6注入路由" class="headerlink" title="IPv6注入路由"></a>IPv6注入路由</h4><p>类似IPv4，也是添加静态路由，然后重分布到OSPFv3中。</p>
-<hr>
-<h3 id="4-其他"><a href="#4-其他" class="headerlink" title="4. 其他"></a>4. 其他</h3><h4 id="排错"><a href="#排错" class="headerlink" title="排错"></a>排错</h4><ul>
-<li>注意iptables，ip6tables开启相应的协议，例如ospf为89.</li>
-<li>若网卡有IPv4或者IPv6地址，则可以不用在路由器模式再配置IP地址。</li>
-<li>可以修改/etc/quagga中的配置文件，修改ospf或者ospf6等的配置，然后重启服务。</li>
-<li>ospf6每次都需要重新执行router-id x.x.x.x以及 interface port area x.x.x.x，才能建立邻居关系</li>
-</ul>
-
+          CentOS 6.x搭建图床
+          <div class="read-more">
+            <a href="/2016/08/24/CentOS 6.x vsftp服务器搭建/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -981,295 +277,14 @@ service iptabkes restart
     <div class="post-content">
       
         
-
-        
-          <h3 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><p>使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，Vigilante为入侵主机，模拟路由器，PC3模拟一个服务器，IP地址为210.76.211.7/24，Ovzinp将冒充该服务器，Vigilante注入主机路由并重分布进OSPF中，将属于PC3的流量劫持到Vigilante。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/1-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图1-1 实验拓扑</strong></center>
-
-<h4 id="IP地址表"><a href="#IP地址表" class="headerlink" title="IP地址表"></a>IP地址表</h4><table>
-<thead>
-<tr>
-<th>设备</th>
-<th>端口</th>
-<th>IPv4地址</th>
-<th>IPv6地址</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Gateway</td>
-<td>f0/0</td>
-<td>10.10.10.253/24</td>
-<td>2001:10:10:10::253/64</td>
-</tr>
-<tr>
-<td></td>
-<td>lo0</td>
-<td>1.1.1.1/32</td>
-<td>2001:1:1:1::1/64</td>
-</tr>
-<tr>
-<td>R2</td>
-<td>f1/0</td>
-<td>10.10.10.254/24</td>
-<td>2001:10:10:10::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.1/24</td>
-<td>2001:20:20:20::1/64</td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/0</td>
-<td>30.30.30.254/24</td>
-<td>2001:30:30:30::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.2/24</td>
-<td>2001:20:20:20::2/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f1/1</td>
-<td>210.76.211.254/24</td>
-<td>/</td>
-</tr>
-<tr>
-<td>Vigilante</td>
-<td>e0</td>
-<td>30.30.30.30/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>Winxp2</td>
-<td>e2</td>
-<td>30.30.30.2/24 (DHCP)</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td></td>
-<td>e2</td>
-<td>210.76.211.254/24</td>
-<td>/</td>
-</tr>
-<tr>
-<td>PC3</td>
-<td>e0</td>
-<td>210.76.211.7/24</td>
-<td>/</td>
-</tr>
-<tr>
-<td>Ovzinp</td>
-<td>e2</td>
-<td>210.76.211.7/24</td>
-<td>/</td>
-</tr>
-</tbody>
-</table>
-<h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><p>Gateway和R2配置不变，与《OSPF 模拟入侵测试1-路由表获取&amp;路由注入》中配置一样。</p>
-<p>R1配置如下，添加端口f1/1的IP地址，并添加了一个DHCP地址池。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">ipv6 unicast-routing</div><div class="line">ipv6 cef</div><div class="line"></div><div class="line">int f1/0</div><div class="line">no sh</div><div class="line">ip addr 30.30.30.254 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:30:30:30::254/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">ip dhcp pool R1</div><div class="line">network 30.30.30.0 255.255.255.0</div><div class="line">default-router 30.30.30.254</div><div class="line"></div><div class="line">int f0/0</div><div class="line">no sh</div><div class="line">ip addr 20.20.20.2 255.255.255.0</div><div class="line">ipv6 enable</div><div class="line">ipv6 addr 2001:20:20:20::2/64</div><div class="line">ipv6 ospf 106 area 0</div><div class="line"></div><div class="line">int f1/1</div><div class="line">no sh</div><div class="line">ip addr 210.77.211.254 255.255.255.0</div><div class="line"></div><div class="line">router ospf 104</div><div class="line">router-id 1.1.1.4</div><div class="line">network 30.30.30.0 0.0.0.255 a 0</div><div class="line">network 20.20.20.0 0.0.0.255 a 0</div><div class="line">network 210.76.211.0 0.0.0.255 a 0</div><div class="line"></div><div class="line">ipv6 router ospf 106</div><div class="line">router-id 1.1.1.6</div></pre></td></tr></table></figure>
-<h4 id="VirtualBox虚拟机接入"><a href="#VirtualBox虚拟机接入" class="headerlink" title="VirtualBox虚拟机接入"></a>VirtualBox虚拟机接入</h4><ul>
-<li>Vigilante<ul>
-<li>eth0、eth2为UDPtunnel模式，接入到实验拓扑</li>
-<li>eth1为host-only模式，用于本地宿主机通过xshell登录。</li>
-</ul>
-</li>
-<li>Ovzinp<ul>
-<li>eth1为host-only模式，用于本地宿主机通过xshell登录。</li>
-<li>eth2为UDPtunnel模式，接入到实验拓扑</li>
-</ul>
-</li>
-</ul>
-<h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><ul>
-<li>ospf或者ospfv3没有开启链路或者区域验证</li>
-<li>路由器R1没有在f1/0上开启passive端口，则终端可以抓去到明文的ospf或者ospfv3的hello包。</li>
-</ul>
-<hr>
-<h3 id="2-入侵测试"><a href="#2-入侵测试" class="headerlink" title="2. 入侵测试"></a>2. 入侵测试</h3><h4 id="ping-PC3"><a href="#ping-PC3" class="headerlink" title="ping PC3"></a>ping PC3</h4><p>210.76.211.7为<strong>PC3</strong>的IP地址，在<strong>Winxp2</strong>上ping  210.76.211.7，路由正常，在<strong>PC3~R1</strong>链路上抓包结果如下。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-1.jpg" alt="2-1"></center><center style="color:purple"><strong>图2-1 抓包结果</strong></center>
-
-
-
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-2.jpg" alt="2-2"></center><center style="color:purple"><strong>图2-2 Winxp2 ping</strong></center>
-
-<p>说明<strong>PC3</strong>到 210.76.211.7的路由是正常的，<strong>PC3</strong>访问了真正的服务器。</p>
-<h4 id="入侵设置"><a href="#入侵设置" class="headerlink" title="入侵设置"></a>入侵设置</h4><ul>
-<li>修改Vigilante的e2端口IP地址为211.76.211.254</li>
-<li>Ovzinp的e2端口地址为211.76.211.7，Ovzinp用于冒充PC3。</li>
-<li>Vigilante的直连路由表如图2-3所示。</li>
-</ul>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-3.jpg" alt="2-3"></center><center style="color:purple"><strong>图2-3 Vigilante路由表</strong></center>
-
-<p>此时，<strong>Winxp2</strong>到210.76.211.7的ping数据包为什么不到Vigilante？因为<strong>Winxp2</strong>的网关为30.30.30.254，首先会把到210.76.211.7的数据包转发到该地址，该地址在R1，而R1上有到210.76.211.0/24的路由，如图2-4所示，目的地为210.76.211.7的数据包会被直接转发到f1/1端口，而不是转发到Vigilante。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-4.jpg" alt="2-3"></center><center style="color:purple"><strong>图2-4 R1正常路由表</strong></center>
-
-<h4 id="注入主机路由条目"><a href="#注入主机路由条目" class="headerlink" title="注入主机路由条目"></a>注入主机路由条目</h4><p>因为会涉及到转发，所以<strong>Vigilante</strong>最好关闭<strong>iptables</strong>和<strong>ip6tables</strong>，这样可以避免一些不必要的麻烦，同时要开启linux内核转发。确定<strong>/etc/sysctl.conf</strong>中<strong>net.ipv4.ip_forward = 1</strong>，然后执行如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -p</div></pre></td></tr></table></figure>
-<p>在<strong>Vigilante</strong>上添加如下静态路由，添加一条指向210.76.211.7的主机路由。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip route 210.76.211.7/32 eth2</div></pre></td></tr></table></figure>
-<p>重分布到OSPF中，必须重分布到OSPF中，这样所有的路由器才能学习到该路由条目。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">router</span> <span class="selector-tag">ospf</span></div><div class="line"><span class="selector-tag">redistribute</span>  <span class="selector-tag">static</span></div></pre></td></tr></table></figure>
-<p><strong>R1</strong>注入后路由表如下图所示，因为路由表查找最长匹配的原则，所以当接收到目的地为210.77.211.7为目的的数据包时，路由器会将该数据包从30.30.30.1转发出去，即转发到了<strong>Vigilante</strong>。根据图2-3中，<strong>Vigilante</strong>收到该数据包后，会通过eth2转发给<strong>Ovzinp</strong>。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-5.jpg" alt="2-3"></center><center style="color:purple"><strong>图2-5 R1注入后路由表</strong></center>
-
-<p>测试结果如下，注入路由条目之后，<strong>Winxp2</strong> ping 210.76.211.7，在链路<strong>Vigilante~SW2</strong>之间抓到结果如图2-6</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-6.jpg" alt="2-3"></center><center style="color:purple"><strong>图2-6 Winxp2 ping</strong></center>
-
-<p>也可以访问<strong>Ovzinp</strong>的http服务器，如图2-7所示</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试2_指定主机欺骗/2-7.jpg" alt="2-3"></center><center style="color:purple"><strong>图2-7  http服务访问</strong></center>
-
-
-
-<hr>
-<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h3><ul>
-<li>利用路由转发最长匹配原则</li>
-<li><strong>Vigilante</strong>开启IPv4转发</li>
-<li><strong>Vigilante</strong>关闭iptables，这样可以避免麻烦，也可以编辑iptables，允许哪些数据包转发。</li>
-<li>可以简化实验，让<strong>Vigilante</strong>的eth2的IP地址为210.76.211.7，添加主机路由也可以实现同样的欺骗效果。</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-  </article>
-
-    
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2016/07/18/OSPF 模拟入侵测试3-劫持网页服务器IP/">OSPF 模拟入侵测试3-劫持网页服务器IP</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2016年7月18日
-        </span>
-      </div>
-    </header>
-
-    
-
-    <div class="post-content">
-      
+          
         
 
         
-          <h3 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><p>使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，Vigilante为入侵主机，模拟路由器，PC3模拟一个服务器，IP地址为210.76.211.7/24，同时Vigilante，也将冒充该服务器，其eth2的IP地址为210.76.211.7/24。Vigilante注入主机路由并重分布进OSPF中，欺骗整个网络中的设备，将属于PC3的流量将被路由到Vigilante的eth2。</p>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试3_网站服务器伪装/1-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图1-1 实验拓扑</strong></center>
-
-<h4 id="IP地址表"><a href="#IP地址表" class="headerlink" title="IP地址表"></a>IP地址表</h4><table>
-<thead>
-<tr>
-<th>设备</th>
-<th>端口</th>
-<th>IPv4地址</th>
-<th>IPv6地址</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Gateway</td>
-<td>f0/0</td>
-<td>10.10.10.253/24</td>
-<td>2001:10:10:10::253/64</td>
-</tr>
-<tr>
-<td></td>
-<td>lo0</td>
-<td>1.1.1.1/32</td>
-<td>2001:1:1:1::1/64</td>
-</tr>
-<tr>
-<td>R2</td>
-<td>f1/0</td>
-<td>10.10.10.254/24</td>
-<td>2001:10:10:10::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.1/24</td>
-<td>2001:20:20:20::1/64</td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/0</td>
-<td>30.30.30.254/24</td>
-<td>2001:30:30:30::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.2/24</td>
-<td>2001:20:20:20::2/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f1/1</td>
-<td>210.76.211.254/24</td>
-<td>/</td>
-</tr>
-<tr>
-<td>Vigilante</td>
-<td>e0</td>
-<td>30.30.30.30/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td></td>
-<td>e2</td>
-<td>210.76.211.7/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>Winxp2</td>
-<td>e2</td>
-<td>30.30.30.2/24 (DHCP)</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>PC3</td>
-<td>e0</td>
-<td>210.76.211.7/24</td>
-<td>/</td>
-</tr>
-</tbody>
-</table>
-<h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><p>配置不变，与《OSPF 模拟入侵测试2-指定主机欺骗》中配置一样。</p>
-<hr>
-<h3 id="2-抓取数据"><a href="#2-抓取数据" class="headerlink" title="2. 抓取数据"></a>2. 抓取数据</h3><h4 id="注入路由"><a href="#注入路由" class="headerlink" title="注入路由"></a>注入路由</h4><p>在Vigilante上注入路由如下，将本来到PC3的流量引到Vigilante的eth2上。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip route 210.76.211.7/32 eth2</div></pre></td></tr></table></figure>
-<h4 id="网页下载"><a href="#网页下载" class="headerlink" title="网页下载"></a>网页下载</h4><ul>
-<li>下载sep.ucas.edu.cn的登录主页，并把其中的名称修改为为index.html，其配置文件夹的名称也改为英文 。</li>
-<li>修改网页跳转，可以跳转到本机，成功跳转才能抓到post请求，否则不能抓到post，这点很重要。</li>
-</ul>
-<h4 id="上传伪装服务器"><a href="#上传伪装服务器" class="headerlink" title="上传伪装服务器"></a>上传伪装服务器</h4><p>把修改的网站上传到Vigilante，伪装为网页服务器，并将伪装服务器的主页改为index.html，修改步骤如下，在<strong>/etc/httpd/conf/httpd.conf</strong>中添加如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DirectoryIndex index.html</div></pre></td></tr></table></figure>
-<h4 id="tcpdump抓取POST请求"><a href="#tcpdump抓取POST请求" class="headerlink" title="tcpdump抓取POST请求"></a>tcpdump抓取POST请求</h4><p>tcpdump抓post语句如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tcpdump -i eth0 &apos;host 210.76.211.7 and port 80 and tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504f5354&apos; -w sep+.cap</div></pre></td></tr></table></figure>
-<p>其中0x504f5354意义为，代表POST</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">P=0x50</div><div class="line">O=0x4f</div><div class="line">S=0x53</div><div class="line">T=0x54</div></pre></td></tr></table></figure>
-<h4 id="读取结果"><a href="#读取结果" class="headerlink" title="读取结果"></a>读取结果</h4><p>讲读取文件结果使用sftp传输到本机，使用Wireshark打开，记过如图2-1所示。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试3_网站服务器伪装/2-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图2-1 POST请求</strong></center>
-
-<p>经过验证，该网页登录没用其他加密手段，其验证口令通过POST明文传输，如图2-2所示。其中账户名和密码为在Winxp2上输入的账户名和密码。</p>
-<center><img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试3_网站服务器伪装/2-2.jpg" alt="1-1"></center><center style="color:purple"><strong>图2-2 POST抓取验证口令</strong></center>
-
-<hr>
-<h3 id="3-拓展"><a href="#3-拓展" class="headerlink" title="3. 拓展"></a>3. 拓展</h3><ul>
-<li>引流DNS流量，做中间人攻击。</li>
-</ul>
-
+          OSPF 模拟入侵测试2-劫持指定主机IP
+          <div class="read-more">
+            <a href="/2016/07/18/OSPF 模拟入侵测试2-劫持指定主机IP/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -1299,120 +314,310 @@ service iptabkes restart
     <div class="post-content">
       
         
+          
+        
 
         
-          <h3 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h3><h4 id="实验拓扑"><a href="#实验拓扑" class="headerlink" title="实验拓扑"></a>实验拓扑</h4><p>使用GNS3搭建实验拓扑，实验拓扑如图1-1所示，其中R1、R2为OSPF网络，CentOS_Fun为入侵主机，模拟路由器，PC3模拟一个DNS服务器，IP地址为210.76.211.7/24。CentOS7_Fun同时运行HTTP服务，DNS服务。此时假设条件如下：</p>
-<ul>
-<li>CentOS7直接获取了所有DNS服务器的流量，并冒充该DNS服务器</li>
-<li>假设CentOS7_Fun的IP地址为30.30.30.2的IP为正常网页服务器</li>
-<li>假设CentOS7_Fun的IP地址为210.76.211.7对应的IP为中间人攻击网页服务器</li>
-<li>假设正确网页服务器域名为test.edu.cn，对应IP为30.30.30.2。</li>
-</ul>
-<center> <img src="http://qingdao.icean.cc:11234/Imgbed/OSPF_模拟入侵测试4_DNS服务器伪装/1-1.jpg" alt="1-1"></center><center style="color:purple"><strong>图1-1 实验拓扑</strong></center>
+          OSPF 模拟入侵测试4-劫持DNS服务器IP
+          <div class="read-more">
+            <a href="/2016/07/18/OSPF 模拟入侵测试4-劫持DNS服务器IP/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
 
-<h4 id="IP地址表"><a href="#IP地址表" class="headerlink" title="IP地址表"></a>IP地址表</h4><table>
-<thead>
-<tr>
-<th>设备</th>
-<th>端口</th>
-<th>IPv4地址</th>
-<th>IPv6地址</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Gateway</td>
-<td>f0/0</td>
-<td>10.10.10.253/24</td>
-<td>2001:10:10:10::253/64</td>
-</tr>
-<tr>
-<td></td>
-<td>lo0</td>
-<td>1.1.1.1/32</td>
-<td>2001:1:1:1::1/64</td>
-</tr>
-<tr>
-<td>R2</td>
-<td>f1/0</td>
-<td>10.10.10.254/24</td>
-<td>2001:10:10:10::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.1/24</td>
-<td>2001:20:20:20::1/64</td>
-</tr>
-<tr>
-<td>R1</td>
-<td>f1/0</td>
-<td>30.30.30.254/24</td>
-<td>2001:30:30:30::254/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f0/0</td>
-<td>20.20.20.2/24</td>
-<td>2001:20:20:20::2/64</td>
-</tr>
-<tr>
-<td></td>
-<td>f1/1</td>
-<td>210.76.211.254/24</td>
-<td>/</td>
-</tr>
-<tr>
-<td>CentOS7_fun</td>
-<td>enp0s3</td>
-<td>30.30.30.2/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td></td>
-<td>enp0s9</td>
-<td>210.76.211.7/24</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>Winxp2</td>
-<td>e2</td>
-<td>30.30.30.1/24 (DHCP)</td>
-<td>eui-64</td>
-</tr>
-<tr>
-<td>DNS服务器</td>
-<td>e0</td>
-<td>210.76.211.7/24</td>
-<td>/</td>
-</tr>
-</tbody>
-</table>
-<h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><p>配置不变，与《OSPF 模拟入侵测试2-指定主机欺骗》中配置一样。</p>
-<hr>
-<h3 id="2-伪造DNS"><a href="#2-伪造DNS" class="headerlink" title="2. 伪造DNS"></a>2. 伪造DNS</h3><h4 id="DNS服务搭建"><a href="#DNS服务搭建" class="headerlink" title="DNS服务搭建"></a>DNS服务搭建</h4><p>安装相关服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y bind*</div></pre></td></tr></table></figure>
-<p>配置/etc/named.conf</p>
-<p>修改配置如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">options &#123;</div><div class="line">    listen-on port 53 &#123; any; &#125;;</div><div class="line">    listen-on-v6 port 53 &#123; any; &#125;;</div><div class="line">    directory   &quot;/var/named&quot;;</div><div class="line">    dump-file   &quot;/var/named/data/cache_dump.db&quot;;</div><div class="line">    statistics-file &quot;/var/named/data/named_stats.txt&quot;;</div><div class="line">    memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</div><div class="line">    allow-query     &#123; any; &#125;;</div><div class="line"></div><div class="line">    recursion no; </div><div class="line">    dnssec-enable yes;</div><div class="line">    dnssec-validation yes;</div><div class="line"></div><div class="line">    /* Path to ISC DLV key */</div><div class="line">    bindkeys-file &quot;/etc/named.iscdlv.key&quot;;</div><div class="line"></div><div class="line">    managed-keys-directory &quot;/var/named/dynamic&quot;;</div><div class="line"></div><div class="line">    pid-file &quot;/run/named/named.pid&quot;;</div><div class="line">    session-keyfile &quot;/run/named/session.key&quot;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">logging &#123;</div><div class="line">        channel default_debug &#123;</div><div class="line">                file &quot;data/named.run&quot;;</div><div class="line">                severity dynamic;</div><div class="line">        &#125;;</div><div class="line">&#125;;</div><div class="line">zone &quot;.&quot; IN &#123;</div><div class="line">    type hint;</div><div class="line">    file &quot;named.ca&quot;;</div><div class="line">&#125;;</div><div class="line">zone &quot;edu.cn&quot; IN &#123;</div><div class="line">    type master;</div><div class="line">    file &quot;named.edu.cn&quot;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>添加数据文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$TTL 600</div><div class="line">@ IN SOA dns.edu.cn. admin.edu.cn. (2011080401 3H 15M 1W 1D) </div><div class="line">@ IN NS dns.edu.cn.</div><div class="line">dns.edu.cn. IN A 210.76.211.1</div><div class="line">                                                                                                                                 </div><div class="line">test.edu.cn. IN A 210.76.211.7  #将正确域名指向伪装http服务器</div><div class="line">test2.edu.cn. IN A 30.30.30.2    #将正确http授予一个类似域名。</div></pre></td></tr></table></figure>
-<p>启动named服务，并开启iptables相关选项。</p>
-<hr>
-<h3 id="3-抓取数据"><a href="#3-抓取数据" class="headerlink" title="3. 抓取数据"></a>3. 抓取数据</h3><h4 id="注入路由"><a href="#注入路由" class="headerlink" title="注入路由"></a>注入路由</h4><p>在Vigilante上注入路由如下，将本来到PC3的流量引到CentOS7_Fun的enp0s9上，包括DNS流量。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip route 210.76.211.7/32 enp0s9</div></pre></td></tr></table></figure>
-<h4 id="网页修改"><a href="#网页修改" class="headerlink" title="网页修改"></a>网页修改</h4><ul>
-<li>下载sep.ucas.edu.cn的登录主页，并把其中的名称修改为为index.html，其配置文件夹的名称也改为英文 。下载到210.76.211.7（伪造http服务器，IP为210.76.211.1，域名为test.edu.cn）</li>
-<li>修改网页跳转，选择跳转正确的网页服务器（IP为30.30.30.2，域名为test2.edu.cn），</li>
-<li>这里为了节省资源，使用了一台主机的两张网卡分别扮演正确的网页服务器和伪造网页服务器。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DirectoryIndex index.html</div></pre></td></tr></table></figure>
-<h4 id="tcpdump抓取POST请求"><a href="#tcpdump抓取POST请求" class="headerlink" title="tcpdump抓取POST请求"></a>tcpdump抓取POST请求</h4><p>tcpdump抓post语句如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tcpdump -i enp0s3 &apos;host 210.76.211.7 and port 80 and tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504f5354&apos; -w sep+.cap</div></pre></td></tr></table></figure>
-<p>其中0x504f5354意义为，代表POST</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">P=0x50</div><div class="line">O=0x4f</div><div class="line">S=0x53</div><div class="line">T=0x54</div></pre></td></tr></table></figure>
-<h4 id="读取结果"><a href="#读取结果" class="headerlink" title="读取结果"></a>读取结果</h4><p>讲读取文件结果使用sftp传输到本机，使用Wireshark打开抓去的POST结果。</p>
+    
+  </article>
 
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/18/OSPF 模拟入侵测试1-路由表获取&路由注入/">OSPF 模拟入侵测试1-路由表获取&路由注入</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月18日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          OSPF 模拟入侵测试1-路由表获取&路由注入
+          <div class="read-more">
+            <a href="/2016/07/18/OSPF 模拟入侵测试1-路由表获取&路由注入/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/18/OSPF 模拟入侵测试3-劫持网页服务器IP/">OSPF 模拟入侵测试3-劫持网页服务器IP</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月18日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          OSPF 模拟入侵测试3-劫持网页服务器IP
+          <div class="read-more">
+            <a href="/2016/07/18/OSPF 模拟入侵测试3-劫持网页服务器IP/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/17/基础DNS学习/">基础DNS学习</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月17日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          基础DNS学习
+          <div class="read-more">
+            <a href="/2016/07/17/基础DNS学习/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/05/OSPF 真实入侵测试/">OSPF 真实入侵测试</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月5日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          OSPF 真实入侵测试
+          <div class="read-more">
+            <a href="/2016/07/05/OSPF 真实入侵测试/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/03/X大_OSPFv3_入侵测试/">X大 OSPFv3 入侵测试</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月3日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          X大 OSPFv3 入侵测试
+          <div class="read-more">
+            <a href="/2016/07/03/X大_OSPFv3_入侵测试/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/07/01/Vim 学习/">Vim 学习</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年7月1日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          Vim 学习
+          <div class="read-more">
+            <a href="/2016/07/01/Vim 学习/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/">CentOS 6.x vsftp 启用 SSL或TLS</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年6月24日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          CentOS 6.x vsftp 启用 SSL或TLS
+          <div class="read-more">
+            <a href="/2016/06/24/CentOS 6.x vsftp 启用 SSL或TLS/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/06/24/Linux 文件分割/">Linux文件分割</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016年6月24日
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          Linux文件分割
+          <div class="read-more">
+            <a href="/2016/06/24/Linux 文件分割/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
